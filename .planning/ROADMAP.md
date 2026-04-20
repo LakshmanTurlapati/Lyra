@@ -123,7 +123,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 07-01-PLAN.md -- Assembly script (TDD) with stratified splitting, domain metadata, and stats command
-- [ ] 07-02-PLAN.md -- Execute assembly on real data, validate, save stats, update gitignore
+- [x] 07-02-PLAN.md -- Execute assembly on real data, validate, save stats, update gitignore
 
 ### Phase 8: Fine-Tuning
 **Goal**: Users can fine-tune SmolLM2-1.7B on the assembled dataset using documented scripts on a consumer GPU
