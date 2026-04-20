@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-04-20T09:29:18.422Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-04-20T09:40:09.436Z"
 last_activity: 2026-04-20
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-20)
 ## Current Position
 
 Phase: 01 (data-format-and-pipeline-foundation) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-04-20
 
@@ -53,6 +53,7 @@ Progress: [..........] 0%
 
 *Updated after each plan completion*
 | Phase 01 P01 | 4min | 2 tasks | 9 files |
+| Phase 01 P02 | 8min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,9 @@ Recent decisions affecting current work:
 - [Phase 01]: TRL-native messages/role/content format over classic ShareGPT from/value -- TRL SFTTrainer expects this natively
 - [Phase 01]: Pydantic model_validator(mode=after) for structural rule enforcement across conversation messages
 - [Phase 01]: Strict system-first rule to prevent SmolLM2 default system prompt injection
+- [Phase 01]: Pre-process TRL-native tool_calls to SmolLM2 <tool_call> XML format before tokenization -- SmolLM2 chat template does not handle structured tool_calls
+- [Phase 01]: Use return_dict=True for apply_chat_template on transformers 5.x -- return_tensors=None returns BatchEncoding not list
+- [Phase 01]: EOS check strips trailing whitespace tokens -- SmolLM2 template ends with im_end+newline so EOS is second-to-last
 
 ### Pending Todos
 
@@ -79,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-20T09:29:18.419Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-04-20T09:40:09.433Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None

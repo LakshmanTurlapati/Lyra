@@ -10,7 +10,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Data Pipeline
 
 - [x] **DATA-01**: User can generate ShareGPT-format conversation datasets with strict role ordering (human/gpt/function_call/observation)
-- [ ] **DATA-02**: User can validate conversation format alignment with SmolLM2-1.7B tokenizer and chat template
+- [x] **DATA-02**: User can validate conversation format alignment with SmolLM2-1.7B tokenizer and chat template
 - [ ] **DATA-03**: User can filter generated data through deduplication, format validation, and quality scoring pipeline
 - [ ] **DATA-04**: User can configure and reuse the generation pipeline with custom prompt templates, topic distributions, and quality thresholds
 - [ ] **DATA-05**: Training data includes adaptive output styles -- terse responses for code tasks, detailed chain-of-thought for reasoning tasks
@@ -96,7 +96,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | DATA-01 | Phase 1 | Complete |
-| DATA-02 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 2 | Pending |
 | DATA-04 | Phase 2 | Pending |
 | DATA-05 | Phase 2 | Pending |
