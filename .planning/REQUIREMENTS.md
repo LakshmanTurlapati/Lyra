@@ -48,7 +48,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **EVAL-01**: Model evaluated on standard benchmarks (MMLU, MBPP/HumanEval, BFCL) with pass@1 scores
 - [ ] **EVAL-02**: Published comparison report of base SmolLM2-1.7B vs Lyra fine-tuned model
 - [ ] **EVAL-03**: Custom eval benchmarks measuring tool-call format compliance, argument extraction accuracy, and code correctness
-- [ ] **EVAL-04**: Per-category quality metrics reported separately for tool calls, code, and general knowledge
+- [x] **EVAL-04**: Per-category quality metrics reported separately for tool calls, code, and general knowledge
 
 ### Release
 
@@ -119,7 +119,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EVAL-01 | Phase 9 | Pending |
 | EVAL-02 | Phase 9 | Pending |
 | EVAL-03 | Phase 3 | Pending |
-| EVAL-04 | Phase 3 | Pending |
+| EVAL-04 | Phase 3 | Complete |
 | REL-01 | Phase 9 | Pending |
 | REL-02 | Phase 9 | Pending |
 | REL-03 | Phase 9 | Pending |

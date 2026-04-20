@@ -64,7 +64,7 @@ Plans:
   3. User can run the eval suite against base SmolLM2-1.7B to establish baseline scores that later compare against the fine-tuned model
 **Plans**: 2 plans
 Plans:
-- [ ] 03-01-PLAN.md -- Pydantic result schemas, eval config, and compare command
+- [x] 03-01-PLAN.md -- Pydantic result schemas, eval config, and compare command
 - [ ] 03-02-PLAN.md -- Unified eval runner CLI and test suite
 
 ### Phase 4: Tool Calling Dataset
