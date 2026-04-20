@@ -1,0 +1,22 @@
+version: 1
+
+knowledge_tasks:
+  - mmlu
+  - arc_challenge
+  - hellaswag
+
+code_datasets:
+  - humaneval
+  - mbpp
+
+bfcl_test_categories:
+  - all
+
+batch_size: "auto"
+
+num_fewshot:
+  mmlu: 5
+  arc_challenge: 25
+  hellaswag: 10
+
+dtype: "float32"
