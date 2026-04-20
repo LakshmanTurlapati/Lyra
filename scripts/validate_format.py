@@ -94,7 +94,16 @@ class Conversation(BaseModel):
 
             # Rule 3, 8: tool messages must follow assistant or tool, must have name
             if msg.role == "tool":
-                if i == 0 or msgs[i - 1].role not in ("assistant", "tool"):
+                if i == 0:
+                    raise ValueError(
+                        f"Tool message at index {i} must follow assistant or tool"
+                    )
+                prev = msgs[i - 1]
+                if prev.role == "assistant" and not prev.tool_calls:
+                    raise ValueError(
+                        f"Tool message at index {i} follows assistant without tool_calls"
+                    )
+                if prev.role not in ("assistant", "tool"):
                     raise ValueError(
                         f"Tool message at index {i} must follow assistant or tool"
                     )
