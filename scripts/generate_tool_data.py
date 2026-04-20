@@ -677,20 +677,22 @@ def generate_single_call_batch(count: int = 50, schemas: dict = None,
 
     system_content = system_prompts["tool_assistant"]
     samples = []
-    edge_case_count = max(1, count // 4)
+    # Per D-05: ~25% edge cases. Split into no-tool (must be >= 20% of total)
+    # and tool-error/param edge cases.
+    no_tool_count = max(1, count * 22 // 100)  # ~22% no-tool-needed
+    error_count = max(1, count * 4 // 100)     # ~4% error handling (still has tool_calls)
     used_queries = set()
 
     for i in range(count):
-        is_edge_case = i < edge_case_count
         tools = get_tools_for_category(schemas, "single-call", rng, count=rng.randint(1, 3))
 
         # Generate unique user query
         query = _get_unique_query(SINGLE_CALL_QUERIES, used_queries, rng)
 
-        if is_edge_case and i % 4 == 0:
-            # No-tool-needed edge case
+        if i < no_tool_count:
+            # No-tool-needed edge case: assistant answers directly
             sample = _build_no_tool_sample(system_content, query, tools)
-        elif is_edge_case and i % 4 == 1:
+        elif i < no_tool_count + error_count:
             # Error handling edge case
             tool = tools[0]
             tool_name = tool["function"]["name"]
@@ -698,22 +700,6 @@ def generate_single_call_batch(count: int = 50, schemas: dict = None,
             error_response = generate_tool_response(tool_name, arguments, rng, error=True)
             sample = _build_error_sample(system_content, query, tools, tool_name,
                                          arguments, error_response, rng)
-        elif is_edge_case and i % 4 == 2:
-            # Ambiguous - answer directly despite tools
-            sample = _build_no_tool_sample(system_content, query, tools)
-        elif is_edge_case and i % 4 == 3:
-            # Parameter edge case - optional params omitted
-            tool = tools[0]
-            tool_name = tool["function"]["name"]
-            # Use only required params
-            schema_params = tool["function"]["parameters"]
-            required = schema_params.get("required", [])
-            arguments = {}
-            for prop_name in required:
-                arguments[prop_name] = _get_string_value(prop_name, rng)
-            response = generate_tool_response(tool_name, arguments, rng)
-            sample = _build_happy_path_sample(system_content, query, tools, tool_name,
-                                              arguments, response, rng)
         else:
             # Happy path
             tool = rng.choice(tools)
@@ -745,17 +731,18 @@ def generate_cli_batch(count: int = 50, schemas: dict = None,
     system_content = system_prompts["cli_assistant"]
     tools = get_tools_for_category(schemas, "cli", rng)
     samples = []
-    edge_case_count = max(1, count // 4)
+    # Per D-05: ~25% edge cases. No-tool must be >= 20% of total.
+    no_tool_count = max(1, count * 22 // 100)  # ~22% no-tool-needed
+    error_count = max(1, count * 4 // 100)     # ~4% error handling
     used_queries = set()
 
     for i in range(count):
-        is_edge_case = i < edge_case_count
         query = _get_unique_query(CLI_QUERIES, used_queries, rng)
 
-        if is_edge_case and i % 2 == 0:
+        if i < no_tool_count:
             # No-tool-needed: question about CLI concepts, answered directly
             sample = _build_no_tool_sample(system_content, query, tools)
-        elif is_edge_case:
+        elif i < no_tool_count + error_count:
             # Error handling: command fails
             command = _generate_safe_command(query, rng)
             arguments = {"command": command}
