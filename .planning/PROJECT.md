@@ -15,6 +15,9 @@ Curate Opus-quality training data that makes a 1.7B parameter model practically 
 - [x] ShareGPT format specification with Pydantic validation (Validated in Phase 1: Data Format and Pipeline Foundation)
 - [x] SmolLM2-1.7B tokenizer alignment validation pipeline (Validated in Phase 1)
 - [x] Prompt template library for data generation guidance (Validated in Phase 1)
+- [x] Data quality curation pipeline with filtering, dedup, scoring (Validated in Phase 2: Data Quality and Curation Pipeline)
+- [x] Configurable pipeline via YAML with per-domain overrides (Validated in Phase 2)
+- [x] Adaptive output style validation -- terse for code, detailed for reasoning (Validated in Phase 2)
 
 ### Active
 
