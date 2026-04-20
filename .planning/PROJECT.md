@@ -23,7 +23,7 @@ Curate Opus-quality training data that makes a 1.7B parameter model practically 
 
 ### Active
 
-- [ ] ShareGPT-format dataset with tool call training samples (function calling, MCP-style, CLI/shell)
+- [x] ShareGPT-format dataset with tool call training samples (function calling, MCP-style, CLI/shell) (Validated in Phase 4: Tool Calling Dataset)
 - [ ] ShareGPT-format dataset with code generation samples (quick, efficient, trivial code)
 - [ ] ShareGPT-format dataset with general knowledge samples (reasoning, Q&A, explanations)
 - [ ] Adaptive output style in training data (terse for code, detailed for reasoning)
