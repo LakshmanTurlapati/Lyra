@@ -133,16 +133,13 @@ def validate_conversation(tokenizer, conversation: dict) -> dict:
     # Check EOS token presence at end of conversation.
     # SmolLM2 chat template ends with <|im_end|>\n, so the last token is \n.
     # The EOS token (id=2, same as <|im_end|>) appears as second-to-last.
-    # We check that EOS appears among the final tokens (strip trailing whitespace tokens).
+    # Check that EOS is present in the final N tokens (more robust than stripping
+    # trailing whitespace tokens, which can incorrectly remove the EOS token itself
+    # if eos_id decodes to an empty or whitespace-only string).
     eos_id = tokenizer.eos_token_id
-    # Find the last non-whitespace token position
-    trailing = token_ids[:]
-    while trailing and tokenizer.decode([trailing[-1]]).strip() == "":
-        trailing.pop()
-    if not trailing or trailing[-1] != eos_id:
-        errors.append(
-            f"Missing EOS token (expected id={eos_id})"
-        )
+    # EOS should be among the last 3 tokens for SmolLM2's template
+    if eos_id not in token_ids[-3:]:
+        errors.append(f"Missing EOS token (expected id={eos_id})")
 
     # Decode for content checks
     decoded = tokenizer.decode(token_ids)
