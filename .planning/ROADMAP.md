@@ -77,7 +77,12 @@ Plans:
   3. Dataset contains parallel function execution patterns with multiple tools invoked in a single turn
   4. Dataset contains MCP-style tool use patterns (server discovery, tool listing, invocation, result handling)
   5. Dataset contains CLI/shell command generation patterns for bash, git, and file operations
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 04-01-PLAN.md -- Tool schema pool (50-100 schemas) and batch generation script
+- [ ] 04-02-PLAN.md -- Generate single-call (~1,155) and CLI (~825) category batches
+- [ ] 04-03-PLAN.md -- Generate multi-turn (~495), parallel (~495), and MCP (~330) category batches
+- [ ] 04-04-PLAN.md -- Full curation pipeline run and quality verification checkpoint
 
 ### Phase 5: Code Generation Dataset
 **Goal**: Users have a complete, curated code generation dataset covering utility functions, file operations, and debugging
@@ -154,7 +159,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 1. Data Format and Pipeline Foundation | 0/3 | Planning complete | - |
 | 2. Data Quality and Curation Pipeline | 0/2 | Planning complete | - |
 | 3. Evaluation Framework | 0/2 | Planning complete | - |
-| 4. Tool Calling Dataset | 0/TBD | Not started | - |
+| 4. Tool Calling Dataset | 0/4 | Planning complete | - |
 | 5. Code Generation Dataset | 0/TBD | Not started | - |
 | 6. General Knowledge Dataset | 0/TBD | Not started | - |
 | 7. Dataset Assembly | 0/TBD | Not started | - |
