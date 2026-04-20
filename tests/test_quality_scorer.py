@@ -117,12 +117,14 @@ def test_score_completeness_tool_call_no_content_skipped():
                 {"type": "function", "function": {"name": "get_weather", "arguments": {"city": "NYC"}}}
             ]},
             {"role": "tool", "name": "get_weather", "content": '{"temp": 70}'},
-            {"role": "assistant", "content": "It is 70F in NYC."},
+            {"role": "assistant", "content": "The current temperature in New York City is 70 degrees Fahrenheit."},
         ],
         "tools": [{"type": "function", "function": {
             "name": "get_weather", "description": "Get weather", "parameters": {}
         }}],
     }
+    # min_response_chars=50 should pass: tool-call message has no content (skipped),
+    # final assistant message is 65 chars (above threshold)
     result = score_completeness(sample, {"min_response_chars": 50})
     assert result["pass"] is True
 
