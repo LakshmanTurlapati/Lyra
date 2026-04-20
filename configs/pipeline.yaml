@@ -24,10 +24,12 @@ domains:
 
   code:
     min_response_chars: 20
+    dedup_scope: "user-response"
+    dedup_threshold: 0.98
     style:
       max_tokens: 600
       require_code_blocks: true
-      max_prose_ratio: 0.4
+      max_prose_ratio: 0.6
 
   knowledge:
     min_response_chars: 100

@@ -118,6 +118,20 @@ def get_dedup_text(sample: dict, scope: str = "response") -> str:
             for m in messages
             if m.get("role") == "user" and m.get("content")
         )
+    elif scope == "user-response":
+        # Like "full" but excludes system messages -- useful for code domain
+        # where all samples share the same system prompt, inflating similarity
+        parts = []
+        for m in messages:
+            if m.get("role") == "system":
+                continue
+            if m.get("content"):
+                parts.append(m["content"])
+            if m.get("role") == "assistant":
+                tc_text = _serialize_tool_calls(m)
+                if tc_text:
+                    parts.append(tc_text)
+        return " ".join(parts)
     else:  # "full"
         parts = []
         for m in messages:
