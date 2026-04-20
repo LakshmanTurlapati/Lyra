@@ -1,0 +1,740 @@
+# Tool Schema Pool for Lyra Tool-Calling Dataset
+# 65 unique tool schemas organized by domain
+# Per D-03: 50-100 unique schemas for generalization
+# Per D-04: Developer-focused tools weighted heavier (~60/40 split)
+# All parameters: max 3 per tool (token budget constraint)
+
+schemas:
+  developer:
+    database:
+      - name: query_database
+        description: "Execute a SQL query against a database"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: "SQL query to execute"
+            database:
+              type: string
+              description: "Database name"
+          required: [query]
+      - name: list_tables
+        description: "List all tables in a database"
+        parameters:
+          type: object
+          properties:
+            database:
+              type: string
+              description: "Database name"
+          required: [database]
+      - name: describe_table
+        description: "Get column names and types for a table"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "Table name"
+            database:
+              type: string
+              description: "Database name"
+          required: [table]
+      - name: insert_record
+        description: "Insert a new record into a database table"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "Table name"
+            data:
+              type: object
+              description: "Record data as key-value pairs"
+          required: [table, data]
+      - name: count_records
+        description: "Count the number of records in a table"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "Table name"
+            condition:
+              type: string
+              description: "Optional WHERE clause"
+          required: [table]
+      - name: get_record_by_id
+        description: "Retrieve a single record by its primary key"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "Table name"
+            id:
+              type: string
+              description: "Record ID"
+          required: [table, id]
+      - name: delete_record
+        description: "Delete a record from a database table by ID"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "Table name"
+            id:
+              type: string
+              description: "Record ID"
+          required: [table, id]
+      - name: create_table
+        description: "Create a new database table with specified columns"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "Table name to create"
+            columns:
+              type: object
+              description: "Column definitions as name:type pairs"
+          required: [table, columns]
+
+    filesystem:
+      - name: read_file
+        description: "Read the contents of a file"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+              description: "File path to read"
+          required: [path]
+      - name: write_file
+        description: "Write content to a file"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+              description: "File path to write"
+            content:
+              type: string
+              description: "Content to write"
+          required: [path, content]
+      - name: list_directory
+        description: "List files and directories at a given path"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+              description: "Directory path to list"
+          required: [path]
+      - name: get_file_info
+        description: "Get metadata about a file including size and modification time"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+              description: "File path to inspect"
+          required: [path]
+      - name: search_files
+        description: "Search for files matching a pattern in a directory"
+        parameters:
+          type: object
+          properties:
+            directory:
+              type: string
+              description: "Directory to search in"
+            pattern:
+              type: string
+              description: "Glob pattern to match"
+          required: [directory, pattern]
+      - name: delete_file
+        description: "Delete a file at the given path"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+              description: "File path to delete"
+          required: [path]
+
+    http:
+      - name: http_get
+        description: "Make an HTTP GET request to a URL"
+        parameters:
+          type: object
+          properties:
+            url:
+              type: string
+              description: "URL to request"
+            headers:
+              type: object
+              description: "Optional request headers"
+          required: [url]
+      - name: http_post
+        description: "Make an HTTP POST request with a JSON body"
+        parameters:
+          type: object
+          properties:
+            url:
+              type: string
+              description: "URL to request"
+            body:
+              type: object
+              description: "JSON request body"
+          required: [url, body]
+      - name: check_endpoint_status
+        description: "Check if an HTTP endpoint is responding"
+        parameters:
+          type: object
+          properties:
+            url:
+              type: string
+              description: "URL to check"
+          required: [url]
+      - name: download_file
+        description: "Download a file from a URL to a local path"
+        parameters:
+          type: object
+          properties:
+            url:
+              type: string
+              description: "URL to download from"
+            output_path:
+              type: string
+              description: "Local path to save the file"
+          required: [url, output_path]
+      - name: fetch_json
+        description: "Fetch JSON data from a REST API endpoint"
+        parameters:
+          type: object
+          properties:
+            url:
+              type: string
+              description: "API endpoint URL"
+          required: [url]
+
+    git:
+      - name: git_status
+        description: "Show the working tree status of a git repository"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+          required: [repo_path]
+      - name: git_diff
+        description: "Show changes between commits or working tree"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+            ref:
+              type: string
+              description: "Git reference to diff against"
+          required: [repo_path]
+      - name: git_log
+        description: "Show recent commit history"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+            count:
+              type: integer
+              description: "Number of commits to show"
+          required: [repo_path]
+      - name: git_commit
+        description: "Create a new commit with staged changes"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+            message:
+              type: string
+              description: "Commit message"
+          required: [repo_path, message]
+      - name: git_branch
+        description: "List or create git branches"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+            name:
+              type: string
+              description: "Branch name to create"
+          required: [repo_path]
+      - name: git_checkout
+        description: "Switch to a different branch or commit"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+            ref:
+              type: string
+              description: "Branch name or commit hash"
+          required: [repo_path, ref]
+      - name: git_add
+        description: "Stage files for the next commit"
+        parameters:
+          type: object
+          properties:
+            repo_path:
+              type: string
+              description: "Path to the git repository"
+            files:
+              type: string
+              description: "File path or pattern to stage"
+          required: [repo_path, files]
+
+    packages:
+      - name: search_packages
+        description: "Search for packages in a package registry"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: "Search query"
+            registry:
+              type: string
+              description: "Package registry (npm, pypi, cargo)"
+          required: [query]
+      - name: install_package
+        description: "Install a package from a registry"
+        parameters:
+          type: object
+          properties:
+            name:
+              type: string
+              description: "Package name"
+            version:
+              type: string
+              description: "Version to install"
+          required: [name]
+      - name: get_package_info
+        description: "Get details about a package including version and dependencies"
+        parameters:
+          type: object
+          properties:
+            name:
+              type: string
+              description: "Package name"
+            registry:
+              type: string
+              description: "Package registry"
+          required: [name]
+      - name: list_installed_packages
+        description: "List all installed packages in the current environment"
+        parameters:
+          type: object
+          properties:
+            format:
+              type: string
+              description: "Output format (table, json)"
+          required: []
+
+    cloud:
+      - name: list_instances
+        description: "List running cloud compute instances"
+        parameters:
+          type: object
+          properties:
+            region:
+              type: string
+              description: "Cloud region to query"
+          required: []
+      - name: deploy_service
+        description: "Deploy a service to a cloud environment"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name"
+            environment:
+              type: string
+              description: "Target environment (staging, production)"
+          required: [service, environment]
+      - name: get_service_logs
+        description: "Retrieve recent logs from a deployed service"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name"
+            lines:
+              type: integer
+              description: "Number of log lines to retrieve"
+          required: [service]
+      - name: scale_service
+        description: "Scale a service to a specified number of instances"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name"
+            replicas:
+              type: integer
+              description: "Number of replicas"
+          required: [service, replicas]
+      - name: get_instance_status
+        description: "Get the status and health of a specific cloud instance"
+        parameters:
+          type: object
+          properties:
+            instance_id:
+              type: string
+              description: "Instance identifier"
+          required: [instance_id]
+      - name: set_environment_variable
+        description: "Set an environment variable for a deployed service"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name"
+            key:
+              type: string
+              description: "Variable name"
+            value:
+              type: string
+              description: "Variable value"
+          required: [service, key, value]
+
+    monitoring:
+      - name: get_system_health
+        description: "Get overall system health status and uptime"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name to check"
+          required: []
+      - name: list_alerts
+        description: "List active monitoring alerts"
+        parameters:
+          type: object
+          properties:
+            severity:
+              type: string
+              description: "Filter by severity (critical, warning, info)"
+          required: []
+      - name: get_metrics
+        description: "Get performance metrics for a service"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name"
+            metric:
+              type: string
+              description: "Metric name (cpu, memory, latency)"
+          required: [service, metric]
+      - name: get_cpu_usage
+        description: "Get current CPU usage percentage for a host"
+        parameters:
+          type: object
+          properties:
+            host:
+              type: string
+              description: "Hostname or IP address"
+          required: [host]
+      - name: get_error_rate
+        description: "Get the error rate for a service over a time period"
+        parameters:
+          type: object
+          properties:
+            service:
+              type: string
+              description: "Service name"
+            period:
+              type: string
+              description: "Time period (1h, 24h, 7d)"
+          required: [service]
+
+  everyday:
+    weather:
+      - name: get_weather
+        description: "Get current weather conditions for a city"
+        parameters:
+          type: object
+          properties:
+            city:
+              type: string
+              description: "City name"
+          required: [city]
+      - name: get_forecast
+        description: "Get weather forecast for the next few days"
+        parameters:
+          type: object
+          properties:
+            city:
+              type: string
+              description: "City name"
+            days:
+              type: integer
+              description: "Number of days to forecast"
+          required: [city]
+      - name: get_temperature
+        description: "Get current temperature in a specified unit"
+        parameters:
+          type: object
+          properties:
+            city:
+              type: string
+              description: "City name"
+            unit:
+              type: string
+              description: "Temperature unit (celsius, fahrenheit)"
+          required: [city]
+
+    calendar:
+      - name: create_event
+        description: "Create a new calendar event"
+        parameters:
+          type: object
+          properties:
+            title:
+              type: string
+              description: "Event title"
+            date:
+              type: string
+              description: "Event date (YYYY-MM-DD)"
+            time:
+              type: string
+              description: "Event time (HH:MM)"
+          required: [title, date]
+      - name: list_events
+        description: "List upcoming calendar events"
+        parameters:
+          type: object
+          properties:
+            date:
+              type: string
+              description: "Date to list events for"
+          required: []
+      - name: delete_event
+        description: "Delete a calendar event by its ID"
+        parameters:
+          type: object
+          properties:
+            event_id:
+              type: string
+              description: "Event ID to delete"
+          required: [event_id]
+
+    email:
+      - name: send_email
+        description: "Send an email to a recipient"
+        parameters:
+          type: object
+          properties:
+            to:
+              type: string
+              description: "Recipient email address"
+            subject:
+              type: string
+              description: "Email subject line"
+            body:
+              type: string
+              description: "Email body content"
+          required: [to, subject, body]
+      - name: search_emails
+        description: "Search emails by keyword or sender"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: "Search query"
+            folder:
+              type: string
+              description: "Folder to search (inbox, sent, archive)"
+          required: [query]
+      - name: get_inbox
+        description: "Get recent emails from the inbox"
+        parameters:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: "Number of emails to retrieve"
+          required: []
+
+    search:
+      - name: search_web
+        description: "Search the web for information on a topic"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: "Search query"
+          required: [query]
+      - name: get_definition
+        description: "Get the dictionary definition of a word"
+        parameters:
+          type: object
+          properties:
+            word:
+              type: string
+              description: "Word to define"
+          required: [word]
+      - name: translate_text
+        description: "Translate text from one language to another"
+        parameters:
+          type: object
+          properties:
+            text:
+              type: string
+              description: "Text to translate"
+            target_language:
+              type: string
+              description: "Target language code"
+          required: [text, target_language]
+      - name: get_wikipedia_summary
+        description: "Get a brief summary of a Wikipedia article"
+        parameters:
+          type: object
+          properties:
+            topic:
+              type: string
+              description: "Topic to look up"
+          required: [topic]
+
+    math:
+      - name: calculate
+        description: "Evaluate a mathematical expression"
+        parameters:
+          type: object
+          properties:
+            expression:
+              type: string
+              description: "Math expression to evaluate"
+          required: [expression]
+      - name: convert_units
+        description: "Convert a value between measurement units"
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+              description: "Numeric value to convert"
+            from_unit:
+              type: string
+              description: "Source unit"
+            to_unit:
+              type: string
+              description: "Target unit"
+          required: [value, from_unit, to_unit]
+
+    maps:
+      - name: get_directions
+        description: "Get directions between two locations"
+        parameters:
+          type: object
+          properties:
+            origin:
+              type: string
+              description: "Starting location"
+            destination:
+              type: string
+              description: "Ending location"
+          required: [origin, destination]
+      - name: geocode
+        description: "Convert an address to geographic coordinates"
+        parameters:
+          type: object
+          properties:
+            address:
+              type: string
+              description: "Address to geocode"
+          required: [address]
+      - name: get_distance
+        description: "Calculate distance between two locations"
+        parameters:
+          type: object
+          properties:
+            origin:
+              type: string
+              description: "Starting location"
+            destination:
+              type: string
+              description: "Ending location"
+          required: [origin, destination]
+
+  mcp_meta:
+    - name: mcp_list_servers
+      description: "List available MCP servers and their connection status"
+      parameters:
+        type: object
+        properties: {}
+        required: []
+    - name: mcp_list_tools
+      description: "List tools available on a specific MCP server"
+      parameters:
+        type: object
+        properties:
+          server:
+            type: string
+            description: "Name of the MCP server"
+        required: [server]
+    - name: mcp_invoke_tool
+      description: "Invoke a tool on a specific MCP server with arguments"
+      parameters:
+        type: object
+        properties:
+          server:
+            type: string
+            description: "MCP server name"
+          tool:
+            type: string
+            description: "Tool name to invoke"
+          arguments:
+            type: object
+            description: "Tool arguments"
+        required: [server, tool]
+
+  cli:
+    - name: run_command
+      description: "Execute a shell command and return its output"
+      parameters:
+        type: object
+        properties:
+          command:
+            type: string
+            description: "The shell command to execute"
+        required: [command]
+    - name: run_command_in_dir
+      description: "Execute a shell command in a specific directory"
+      parameters:
+        type: object
+        properties:
+          command:
+            type: string
+            description: "The shell command to execute"
+          working_directory:
+            type: string
+            description: "Directory to run the command in"
+        required: [command, working_directory]
