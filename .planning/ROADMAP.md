@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can generate a small batch (10-50 samples) via the Anthropic API and receive JSONL output on disk
 **Plans**: 3 plans
 Plans:
-- [ ] 01-01-PLAN.md -- Format specification, Pydantic validation schema, and test infrastructure
+- [x] 01-01-PLAN.md -- Format specification, Pydantic validation schema, and test infrastructure
 - [ ] 01-02-PLAN.md -- Tokenizer alignment validation, sample generator, and dataset directory structure
 - [ ] 01-03-PLAN.md -- Prompt template library for all three domains with system prompts
 
