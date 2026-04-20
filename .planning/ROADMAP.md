@@ -34,7 +34,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can validate any generated conversation against SmolLM2-1.7B's tokenizer and chat template and get pass/fail with error details
   3. User can browse a prompt template library organized by category (tool call, code, general knowledge) with documented system prompts
   4. User can generate a small batch (10-50 samples) via the Anthropic API and receive JSONL output on disk
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 01-01-PLAN.md -- Format specification, Pydantic validation schema, and test infrastructure
+- [ ] 01-02-PLAN.md -- Tokenizer alignment validation, sample generator, and dataset directory structure
+- [ ] 01-03-PLAN.md -- Prompt template library for all three domains with system prompts
 
 ### Phase 2: Data Quality and Curation Pipeline
 **Goal**: Users can filter, deduplicate, score, and configure their data generation pipeline so only high-quality samples proceed to training
@@ -141,7 +145,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data Format and Pipeline Foundation | 0/TBD | Not started | - |
+| 1. Data Format and Pipeline Foundation | 0/3 | Planning complete | - |
 | 2. Data Quality and Curation Pipeline | 0/TBD | Not started | - |
 | 3. Evaluation Framework | 0/TBD | Not started | - |
 | 4. Tool Calling Dataset | 0/TBD | Not started | - |
