@@ -51,7 +51,7 @@ Plans:
   4. User can see per-sample quality scores and filter by threshold
 **Plans**: 2 plans
 Plans:
-- [ ] 02-01-PLAN.md -- Quality scorer with 4 heuristic signals and n-gram Jaccard deduplication
+- [x] 02-01-PLAN.md -- Quality scorer with 4 heuristic signals and n-gram Jaccard deduplication
 - [ ] 02-02-PLAN.md -- Style validator, pipeline config, and orchestrator wiring all stages
 
 ### Phase 3: Evaluation Framework
