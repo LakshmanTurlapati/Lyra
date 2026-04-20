@@ -65,7 +65,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 03-01-PLAN.md -- Pydantic result schemas, eval config, and compare command
-- [ ] 03-02-PLAN.md -- Unified eval runner CLI and test suite
+- [x] 03-02-PLAN.md -- Unified eval runner CLI and test suite
 
 ### Phase 4: Tool Calling Dataset
 **Goal**: Users have a complete, curated tool-calling dataset covering all five tool-call patterns (JSON function calls, multi-turn, parallel, MCP, CLI)
