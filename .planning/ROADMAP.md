@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Tool Calling Dataset** - Generate and curate all tool-call domain training data (JSON function calls, multi-turn, parallel, MCP, CLI)
 - [ ] **Phase 5: Code Generation Dataset** - Generate and curate all code domain training data (utilities, file ops, debugging)
 - [ ] **Phase 6: General Knowledge Dataset** - Generate and curate all knowledge domain training data (reasoning chains, Q&A, explanations)
-- [ ] **Phase 7: Dataset Assembly** - Merge domains into final dataset with stratified train/validation/test splits and 33/33/33 domain balance
+- [ ] **Phase 7: Dataset Assembly** - Merge domains into final dataset with stratified train/validation/test splits and natural domain balance
 - [ ] **Phase 8: Fine-Tuning** - QLoRA training on SmolLM2-1.7B with documented scripts, hyperparameters, and consumer GPU targeting
 - [ ] **Phase 9: Benchmarking and Core Release** - Run evaluations, produce comparison report, publish model/dataset cards and weights on HuggingFace under MIT
 - [ ] **Phase 10: Community Release Enhancements** - GGUF quantized variants, interactive Gradio demo Space, and versioned dataset releases
@@ -117,10 +117,13 @@ Plans:
 **Depends on**: Phase 4, Phase 5, Phase 6
 **Requirements**: DATA-07
 **Success Criteria** (what must be TRUE):
-  1. Final dataset contains stratified train/validation/test splits (e.g., 90/5/5) with all three focus areas represented proportionally in each split
-  2. User can verify the 33/33/33 domain balance across splits with a stats command
+  1. Final dataset contains stratified train/validation/test splits (90/5/5) with all three focus areas represented proportionally in each split
+  2. User can verify domain balance across splits with a stats command
   3. Final assembled dataset passes the full validation pipeline from Phase 2 without errors
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 07-01-PLAN.md -- Assembly script (TDD) with stratified splitting, domain metadata, and stats command
+- [ ] 07-02-PLAN.md -- Execute assembly on real data, validate, save stats, update gitignore
 
 ### Phase 8: Fine-Tuning
 **Goal**: Users can fine-tune SmolLM2-1.7B on the assembled dataset using documented scripts on a consumer GPU
@@ -170,7 +173,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 4. Tool Calling Dataset | 0/4 | Planning complete | - |
 | 5. Code Generation Dataset | 0/3 | Planning complete | - |
 | 6. General Knowledge Dataset | 0/3 | Planning complete | - |
-| 7. Dataset Assembly | 0/TBD | Not started | - |
+| 7. Dataset Assembly | 0/2 | Planning complete | - |
 | 8. Fine-Tuning | 0/TBD | Not started | - |
 | 9. Benchmarking and Core Release | 0/TBD | Not started | - |
 | 10. Community Release Enhancements | 0/TBD | Not started | - |
