@@ -38,7 +38,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md -- Format specification, Pydantic validation schema, and test infrastructure
 - [x] 01-02-PLAN.md -- Tokenizer alignment validation, sample generator, and dataset directory structure
-- [ ] 01-03-PLAN.md -- Prompt template library for all three domains with system prompts
+- [x] 01-03-PLAN.md -- Prompt template library for all three domains with system prompts
 
 ### Phase 2: Data Quality and Curation Pipeline
 **Goal**: Users can filter, deduplicate, score, and configure their data generation pipeline so only high-quality samples proceed to training
