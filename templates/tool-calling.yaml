@@ -1,0 +1,198 @@
+# Tool Calling Prompt Templates for Lyra
+# Covers all 5 tool call patterns per D-02
+domain: tool-calling
+description: >
+  Templates for generating tool calling training conversations.
+  Each category covers a different tool call pattern.
+  All generated data must follow the TRL-native format defined in specs/sharegpt-format.md.
+
+categories:
+  single_call:
+    description: "User asks a question, assistant calls one tool, gets result, responds"
+    complexity: basic
+    system_prompt_ref: tool_assistant
+    example_tools:
+      - name: get_weather
+        description: "Get current weather for a city"
+        parameters:
+          type: object
+          properties:
+            city:
+              type: string
+              description: "The name of the city"
+          required:
+            - city
+      - name: calculate
+        description: "Evaluate a mathematical expression"
+        parameters:
+          type: object
+          properties:
+            expression:
+              type: string
+              description: "The math expression to evaluate"
+          required:
+            - expression
+      - name: search_web
+        description: "Search the web for information"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: "The search query"
+          required:
+            - query
+    topics:
+      - "Weather lookup for various cities"
+      - "Unit conversion calculations"
+      - "Simple math computations"
+      - "Web search for current events"
+      - "Dictionary/definition lookups"
+    generation_notes: >
+      Include 15-20% samples where the assistant responds WITHOUT calling a tool
+      (the question is simple enough to answer directly). This teaches the model
+      when NOT to use tools.
+
+  multi_turn:
+    description: "Multi-turn conversation with tool calls and follow-up questions"
+    complexity: intermediate
+    system_prompt_ref: tool_assistant
+    example_tools:
+      - name: search_database
+        description: "Search a database for records matching a query"
+        parameters:
+          type: object
+          properties:
+            table:
+              type: string
+              description: "The database table to search"
+            query:
+              type: string
+              description: "Search query string"
+          required:
+            - table
+            - query
+      - name: get_details
+        description: "Get detailed information about a specific record"
+        parameters:
+          type: object
+          properties:
+            record_id:
+              type: string
+              description: "The ID of the record"
+          required:
+            - record_id
+    topics:
+      - "Search results followed by detail lookup"
+      - "Initial query, refine based on results"
+      - "Multi-step information gathering"
+      - "Tool result informs next question"
+    generation_notes: >
+      Each conversation should have 2-3 tool call rounds.
+      The follow-up questions should build on previous tool results.
+      Keep total under 2048 tokens after tokenization.
+
+  parallel_calls:
+    description: "Assistant calls multiple tools in a single turn"
+    complexity: advanced
+    system_prompt_ref: tool_assistant
+    example_tools:
+      - name: get_weather
+        description: "Get current weather for a city"
+        parameters:
+          type: object
+          properties:
+            city:
+              type: string
+          required:
+            - city
+      - name: get_time
+        description: "Get current time in a timezone"
+        parameters:
+          type: object
+          properties:
+            timezone:
+              type: string
+          required:
+            - timezone
+    topics:
+      - "Compare weather across multiple cities"
+      - "Get weather and time for a destination"
+      - "Look up multiple items simultaneously"
+      - "Batch information retrieval"
+    generation_notes: >
+      Assistant message should contain 2-3 tool_calls in a single list.
+      Each tool_call must have a corresponding tool response message.
+      Order of tool responses should match order of tool_calls.
+
+  mcp_patterns:
+    description: "MCP-style server discovery, tool listing, and invocation"
+    complexity: advanced
+    system_prompt_ref: mcp_assistant
+    example_tools:
+      - name: list_servers
+        description: "List available MCP servers"
+        parameters:
+          type: object
+          properties: {}
+      - name: list_tools
+        description: "List tools available on a specific MCP server"
+        parameters:
+          type: object
+          properties:
+            server_name:
+              type: string
+              description: "Name of the MCP server"
+          required:
+            - server_name
+      - name: invoke_tool
+        description: "Invoke a tool on an MCP server"
+        parameters:
+          type: object
+          properties:
+            server_name:
+              type: string
+            tool_name:
+              type: string
+            arguments:
+              type: object
+          required:
+            - server_name
+            - tool_name
+    topics:
+      - "Discover available servers, pick one, list tools, invoke"
+      - "User requests task, assistant finds appropriate MCP server and tool"
+      - "Multi-step MCP workflow with server selection"
+    generation_notes: >
+      MCP conversations typically follow: list_servers -> list_tools -> invoke_tool.
+      This is a multi-turn pattern where each step informs the next.
+      Keep tool schemas simple (max 3-5 params per D-02 research pitfall guidance).
+
+  cli_commands:
+    description: "CLI/shell command generation as tool use"
+    complexity: intermediate
+    system_prompt_ref: cli_assistant
+    example_tools:
+      - name: run_command
+        description: "Execute a shell command and return output"
+        parameters:
+          type: object
+          properties:
+            command:
+              type: string
+              description: "The shell command to execute"
+            working_directory:
+              type: string
+              description: "Directory to run command in"
+          required:
+            - command
+    topics:
+      - "File listing and directory navigation (ls, find, tree)"
+      - "Git operations (status, diff, log, commit)"
+      - "File content operations (grep, cat, head, tail)"
+      - "Process management (ps, kill)"
+      - "Package management (pip, npm)"
+    generation_notes: >
+      Commands should be safe and non-destructive by default.
+      Include explanation of what the command does in the assistant response.
+      Cover bash, git, and file operations per TOOL-05 requirement.

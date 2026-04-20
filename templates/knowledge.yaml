@@ -1,0 +1,57 @@
+# General Knowledge Prompt Templates for Lyra
+domain: knowledge
+description: >
+  Templates for generating general knowledge training conversations.
+  Covers reasoning chains, factual Q&A, and explanations.
+  All generated data must follow the TRL-native format defined in specs/sharegpt-format.md.
+
+categories:
+  reasoning_chains:
+    description: "Step-by-step reasoning with explicit chain-of-thought"
+    complexity: intermediate
+    system_prompt_ref: knowledge_reasoning
+    topics:
+      - "Math word problems (arithmetic, algebra, probability)"
+      - "Logic puzzles and deduction"
+      - "Estimation and Fermi problems"
+      - "Cause-and-effect analysis"
+      - "Decision-making with tradeoffs"
+      - "Analogical reasoning"
+    generation_notes: >
+      Every answer must show explicit reasoning steps before the conclusion.
+      Use numbered steps or clear paragraph breaks.
+      Final answer should be clearly marked.
+      Target ~500-1200 tokens per conversation.
+
+  factual_qa:
+    description: "Factual Q&A across diverse knowledge domains"
+    complexity: basic
+    system_prompt_ref: knowledge_assistant
+    domains:
+      - "Science (physics, chemistry, biology)"
+      - "History (events, people, timelines)"
+      - "Mathematics (concepts, theorems, proofs)"
+      - "Technology (computing, networking, software)"
+      - "Geography (countries, cities, features)"
+      - "Everyday life (cooking, health, finance basics)"
+    generation_notes: >
+      Answers should be factually accurate and concise.
+      For simple facts, 1-3 sentences is sufficient.
+      For concepts requiring context, provide brief background.
+      Target ~200-600 tokens per conversation.
+
+  explanations:
+    description: "Teaching and explanation samples with adaptive detail"
+    complexity: intermediate
+    system_prompt_ref: knowledge_assistant
+    topics:
+      - "How does X work (TCP/IP, DNS, compilers, databases)"
+      - "What is X (machine learning, blockchain, quantum computing)"
+      - "Why does X happen (seasons, tides, inflation)"
+      - "Compare X vs Y (SQL vs NoSQL, threads vs processes)"
+      - "Explain X to a beginner (recursion, APIs, encryption)"
+    generation_notes: >
+      Adjust explanation depth to topic complexity.
+      Simple topics get concise answers. Complex topics get structured
+      explanations with examples or analogies.
+      Target ~400-1000 tokens per conversation.

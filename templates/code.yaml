@@ -1,0 +1,73 @@
+# Code Generation Prompt Templates for Lyra
+domain: code
+description: >
+  Templates for generating code generation training conversations.
+  Covers utility functions, file operations, and debugging.
+  All generated data must follow the TRL-native format defined in specs/sharegpt-format.md.
+
+categories:
+  utility_functions:
+    description: "Quick utility function generation across common languages"
+    complexity: basic
+    system_prompt_ref: code_assistant
+    languages:
+      - python
+      - javascript
+      - typescript
+      - go
+      - rust
+    topics:
+      - "String manipulation (reverse, capitalize, truncate, slugify)"
+      - "Array/list operations (flatten, chunk, deduplicate, sort)"
+      - "Date/time formatting and parsing"
+      - "Number utilities (fibonacci, prime check, GCD)"
+      - "Data structure helpers (deep merge, path lookup, type checking)"
+      - "Validation functions (email, URL, phone number)"
+      - "Encoding/decoding (base64, hex, URL encoding)"
+    generation_notes: >
+      Functions should be self-contained (no external dependencies).
+      Include type hints/annotations where the language supports them.
+      Keep responses concise -- function definition plus 1-2 line explanation.
+      Target ~200-500 tokens per conversation.
+
+  file_operations:
+    description: "File operation and system manipulation code samples"
+    complexity: intermediate
+    system_prompt_ref: code_assistant
+    languages:
+      - python
+      - javascript
+      - typescript
+    topics:
+      - "Read/write CSV files"
+      - "Parse JSON/YAML configuration"
+      - "Directory traversal and file search"
+      - "Log file parsing and analysis"
+      - "File compression/decompression"
+      - "Environment variable management"
+      - "Path manipulation and validation"
+    generation_notes: >
+      Include proper error handling (try/except, try/catch).
+      Show safe file handling (context managers, proper close).
+      Target ~300-800 tokens per conversation.
+
+  debugging:
+    description: "Debugging and code fix samples"
+    complexity: intermediate
+    system_prompt_ref: code_debugger
+    languages:
+      - python
+      - javascript
+      - typescript
+    bug_types:
+      - "Off-by-one errors in loops"
+      - "Null/undefined reference errors"
+      - "Type mismatches"
+      - "Logic errors in conditionals"
+      - "Async/await mistakes"
+      - "Variable scoping issues"
+      - "Import/module errors"
+    generation_notes: >
+      User presents buggy code. Assistant identifies the bug, explains WHY it
+      is wrong, and provides corrected code. Three-part structure: identify, explain, fix.
+      Target ~400-800 tokens per conversation.
