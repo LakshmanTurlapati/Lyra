@@ -90,15 +90,16 @@ def sample_knowledge():
 def domain_fixture_dir(tmp_path, sample_tool_calling, sample_code, sample_knowledge):
     """Create temporary JSONL files for all 3 domains with known counts.
 
-    Creates 20 tool-calling, 10 code, 10 knowledge samples = 40 total.
-    This ratio roughly mirrors the actual dataset proportions.
+    Creates 60 tool-calling, 30 code, 30 knowledge samples = 120 total.
+    This ratio roughly mirrors the actual dataset proportions and provides
+    enough samples for stratified splits to work (min 2 per class per split).
     """
-    # Tool-calling: 20 samples
+    # Tool-calling: 60 samples
     tc_dir = tmp_path / "datasets" / "tool-calling" / "curated"
     tc_dir.mkdir(parents=True)
     tc_file = tc_dir / "tool-calling-curated.jsonl"
     with open(tc_file, "w") as f:
-        for i in range(20):
+        for i in range(60):
             sample = sample_tool_calling.copy()
             sample["_quality"] = {"score": 0.9 + i * 0.001, "dedup_hash": f"tc_{i}"}
             sample["messages"] = [
@@ -122,12 +123,12 @@ def domain_fixture_dir(tmp_path, sample_tool_calling, sample_code, sample_knowle
             ]
             f.write(json.dumps(sample) + "\n")
 
-    # Code: 10 samples
+    # Code: 30 samples
     code_dir = tmp_path / "datasets" / "code" / "curated"
     code_dir.mkdir(parents=True)
     code_file = code_dir / "code-curated.jsonl"
     with open(code_file, "w") as f:
-        for i in range(10):
+        for i in range(30):
             sample = sample_code.copy()
             sample["_quality"] = {"score": 0.85 + i * 0.001, "dedup_hash": f"code_{i}"}
             sample["messages"] = [
@@ -137,12 +138,12 @@ def domain_fixture_dir(tmp_path, sample_tool_calling, sample_code, sample_knowle
             ]
             f.write(json.dumps(sample) + "\n")
 
-    # Knowledge: 10 samples
+    # Knowledge: 30 samples
     know_dir = tmp_path / "datasets" / "knowledge" / "curated"
     know_dir.mkdir(parents=True)
     know_file = know_dir / "knowledge-curated.jsonl"
     with open(know_file, "w") as f:
-        for i in range(10):
+        for i in range(30):
             sample = sample_knowledge.copy()
             sample["_quality"] = {
                 "score": 0.80 + i * 0.001,
@@ -177,7 +178,7 @@ class TestLoadDomainJsonl:
         )
         samples = load_domain_jsonl(tc_path, "tool-calling")
 
-        assert len(samples) == 20
+        assert len(samples) == 60
         for s in samples:
             assert s["domain"] == "tool-calling"
             assert "_quality" not in s
@@ -197,7 +198,7 @@ class TestLoadDomainJsonl:
         )
         samples = load_domain_jsonl(code_path, "code")
 
-        assert len(samples) == 10
+        assert len(samples) == 30
         for s in samples:
             assert s["domain"] == "code"
             assert s["tools"] is None
@@ -239,9 +240,9 @@ class TestAssemblyOutput:
             base_dir=str(domain_fixture_dir),
         )
 
-        # Overall proportions: 20/40 = 50% tool-calling, 10/40 = 25% code, 25% knowledge
+        # Overall proportions: 60/120 = 50% tool-calling, 30/120 = 25% code, 25% knowledge
         total = sum(len(dd[s]) for s in dd)
-        assert total == 40
+        assert total == 120
 
         for split_name in ["train", "validation", "test"]:
             split_data = dd[split_name]
@@ -278,7 +279,7 @@ class TestAssemblyOutput:
                 )
 
     def test_total_count(self, domain_fixture_dir):
-        """Total across all splits equals sum of input files (40 for fixture)."""
+        """Total across all splits equals sum of input files (120 for fixture)."""
         from scripts.assemble_dataset import assemble
 
         output_dir = domain_fixture_dir / "output"
@@ -289,7 +290,7 @@ class TestAssemblyOutput:
         )
 
         total = sum(len(dd[s]) for s in dd)
-        assert total == 40
+        assert total == 120
 
     def test_split_ratios(self, domain_fixture_dir):
         """Train ~90%, validation ~5%, test ~5% (within tolerance for small N)."""
