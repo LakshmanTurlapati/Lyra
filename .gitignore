@@ -21,5 +21,8 @@ venv/
 # Model cache
 .cache/
 
+# Assembled dataset (binary Arrow files, reproducible from source JSONL + script)
+datasets/assembled/
+
 # Environment
 .env
