@@ -55,8 +55,9 @@ def get_domain_config(config: PipelineConfig, domain: str) -> dict:
 
     # Propagate top-level pipeline settings that modules need
     result["ngram_size"] = config.ngram_size
-    result["dedup_threshold"] = config.dedup_threshold
-    result["dedup_scope"] = config.dedup_scope
+    # Per-domain dedup overrides global if set
+    result["dedup_threshold"] = result.get("dedup_threshold") or config.dedup_threshold
+    result["dedup_scope"] = result.get("dedup_scope") or config.dedup_scope
     result["style_validation"] = config.style_validation
     result["include_quality_scores"] = config.include_quality_scores
 

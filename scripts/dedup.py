@@ -59,15 +59,43 @@ def jaccard_similarity(set_a: set, set_b: set) -> float:
     return intersection / union if union > 0 else 0.0
 
 
+def _serialize_tool_calls(msg: dict) -> str:
+    """Serialize tool_calls from a message into a comparable text representation.
+
+    Includes function names and arguments so that samples calling different
+    tools or with different arguments are distinguished during dedup.
+
+    Args:
+        msg: Message dict that may contain a "tool_calls" field.
+
+    Returns:
+        String representation of tool calls, or empty string if none.
+    """
+    tool_calls = msg.get("tool_calls")
+    if not tool_calls:
+        return ""
+    import json
+    parts = []
+    for tc in tool_calls:
+        func = tc.get("function", {})
+        parts.append(f"{func.get('name', '')}({json.dumps(func.get('arguments', {}), sort_keys=True)})")
+    return " ".join(parts)
+
+
 def get_dedup_text(sample: dict, scope: str = "response") -> str:
     """Extract text for deduplication comparison based on scope.
+
+    For "response" scope, includes both assistant content AND serialized
+    tool_calls data. This ensures tool-calling samples that differ in which
+    tools they call (but have similar boilerplate text) are not falsely
+    deduplicated.
 
     Args:
         sample: Conversation dict with "messages" key.
         scope: One of "response", "prompt", "full".
-            - "response": join all assistant messages' content (skip None)
+            - "response": join all assistant messages' content + tool_calls
             - "prompt": join all user messages' content
-            - "full": join all messages' content (skip None)
+            - "full": join all messages' content + tool_calls (skip None)
 
     Returns:
         Concatenated text string for comparison.
@@ -75,11 +103,15 @@ def get_dedup_text(sample: dict, scope: str = "response") -> str:
     messages = sample.get("messages", [])
 
     if scope == "response":
-        return " ".join(
-            m.get("content")
-            for m in messages
-            if m.get("role") == "assistant" and m.get("content")
-        )
+        parts = []
+        for m in messages:
+            if m.get("role") == "assistant":
+                if m.get("content"):
+                    parts.append(m["content"])
+                tc_text = _serialize_tool_calls(m)
+                if tc_text:
+                    parts.append(tc_text)
+        return " ".join(parts)
     elif scope == "prompt":
         return " ".join(
             m.get("content")
@@ -87,11 +119,15 @@ def get_dedup_text(sample: dict, scope: str = "response") -> str:
             if m.get("role") == "user" and m.get("content")
         )
     else:  # "full"
-        return " ".join(
-            m.get("content")
-            for m in messages
-            if m.get("content")
-        )
+        parts = []
+        for m in messages:
+            if m.get("content"):
+                parts.append(m["content"])
+            if m.get("role") == "assistant":
+                tc_text = _serialize_tool_calls(m)
+                if tc_text:
+                    parts.append(tc_text)
+        return " ".join(parts)
 
 
 def deduplicate_batch(samples: list[dict], config: dict) -> list[dict]:

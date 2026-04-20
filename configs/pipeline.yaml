@@ -15,6 +15,8 @@ domains:
   tool-calling:
     min_response_chars: 5
     max_turn_ratio: 100
+    dedup_scope: "full"
+    dedup_threshold: 0.9
     style:
       max_tokens: 800
       require_tool_calls: true

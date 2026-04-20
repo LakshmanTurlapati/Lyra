@@ -35,6 +35,8 @@ class DomainConfig(BaseModel):
     min_response_chars: int = 10
     max_turn_ratio: float = 50.0
     min_assistant_messages: int = 1
+    dedup_scope: Optional[str] = None
+    dedup_threshold: Optional[float] = None
     style: StyleConfig = StyleConfig()
 
 
