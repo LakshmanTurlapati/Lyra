@@ -191,7 +191,7 @@ def validate_file(tokenizer, path: Path) -> dict:
     invalid_count = 0
     valid_token_counts = []
 
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             line = line.strip()
             if not line:

@@ -151,7 +151,7 @@ def validate_file(path: Path) -> dict:
     """
     results = {"total": 0, "valid": 0, "invalid": 0, "errors": []}
 
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             line = line.strip()
             if not line:

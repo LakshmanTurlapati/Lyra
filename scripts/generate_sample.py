@@ -175,7 +175,7 @@ def write_samples(output_dir: Path, domain: str, samples: list[dict]) -> Path:
     domain_dir.mkdir(parents=True, exist_ok=True)
     jsonl_path = domain_dir / "samples.jsonl"
 
-    with open(jsonl_path, "w") as f:
+    with open(jsonl_path, "w", encoding="utf-8") as f:
         for sample in samples:
             f.write(json.dumps(sample) + "\n")
 
