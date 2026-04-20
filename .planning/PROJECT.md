@@ -12,7 +12,9 @@ Curate Opus-quality training data that makes a 1.7B parameter model practically 
 
 ### Validated
 
-(None yet -- ship to validate)
+- [x] ShareGPT format specification with Pydantic validation (Validated in Phase 1: Data Format and Pipeline Foundation)
+- [x] SmolLM2-1.7B tokenizer alignment validation pipeline (Validated in Phase 1)
+- [x] Prompt template library for data generation guidance (Validated in Phase 1)
 
 ### Active
 
@@ -84,4 +86,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-20 after initialization*
+*Last updated: 2026-04-20 after Phase 1 completion*
