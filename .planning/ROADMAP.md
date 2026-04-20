@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. User can run a generation command that produces ShareGPT-format conversations with correct role ordering (human/gpt/function_call/observation)
   2. User can validate any generated conversation against SmolLM2-1.7B's tokenizer and chat template and get pass/fail with error details
   3. User can browse a prompt template library organized by category (tool call, code, general knowledge) with documented system prompts
-  4. User can generate a small batch (10-50 samples) via the Anthropic API and receive JSONL output on disk
+  4. User can generate local test samples and validate them end-to-end through the format and tokenizer pipeline (Anthropic API generation deferred to Phase 4-6 per D-05)
 **Plans**: 3 plans
 Plans:
 - [x] 01-01-PLAN.md -- Format specification, Pydantic validation schema, and test infrastructure
