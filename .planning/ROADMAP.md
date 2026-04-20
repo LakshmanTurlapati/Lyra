@@ -49,7 +49,10 @@ Plans:
   2. User can configure prompt templates, topic distributions, and quality thresholds via config files and reuse them across runs
   3. User can observe adaptive output styles in generated data -- terse responses for code tasks, detailed chain-of-thought for reasoning tasks
   4. User can see per-sample quality scores and filter by threshold
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 02-01-PLAN.md -- Quality scorer with 4 heuristic signals and n-gram Jaccard deduplication
+- [ ] 02-02-PLAN.md -- Style validator, pipeline config, and orchestrator wiring all stages
 
 ### Phase 3: Evaluation Framework
 **Goal**: Users can evaluate any SmolLM2-1.7B checkpoint (base or fine-tuned) against standard and custom benchmarks before any training begins
@@ -146,7 +149,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Data Format and Pipeline Foundation | 0/3 | Planning complete | - |
-| 2. Data Quality and Curation Pipeline | 0/TBD | Not started | - |
+| 2. Data Quality and Curation Pipeline | 0/2 | Planning complete | - |
 | 3. Evaluation Framework | 0/TBD | Not started | - |
 | 4. Tool Calling Dataset | 0/TBD | Not started | - |
 | 5. Code Generation Dataset | 0/TBD | Not started | - |
