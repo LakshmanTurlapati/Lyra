@@ -107,19 +107,22 @@ def validate_style(sample: dict, domain: str, config: dict) -> bool:
 
     # --- Code domain: terse, code-heavy ---
     if domain == "code":
-        max_tokens = style.get("max_tokens", 600)
+        # Use ``or`` fallback because Pydantic model_dump() serializes
+        # Optional[int]=None as {"max_tokens": None} -- dict.get() returns
+        # None (key present) rather than the default.
+        max_tokens = style.get("max_tokens") or 600
         if approx_tokens > max_tokens:
             return False
         if style.get("require_code_blocks", False) and "```" not in response_text:
             return False
-        max_prose = style.get("max_prose_ratio", 0.4)
+        max_prose = style.get("max_prose_ratio") or 0.4
         code_ratio = get_code_ratio(response_text)
         if code_ratio < (1 - max_prose):
             return False
 
     # --- Knowledge domain: detailed, reasoning-heavy ---
     elif domain == "knowledge":
-        min_tokens = style.get("min_tokens", 200)
+        min_tokens = style.get("min_tokens") or 200
         if approx_tokens < min_tokens:
             return False
         if style.get("require_reasoning_markers", False) and not has_reasoning_markers(response_text):
@@ -127,7 +130,7 @@ def validate_style(sample: dict, domain: str, config: dict) -> bool:
 
     # --- Tool-calling domain: moderate length ---
     elif domain == "tool-calling":
-        max_tokens = style.get("max_tokens", 800)
+        max_tokens = style.get("max_tokens") or 800
         if approx_tokens > max_tokens:
             return False
 
