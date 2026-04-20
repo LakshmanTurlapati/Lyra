@@ -110,7 +110,7 @@ Plans:
 Plans:
 - [x] 06-01-PLAN.md -- Knowledge generation script (TDD) with 200+ topic pool, 3 category generators, and test suite
 - [x] 06-02-PLAN.md -- Generate all 67 batches: 27 Q&A, 23 explanation, 17 reasoning (~3,350 raw samples)
-- [ ] 06-03-PLAN.md -- Curation pipeline run and quality verification checkpoint
+- [x] 06-03-PLAN.md -- Curation pipeline run and quality verification checkpoint
 
 ### Phase 7: Dataset Assembly
 **Goal**: Users can merge all three domain datasets into a single final dataset with correct splits and balanced domain representation
