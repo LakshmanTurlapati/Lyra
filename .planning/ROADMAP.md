@@ -92,7 +92,11 @@ Plans:
   1. Dataset contains quick utility function generation samples across common programming languages (Python, JavaScript, TypeScript, Go, Rust)
   2. Dataset contains file operation and system manipulation code samples with correct error handling
   3. Dataset contains debugging and code fix samples that identify bugs, explain them, and provide corrected code
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 05-01-PLAN.md -- Code generation script (TDD) with 3 category generators and test suite
+- [ ] 05-02-PLAN.md -- Generate all 68 batches: 34 utility, 17 file-ops, 17 debugging (~3,400 raw samples)
+- [ ] 05-03-PLAN.md -- Curation pipeline run and quality verification checkpoint
 
 ### Phase 6: General Knowledge Dataset
 **Goal**: Users have a complete, curated general knowledge dataset covering reasoning, Q&A, and explanations
@@ -160,7 +164,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 2. Data Quality and Curation Pipeline | 0/2 | Planning complete | - |
 | 3. Evaluation Framework | 0/2 | Planning complete | - |
 | 4. Tool Calling Dataset | 0/4 | Planning complete | - |
-| 5. Code Generation Dataset | 0/TBD | Not started | - |
+| 5. Code Generation Dataset | 0/3 | Planning complete | - |
 | 6. General Knowledge Dataset | 0/TBD | Not started | - |
 | 7. Dataset Assembly | 0/TBD | Not started | - |
 | 8. Fine-Tuning | 0/TBD | Not started | - |
