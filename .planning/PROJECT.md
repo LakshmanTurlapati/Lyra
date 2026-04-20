@@ -18,6 +18,8 @@ Curate Opus-quality training data that makes a 1.7B parameter model practically 
 - [x] Data quality curation pipeline with filtering, dedup, scoring (Validated in Phase 2: Data Quality and Curation Pipeline)
 - [x] Configurable pipeline via YAML with per-domain overrides (Validated in Phase 2)
 - [x] Adaptive output style validation -- terse for code, detailed for reasoning (Validated in Phase 2)
+- [x] Custom eval benchmarks for tool-call format, code correctness, argument accuracy (Validated in Phase 3: Evaluation Framework)
+- [x] Per-category quality metrics reported separately for tool calls, code, knowledge (Validated in Phase 3)
 
 ### Active
 
