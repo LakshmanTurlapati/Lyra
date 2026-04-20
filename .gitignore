@@ -1,9 +1,25 @@
+# Python
 __pycache__/
 *.pyc
 *.pyo
-.pytest_cache/
-datasets/
 *.egg-info/
 dist/
 build/
+
+# Testing
+.pytest_cache/
+
+# Dataset files (large, generated)
+datasets/**/*.jsonl
+datasets/**/*.json
+!datasets/**/.gitkeep
+
+# Virtual environments
+venv/
+.venv/
+
+# Model cache
+.cache/
+
+# Environment
 .env
