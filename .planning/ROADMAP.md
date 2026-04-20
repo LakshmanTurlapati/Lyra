@@ -94,7 +94,7 @@ Plans:
   3. Dataset contains debugging and code fix samples that identify bugs, explain them, and provide corrected code
 **Plans**: 3 plans
 Plans:
-- [ ] 05-01-PLAN.md -- Code generation script (TDD) with 3 category generators and test suite
+- [x] 05-01-PLAN.md -- Code generation script (TDD) with 3 category generators and test suite
 - [ ] 05-02-PLAN.md -- Generate all 68 batches: 34 utility, 17 file-ops, 17 debugging (~3,400 raw samples)
 - [ ] 05-03-PLAN.md -- Curation pipeline run and quality verification checkpoint
 

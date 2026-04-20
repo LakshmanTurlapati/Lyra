@@ -27,9 +27,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Code Generation
 
-- [ ] **CODE-01**: Dataset includes quick utility function generation samples across common languages
-- [ ] **CODE-02**: Dataset includes file operation and system manipulation code samples
-- [ ] **CODE-03**: Dataset includes debugging and code fix samples (identify bug, explain, fix)
+- [x] **CODE-01**: Dataset includes quick utility function generation samples across common languages
+- [x] **CODE-02**: Dataset includes file operation and system manipulation code samples
+- [x] **CODE-03**: Dataset includes debugging and code fix samples (identify bug, explain, fix)
 
 ### General Knowledge
 
@@ -107,9 +107,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TOOL-03 | Phase 4 | Complete |
 | TOOL-04 | Phase 4 | Complete |
 | TOOL-05 | Phase 4 | Complete |
-| CODE-01 | Phase 5 | Pending |
-| CODE-02 | Phase 5 | Pending |
-| CODE-03 | Phase 5 | Pending |
+| CODE-01 | Phase 5 | Complete |
+| CODE-02 | Phase 5 | Complete |
+| CODE-03 | Phase 5 | Complete |
 | KNOW-01 | Phase 6 | Pending |
 | KNOW-02 | Phase 6 | Pending |
 | KNOW-03 | Phase 6 | Pending |

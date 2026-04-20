@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 5 context gathered
-last_updated: "2026-04-20T18:59:31.252Z"
-last_activity: 2026-04-20 -- Phase 5 planning complete
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-04-20T19:10:21.270Z"
+last_activity: 2026-04-20
 progress:
   total_phases: 10
   completed_phases: 4
   total_plans: 14
-  completed_plans: 11
-  percent: 79
+  completed_plans: 12
+  percent: 86
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-20)
 
 **Core value:** Curate Opus-quality training data that makes a 1.7B parameter model practically useful for day-to-day development tasks -- tool calls, quick code, and general reasoning.
-**Current focus:** Phase 04 — Tool Calling Dataset
+**Current focus:** Phase 05 — Code Generation Dataset
 
 ## Current Position
 
-Phase: 5
-Plan: Not started
+Phase: 05 (Code Generation Dataset) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-04-20 -- Phase 5 planning complete
+Last activity: 2026-04-20
 
 Progress: [..........] 0%
 
@@ -66,6 +66,7 @@ Progress: [..........] 0%
 | Phase 04 P02 | 4min | 2 tasks | 41 files |
 | Phase 04 P03 | 2min | 2 tasks | 27 files |
 | Phase 04 P04 | 7min | 2 tasks | 4 files |
+| Phase 05 P01 | 8min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,8 @@ Recent decisions affecting current work:
 - [Phase 04]: Per-domain dedup config: tool-calling uses full-scope dedup at 0.9 threshold instead of global response-scope at 0.7
 - [Phase 04]: Dedup includes tool_calls serialization: function names + arguments included in comparison text for tool-calling domain
 - [Phase 04]: Edge case no-tool samples retained (405 of 2470): teaches model when NOT to call tools
+- [Phase 05]: Language-specific code pools with idiomatic patterns per language for code generation training data
+- [Phase 05]: Debugging entries stored as explicit (query, response) tuples for exact Bug/Fix format control per D-06
 
 ### Pending Todos
 
@@ -114,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-20T18:42:58.398Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-code-generation-dataset/05-CONTEXT.md
+Last session: 2026-04-20T19:10:21.267Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None
