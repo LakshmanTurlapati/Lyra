@@ -106,7 +106,11 @@ Plans:
   1. Dataset contains reasoning chain samples with explicit step-by-step chain-of-thought that reaches a conclusion
   2. Dataset contains factual Q&A samples spanning diverse domains (science, history, math, technology, everyday life)
   3. Dataset contains explanation and teaching samples with adaptive detail level matching the complexity of the topic
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 06-01-PLAN.md -- Knowledge generation script (TDD) with 200+ topic pool, 3 category generators, and test suite
+- [ ] 06-02-PLAN.md -- Generate all 67 batches: 27 Q&A, 23 explanation, 17 reasoning (~3,350 raw samples)
+- [ ] 06-03-PLAN.md -- Curation pipeline run and quality verification checkpoint
 
 ### Phase 7: Dataset Assembly
 **Goal**: Users can merge all three domain datasets into a single final dataset with correct splits and balanced domain representation
@@ -165,7 +169,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 3. Evaluation Framework | 0/2 | Planning complete | - |
 | 4. Tool Calling Dataset | 0/4 | Planning complete | - |
 | 5. Code Generation Dataset | 0/3 | Planning complete | - |
-| 6. General Knowledge Dataset | 0/TBD | Not started | - |
+| 6. General Knowledge Dataset | 0/3 | Planning complete | - |
 | 7. Dataset Assembly | 0/TBD | Not started | - |
 | 8. Fine-Tuning | 0/TBD | Not started | - |
 | 9. Benchmarking and Core Release | 0/TBD | Not started | - |
