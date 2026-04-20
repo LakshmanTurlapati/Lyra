@@ -95,44 +95,44 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | TBD | Pending |
-| DATA-02 | TBD | Pending |
-| DATA-03 | TBD | Pending |
-| DATA-04 | TBD | Pending |
-| DATA-05 | TBD | Pending |
-| DATA-06 | TBD | Pending |
-| DATA-07 | TBD | Pending |
-| TOOL-01 | TBD | Pending |
-| TOOL-02 | TBD | Pending |
-| TOOL-03 | TBD | Pending |
-| TOOL-04 | TBD | Pending |
-| TOOL-05 | TBD | Pending |
-| CODE-01 | TBD | Pending |
-| CODE-02 | TBD | Pending |
-| CODE-03 | TBD | Pending |
-| KNOW-01 | TBD | Pending |
-| KNOW-02 | TBD | Pending |
-| KNOW-03 | TBD | Pending |
-| TRNG-01 | TBD | Pending |
-| TRNG-02 | TBD | Pending |
-| TRNG-03 | TBD | Pending |
-| EVAL-01 | TBD | Pending |
-| EVAL-02 | TBD | Pending |
-| EVAL-03 | TBD | Pending |
-| EVAL-04 | TBD | Pending |
-| REL-01 | TBD | Pending |
-| REL-02 | TBD | Pending |
-| REL-03 | TBD | Pending |
-| REL-04 | TBD | Pending |
-| REL-05 | TBD | Pending |
-| REL-06 | TBD | Pending |
-| REL-07 | TBD | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 2 | Pending |
+| DATA-04 | Phase 2 | Pending |
+| DATA-05 | Phase 2 | Pending |
+| DATA-06 | Phase 1 | Pending |
+| DATA-07 | Phase 7 | Pending |
+| TOOL-01 | Phase 4 | Pending |
+| TOOL-02 | Phase 4 | Pending |
+| TOOL-03 | Phase 4 | Pending |
+| TOOL-04 | Phase 4 | Pending |
+| TOOL-05 | Phase 4 | Pending |
+| CODE-01 | Phase 5 | Pending |
+| CODE-02 | Phase 5 | Pending |
+| CODE-03 | Phase 5 | Pending |
+| KNOW-01 | Phase 6 | Pending |
+| KNOW-02 | Phase 6 | Pending |
+| KNOW-03 | Phase 6 | Pending |
+| TRNG-01 | Phase 8 | Pending |
+| TRNG-02 | Phase 8 | Pending |
+| TRNG-03 | Phase 8 | Pending |
+| EVAL-01 | Phase 9 | Pending |
+| EVAL-02 | Phase 9 | Pending |
+| EVAL-03 | Phase 3 | Pending |
+| EVAL-04 | Phase 3 | Pending |
+| REL-01 | Phase 9 | Pending |
+| REL-02 | Phase 9 | Pending |
+| REL-03 | Phase 9 | Pending |
+| REL-04 | Phase 9 | Pending |
+| REL-05 | Phase 10 | Pending |
+| REL-06 | Phase 10 | Pending |
+| REL-07 | Phase 10 | Pending |
 
 **Coverage:**
 - v1 requirements: 32 total
-- Mapped to phases: 0
-- Unmapped: 32
+- Mapped to phases: 32
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 after initial definition*
+*Last updated: 2026-04-20 after roadmap creation*
