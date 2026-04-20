@@ -62,7 +62,10 @@ Plans:
   1. User can run custom eval benchmarks that measure tool-call format compliance, argument extraction accuracy, and code correctness
   2. User can see per-category quality metrics reported separately for tool calls, code, and general knowledge
   3. User can run the eval suite against base SmolLM2-1.7B to establish baseline scores that later compare against the fine-tuned model
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 03-01-PLAN.md -- Pydantic result schemas, eval config, and compare command
+- [ ] 03-02-PLAN.md -- Unified eval runner CLI and test suite
 
 ### Phase 4: Tool Calling Dataset
 **Goal**: Users have a complete, curated tool-calling dataset covering all five tool-call patterns (JSON function calls, multi-turn, parallel, MCP, CLI)
@@ -150,7 +153,7 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 |-------|----------------|--------|-----------|
 | 1. Data Format and Pipeline Foundation | 0/3 | Planning complete | - |
 | 2. Data Quality and Curation Pipeline | 0/2 | Planning complete | - |
-| 3. Evaluation Framework | 0/TBD | Not started | - |
+| 3. Evaluation Framework | 0/2 | Planning complete | - |
 | 4. Tool Calling Dataset | 0/TBD | Not started | - |
 | 5. Code Generation Dataset | 0/TBD | Not started | - |
 | 6. General Knowledge Dataset | 0/TBD | Not started | - |
