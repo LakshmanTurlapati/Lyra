@@ -33,9 +33,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### General Knowledge
 
-- [ ] **KNOW-01**: Dataset includes reasoning chain samples with explicit chain-of-thought
-- [ ] **KNOW-02**: Dataset includes factual Q&A samples across diverse domains
-- [ ] **KNOW-03**: Dataset includes explanation and teaching samples with adaptive detail level
+- [x] **KNOW-01**: Dataset includes reasoning chain samples with explicit chain-of-thought
+- [x] **KNOW-02**: Dataset includes factual Q&A samples across diverse domains
+- [x] **KNOW-03**: Dataset includes explanation and teaching samples with adaptive detail level
 
 ### Training
 
@@ -110,9 +110,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CODE-01 | Phase 5 | Complete |
 | CODE-02 | Phase 5 | Complete |
 | CODE-03 | Phase 5 | Complete |
-| KNOW-01 | Phase 6 | Pending |
-| KNOW-02 | Phase 6 | Pending |
-| KNOW-03 | Phase 6 | Pending |
+| KNOW-01 | Phase 6 | Complete |
+| KNOW-02 | Phase 6 | Complete |
+| KNOW-03 | Phase 6 | Complete |
 | TRNG-01 | Phase 8 | Pending |
 | TRNG-02 | Phase 8 | Pending |
 | TRNG-03 | Phase 8 | Pending |
