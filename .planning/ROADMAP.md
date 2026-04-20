@@ -52,7 +52,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 02-01-PLAN.md -- Quality scorer with 4 heuristic signals and n-gram Jaccard deduplication
-- [ ] 02-02-PLAN.md -- Style validator, pipeline config, and orchestrator wiring all stages
+- [x] 02-02-PLAN.md -- Style validator, pipeline config, and orchestrator wiring all stages
 
 ### Phase 3: Evaluation Framework
 **Goal**: Users can evaluate any SmolLM2-1.7B checkpoint (base or fine-tuned) against standard and custom benchmarks before any training begins
