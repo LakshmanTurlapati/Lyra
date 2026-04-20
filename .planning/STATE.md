@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-04-20T19:14:15.532Z"
+status: verifying
+stopped_at: Completed 05-03-PLAN.md
+last_updated: "2026-04-20T19:23:53.200Z"
 last_activity: 2026-04-20
 progress:
   total_phases: 10
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 13
-  percent: 93
+  completed_plans: 14
+  percent: 100
 ---
 
 # Project State
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-20)
 
 Phase: 05 (Code Generation Dataset) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-20
 
 Progress: [..........] 0%
@@ -68,6 +68,7 @@ Progress: [..........] 0%
 | Phase 04 P04 | 7min | 2 tasks | 4 files |
 | Phase 05 P01 | 8min | 2 tasks | 2 files |
 | Phase 05 P02 | 1min | 2 tasks | 68 files |
+| Phase 05 P03 | 7min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -108,6 +109,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Debugging entries stored as explicit (query, response) tuples for exact Bug/Fix format control per D-06
 - [Phase 05]: Sequential seed strategy (batch*100 + offset) for reproducibility across categories
 - [Phase 05]: Force-add (git add -f) to override datasets/**/*.jsonl gitignore rule (same as Phase 4)
+- [Phase 05]: Code domain uses user-response dedup scope (excludes system prompts) at 0.98 threshold for template-generated data
+- [Phase 05]: max_prose_ratio relaxed from 0.4 to 0.6 for code domain to accommodate Bug/Fix debugging format
 
 ### Pending Todos
 
@@ -120,6 +123,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-20T19:14:15.530Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-04-20T19:23:53.196Z
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None
