@@ -33,8 +33,10 @@ domains:
 
   knowledge:
     min_response_chars: 100
+    dedup_scope: "user-response"
+    dedup_threshold: 0.995
     style:
-      min_tokens: 200
+      min_tokens: 120
       require_reasoning_markers: true
       min_prose_ratio: 0.7
 
