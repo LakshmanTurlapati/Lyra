@@ -79,7 +79,7 @@ Plans:
   5. Dataset contains CLI/shell command generation patterns for bash, git, and file operations
 **Plans**: 4 plans
 Plans:
-- [ ] 04-01-PLAN.md -- Tool schema pool (50-100 schemas) and batch generation script
+- [x] 04-01-PLAN.md -- Tool schema pool (50-100 schemas) and batch generation script
 - [ ] 04-02-PLAN.md -- Generate single-call (~1,155) and CLI (~825) category batches
 - [ ] 04-03-PLAN.md -- Generate multi-turn (~495), parallel (~495), and MCP (~330) category batches
 - [ ] 04-04-PLAN.md -- Full curation pipeline run and quality verification checkpoint

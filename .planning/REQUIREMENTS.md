@@ -19,11 +19,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Tool Calling
 
-- [ ] **TOOL-01**: Dataset includes structured JSON function calling samples in OpenAI-compatible format
-- [ ] **TOOL-02**: Dataset includes multi-turn tool calling with results handling (function_call -> observation -> response)
-- [ ] **TOOL-03**: Dataset includes parallel function execution patterns (multiple tools in one turn)
-- [ ] **TOOL-04**: Dataset includes MCP-style tool use patterns (server discovery, tool listing, invocation, result handling)
-- [ ] **TOOL-05**: Dataset includes CLI/shell command generation patterns (bash, git, file operations)
+- [x] **TOOL-01**: Dataset includes structured JSON function calling samples in OpenAI-compatible format
+- [x] **TOOL-02**: Dataset includes multi-turn tool calling with results handling (function_call -> observation -> response)
+- [x] **TOOL-03**: Dataset includes parallel function execution patterns (multiple tools in one turn)
+- [x] **TOOL-04**: Dataset includes MCP-style tool use patterns (server discovery, tool listing, invocation, result handling)
+- [x] **TOOL-05**: Dataset includes CLI/shell command generation patterns (bash, git, file operations)
 
 ### Code Generation
 
@@ -102,11 +102,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-05 | Phase 2 | Complete |
 | DATA-06 | Phase 1 | Complete |
 | DATA-07 | Phase 7 | Pending |
-| TOOL-01 | Phase 4 | Pending |
-| TOOL-02 | Phase 4 | Pending |
-| TOOL-03 | Phase 4 | Pending |
-| TOOL-04 | Phase 4 | Pending |
-| TOOL-05 | Phase 4 | Pending |
+| TOOL-01 | Phase 4 | Complete |
+| TOOL-02 | Phase 4 | Complete |
+| TOOL-03 | Phase 4 | Complete |
+| TOOL-04 | Phase 4 | Complete |
+| TOOL-05 | Phase 4 | Complete |
 | CODE-01 | Phase 5 | Pending |
 | CODE-02 | Phase 5 | Pending |
 | CODE-03 | Phase 5 | Pending |

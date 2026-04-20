@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 4 context gathered
-last_updated: "2026-04-20T16:03:37.031Z"
-last_activity: 2026-04-20 -- Phase 4 planning complete
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-04-20T16:16:13.363Z"
+last_activity: 2026-04-20
 progress:
   total_phases: 10
   completed_phases: 3
   total_plans: 11
-  completed_plans: 7
-  percent: 64
+  completed_plans: 8
+  percent: 73
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-20)
 
 **Core value:** Curate Opus-quality training data that makes a 1.7B parameter model practically useful for day-to-day development tasks -- tool calls, quick code, and general reasoning.
-**Current focus:** Phase 03 — evaluation-framework
+**Current focus:** Phase 04 — Tool Calling Dataset
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
+Phase: 04 (Tool Calling Dataset) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-04-20 -- Phase 4 planning complete
+Last activity: 2026-04-20
 
 Progress: [..........] 0%
 
@@ -61,6 +61,7 @@ Progress: [..........] 0%
 | Phase 02 P02 | 6min | 2 tasks | 7 files |
 | Phase 03 P01 | 2min | 2 tasks | 4 files |
 | Phase 03 P02 | 4min | 2 tasks | 4 files |
+| Phase 04 P01 | 10min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,8 @@ Recent decisions affecting current work:
 - [Phase 03]: EvalResult.model_validate_json for safe JSON loading at trust boundary per T-03-02
 - [Phase 03]: Lazy imports for torch/lm_eval/transformers inside functions -- avoids import errors when packages not installed
 - [Phase 03]: Model path validation via regex before subprocess/library calls per T-03-07
+- [Phase 04]: 64 schemas total: 41 developer, 18 everyday, 3 MCP meta, 2 CLI (64% developer weight per D-04)
+- [Phase 04]: Template-based query generation with placeholder filling for diversity and seeded Random per batch for reproducibility
 
 ### Pending Todos
 
@@ -101,6 +104,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-20T15:40:06.650Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-tool-calling-dataset/04-CONTEXT.md
+Last session: 2026-04-20T16:16:13.360Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None
