@@ -122,7 +122,7 @@ Plans:
   3. Final assembled dataset passes the full validation pipeline from Phase 2 without errors
 **Plans**: 2 plans
 Plans:
-- [ ] 07-01-PLAN.md -- Assembly script (TDD) with stratified splitting, domain metadata, and stats command
+- [x] 07-01-PLAN.md -- Assembly script (TDD) with stratified splitting, domain metadata, and stats command
 - [ ] 07-02-PLAN.md -- Execute assembly on real data, validate, save stats, update gitignore
 
 ### Phase 8: Fine-Tuning

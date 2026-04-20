@@ -15,7 +15,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DATA-04**: User can configure and reuse the generation pipeline with custom prompt templates, topic distributions, and quality thresholds
 - [x] **DATA-05**: Training data includes adaptive output styles -- terse responses for code tasks, detailed chain-of-thought for reasoning tasks
 - [x] **DATA-06**: Prompt template library organized by category (tool call, code, general knowledge) with documented system prompts
-- [ ] **DATA-07**: Dataset includes stratified train/validation/test splits across all three focus areas
+- [x] **DATA-07**: Dataset includes stratified train/validation/test splits across all three focus areas
 
 ### Tool Calling
 
@@ -101,7 +101,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 2 | Complete |
 | DATA-05 | Phase 2 | Complete |
 | DATA-06 | Phase 1 | Complete |
-| DATA-07 | Phase 7 | Pending |
+| DATA-07 | Phase 7 | Complete |
 | TOOL-01 | Phase 4 | Complete |
 | TOOL-02 | Phase 4 | Complete |
 | TOOL-03 | Phase 4 | Complete |
