@@ -16,6 +16,11 @@ from transformers import AutoTokenizer
 # --- Constants ---
 
 MODEL_ID = "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+
+# Training sequence length limit. Intentionally conservative vs SmolLM2's 8192 context:
+# - Shorter samples train faster and with less memory
+# - 2048 matches SmolLM2's native training sequence length
+# - Can be overridden via --max-tokens CLI flag for longer samples in future phases
 MAX_TOKENS = 2048
 
 
@@ -78,7 +83,7 @@ def _prepare_messages_for_template(messages: list[dict], tools: list[dict] | Non
     return prepared
 
 
-def validate_conversation(tokenizer, conversation: dict) -> dict:
+def validate_conversation(tokenizer, conversation: dict, max_tokens: int = MAX_TOKENS) -> dict:
     """Validate a conversation dict against the SmolLM2 tokenizer.
 
     Checks that the conversation tokenizes correctly, fits within the token limit,
@@ -93,6 +98,7 @@ def validate_conversation(tokenizer, conversation: dict) -> dict:
         tokenizer: A loaded HuggingFace tokenizer instance.
         conversation: Dict with "messages" key (list of role/content dicts)
             and optional "tools" key (list of tool schema dicts).
+        max_tokens: Maximum allowed token count. Defaults to MAX_TOKENS (2048).
 
     Returns:
         Dict with keys:
@@ -125,9 +131,9 @@ def validate_conversation(tokenizer, conversation: dict) -> dict:
 
     # Check token count
     token_count = len(token_ids)
-    if token_count > MAX_TOKENS:
+    if token_count > max_tokens:
         errors.append(
-            f"Token count {token_count} exceeds {MAX_TOKENS} limit"
+            f"Token count {token_count} exceeds {max_tokens} limit"
         )
 
     # Check EOS token presence at end of conversation.
@@ -167,7 +173,7 @@ def validate_conversation(tokenizer, conversation: dict) -> dict:
     }
 
 
-def validate_file(tokenizer, path: Path) -> dict:
+def validate_file(tokenizer, path: Path, max_tokens: int = MAX_TOKENS) -> dict:
     """Validate a JSONL file of conversations against the tokenizer.
 
     Reads the file line by line, validates each conversation, and computes
@@ -176,6 +182,7 @@ def validate_file(tokenizer, path: Path) -> dict:
     Args:
         tokenizer: A loaded HuggingFace tokenizer instance.
         path: Path to the JSONL file to validate.
+        max_tokens: Maximum allowed token count per conversation. Defaults to MAX_TOKENS.
 
     Returns:
         Dict with keys:
@@ -209,7 +216,7 @@ def validate_file(tokenizer, path: Path) -> dict:
                 })
                 continue
 
-            result = validate_conversation(tokenizer, data)
+            result = validate_conversation(tokenizer, data, max_tokens=max_tokens)
             line_result = {
                 "line": line_num,
                 "valid": result["valid"],
@@ -258,6 +265,12 @@ def main():
         default=MODEL_ID,
         help=f"HuggingFace model ID for tokenizer (default: {MODEL_ID})",
     )
+    parser.add_argument(
+        "--max-tokens",
+        type=int,
+        default=MAX_TOKENS,
+        help=f"Maximum token count per conversation (default: {MAX_TOKENS})",
+    )
     args = parser.parse_args()
 
     if not args.jsonl_file.exists():
@@ -267,8 +280,8 @@ def main():
     print(f"Loading tokenizer: {args.model}")
     tokenizer = load_tokenizer(args.model)
 
-    print(f"Validating: {args.jsonl_file}")
-    results = validate_file(tokenizer, args.jsonl_file)
+    print(f"Validating: {args.jsonl_file} (max_tokens={args.max_tokens})")
+    results = validate_file(tokenizer, args.jsonl_file, max_tokens=args.max_tokens)
 
     # Print summary
     print(f"\nResults: {results['valid']}/{results['total']} valid")
