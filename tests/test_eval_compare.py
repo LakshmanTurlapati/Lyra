@@ -187,3 +187,65 @@ def test_format_compare_table_positive_delta_prefix():
     ]
     output = format_compare_table(results)
     assert "+0.1000" in output
+
+
+# ---------------------------------------------------------------------------
+# Phase 9: Markdown + Mermaid output tests (EVAL-02 / D-04, D-05, D-06)
+# ---------------------------------------------------------------------------
+
+def test_write_benchmark_md(tmp_path):
+    """write_benchmark_md writes BENCHMARK.md with summary table to given path."""
+    from scripts.eval_compare import write_benchmark_md
+
+    results = [
+        CompareResult(
+            category="knowledge",
+            benchmark="mmlu",
+            metric="acc",
+            baseline_score=0.25,
+            candidate_score=0.35,
+            delta=0.10,
+        ),
+        CompareResult(
+            category="custom",
+            benchmark="tool-call-format",
+            metric="pass@1",
+            baseline_score=0.40,
+            candidate_score=0.72,
+            delta=0.32,
+        ),
+    ]
+
+    output_path = tmp_path / "BENCHMARK.md"
+    write_benchmark_md(results, output_path, "SmolLM2-1.7B-Instruct", "lyra-merged")
+
+    assert output_path.exists()
+    text = output_path.read_text()
+    assert "# Benchmark Results" in text
+    assert "SmolLM2-1.7B-Instruct" in text
+    assert "lyra-merged" in text
+    assert "mmlu" in text
+    assert "tool-call-format" in text
+    assert "+0.1000" in text or "+0.10" in text
+
+
+def test_mermaid_chart_present(tmp_path):
+    """write_benchmark_md includes a Mermaid xychart-beta block in BENCHMARK.md."""
+    from scripts.eval_compare import write_benchmark_md
+
+    results = [
+        CompareResult(
+            category="knowledge",
+            benchmark="mmlu",
+            metric="acc",
+            baseline_score=0.25,
+            candidate_score=0.35,
+            delta=0.10,
+        )
+    ]
+
+    output_path = tmp_path / "BENCHMARK.md"
+    write_benchmark_md(results, output_path, "base", "lyra")
+    text = output_path.read_text()
+    assert "```mermaid" in text, "BENCHMARK.md does not contain a mermaid code block"
+    assert "xychart-beta" in text, "BENCHMARK.md mermaid block does not use xychart-beta"
