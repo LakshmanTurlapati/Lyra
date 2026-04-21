@@ -133,7 +133,10 @@ Plans:
   1. User can run end-to-end fine-tuning using TRL SFTTrainer with LoRA/PEFT via a single documented script
   2. Training completes on a consumer GPU (8GB+ VRAM) with documented hyperparameters and expected training time
   3. Fine-tuned SmolLM2-1.7B model weights are produced via QLoRA and saved in a format ready for evaluation and release
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 08-01-PLAN.md -- Training script with hardware auto-detection, LoRA config, SFTTrainer, and unit tests
+- [ ] 08-02-PLAN.md -- Integration smoke test on tiny subset and human verification of readiness
 
 ### Phase 9: Benchmarking and Core Release
 **Goal**: Users can see how Lyra compares to base SmolLM2-1.7B on standard benchmarks and download the model/dataset from HuggingFace under MIT license
@@ -174,6 +177,6 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 5. Code Generation Dataset | 0/3 | Planning complete | - |
 | 6. General Knowledge Dataset | 0/3 | Planning complete | - |
 | 7. Dataset Assembly | 0/2 | Planning complete | - |
-| 8. Fine-Tuning | 0/TBD | Not started | - |
+| 8. Fine-Tuning | 0/2 | Planning complete | - |
 | 9. Benchmarking and Core Release | 0/TBD | Not started | - |
 | 10. Community Release Enhancements | 0/TBD | Not started | - |
