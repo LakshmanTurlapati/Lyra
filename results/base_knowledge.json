@@ -1,0 +1,31 @@
+{
+  "model_path": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+  "model_name": "SmolLM2-1.7B-Instruct",
+  "timestamp": "2026-04-21T18:37:10.758240",
+  "device": "cpu",
+  "categories": [
+    {
+      "category": "knowledge",
+      "benchmarks": [
+        {
+          "benchmark": "mmlu",
+          "metric": "acc",
+          "score": 0.5012280701754386,
+          "num_fewshot": 5
+        },
+        {
+          "benchmark": "arc_challenge",
+          "metric": "acc_norm",
+          "score": 0.45,
+          "num_fewshot": 25
+        },
+        {
+          "benchmark": "hellaswag",
+          "metric": "acc_norm",
+          "score": 0.66,
+          "num_fewshot": 10
+        }
+      ]
+    }
+  ]
+}

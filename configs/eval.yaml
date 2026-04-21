@@ -12,7 +12,7 @@ code_datasets:
 bfcl_test_categories:
   - all
 
-batch_size: "auto"
+batch_size: "1"
 
 num_fewshot:
   mmlu: 5

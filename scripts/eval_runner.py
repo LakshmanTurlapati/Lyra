@@ -91,7 +91,7 @@ def detect_device() -> str:
 
 
 def run_knowledge_benchmarks(
-    model_path: str, device: str, config: EvalConfig
+    model_path: str, device: str, config: EvalConfig, limit: int | None = None
 ) -> CategoryResult:
     """Run MMLU, ARC-Challenge, HellaSwag via lm-eval-harness Python API.
 
@@ -104,6 +104,8 @@ def run_knowledge_benchmarks(
         model_path: HuggingFace model path or local path.
         device: Device string ("mps" or "cpu").
         config: Evaluation configuration.
+        limit: Optional maximum number of samples per task. None = full dataset.
+            Use e.g. 100 to cap each subtask for faster runs on constrained hardware.
 
     Returns:
         CategoryResult with category="knowledge" and benchmark scores.
@@ -121,6 +123,9 @@ def run_knowledge_benchmarks(
     first_task = config.knowledge_tasks[0] if config.knowledge_tasks else "mmlu"
     num_fewshot = config.num_fewshot.get(first_task, 5)
 
+    if limit is not None:
+        logger.info("Running with limit=%d samples per task (hardware-constrained mode)", limit)
+
     results = lm_eval.simple_evaluate(
         model="hf",
         model_args=f"pretrained={model_path},dtype={config.dtype}",
@@ -128,6 +133,7 @@ def run_knowledge_benchmarks(
         device=device,
         batch_size=config.batch_size,
         num_fewshot=num_fewshot,
+        limit=limit,
     )
 
     # Extract per-task scores
@@ -452,6 +458,16 @@ def main() -> int:
         default=None,
         help="Override auto-detected device ('mps' or 'cpu').",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help=(
+            "Maximum number of samples per task for knowledge benchmarks. "
+            "Useful for hardware-constrained runs (e.g. --limit 100). "
+            "None (default) runs the full benchmark dataset."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -506,7 +522,7 @@ def main() -> int:
         if "knowledge" in requested:
             logger.info("Running knowledge benchmarks...")
             categories.append(
-                run_knowledge_benchmarks(args.model, device, config)
+                run_knowledge_benchmarks(args.model, device, config, limit=args.limit)
             )
 
         if "code" in requested:

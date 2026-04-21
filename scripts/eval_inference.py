@@ -47,7 +47,13 @@ def check_tool_call_format(output: str) -> bool:
     """Return True if output contains a valid SmolLM2-format tool call.
 
     Checks for the <tool_call>JSON</tool_call> XML wrapper (Phase 1 decision)
-    and validates that the interior JSON contains both "name" and "arguments" keys.
+    and validates the interior JSON. Accepts two formats that the model produces:
+
+    Format A (flat):  {"name": "...", "arguments": {...}}
+    Format B (TRL list): [{"type": "function", "function": {"name": "...", "arguments": {...}}}]
+
+    Format B is produced when training converts TRL-native tool_calls via
+    json.dumps(message['tool_calls']) in the chat template (train.py pattern).
 
     The model output is treated as untrusted text; it is never executed (T-09-06).
 
@@ -62,8 +68,21 @@ def check_tool_call_format(output: str) -> bool:
         return False
     try:
         obj = json.loads(match.group(1))
-        return "name" in obj and "arguments" in obj
-    except (json.JSONDecodeError, KeyError):
+        # Format A: flat dict with "name" and "arguments"
+        if isinstance(obj, dict):
+            return "name" in obj and "arguments" in obj
+        # Format B: TRL-native list of function call objects
+        if isinstance(obj, list) and len(obj) > 0:
+            first = obj[0]
+            if isinstance(first, dict):
+                # Check for nested function format: {"type": "function", "function": {...}}
+                if "function" in first and isinstance(first["function"], dict):
+                    fn = first["function"]
+                    return "name" in fn and "arguments" in fn
+                # Check for flat format in list element
+                return "name" in first and "arguments" in first
+        return False
+    except (json.JSONDecodeError, KeyError, IndexError):
         return False
 
 
@@ -113,12 +132,57 @@ def _do_load_model_and_tokenizer(model_path: str, device: str):
     return model, tokenizer
 
 
+def _normalize_messages_for_template(messages: list[dict]) -> list[dict]:
+    """Normalize dataset messages to be compatible with SmolLM2 chat template.
+
+    The assembled dataset uses TRL-native format where assistant tool-calling
+    turns have a 'tool_calls' key (not 'content'). The SmolLM2 default chat
+    template requires every message to have a 'content' key.
+
+    This function mirrors the train.py chat template logic (Phase 1 decision):
+    Pre-process TRL-native tool_calls to SmolLM2 <tool_call> XML format before
+    applying the chat template.
+
+    Also handles 'tool' role messages (observation/result turns) by converting
+    them to 'user' role with the tool result content.
+
+    Args:
+        messages: Raw messages from the assembled dataset.
+
+    Returns:
+        Normalized messages list compatible with the SmolLM2 chat template.
+    """
+    normalized = []
+    for msg in messages:
+        role = msg.get("role", "")
+        content = msg.get("content", "")
+
+        if role == "assistant" and not content and msg.get("tool_calls"):
+            # Convert TRL-native tool_calls to SmolLM2 XML format
+            tool_calls_json = json.dumps(msg["tool_calls"])
+            content = f"<tool_call>{tool_calls_json}</tool_call>"
+            normalized.append({"role": "assistant", "content": content})
+        elif role == "tool":
+            # Tool observation/result: convert to user message so the model
+            # sees the tool result as context before generating its next turn.
+            tool_name = msg.get("name", "tool")
+            tool_content = content or ""
+            normalized.append({
+                "role": "user",
+                "content": f"[Tool result from {tool_name}]: {tool_content}",
+            })
+        else:
+            normalized.append({"role": role, "content": content})
+    return normalized
+
+
 def _run_inference_on_sample(
     model, tokenizer, sample: dict, device: str, max_new_tokens: int = 256
 ) -> str:
     """Run model inference on one test split sample.
 
     Builds prompt by excluding the last assistant turn (which is the label),
+    normalizes TRL-native tool_calls to SmolLM2 XML format (Phase 1 decision),
     applies the SmolLM2 chat template, and generates greedily for determinism
     (do_sample=False per Pitfall 4).
 
@@ -140,6 +204,9 @@ def _run_inference_on_sample(
         i for i, m in enumerate(messages) if m["role"] == "assistant"
     )
     prompt_messages = messages[:last_asst_idx]  # everything before the label
+
+    # Normalize TRL-native tool_calls to SmolLM2 XML format before templating
+    prompt_messages = _normalize_messages_for_template(prompt_messages)
 
     prompt = tokenizer.apply_chat_template(
         prompt_messages,
