@@ -54,8 +54,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **REL-01**: Dataset card on HuggingFace with description, creation methodology, statistics, limitations
 - [ ] **REL-02**: Model card on HuggingFace with metadata YAML, usage examples, training params, benchmark results
-- [ ] **REL-03**: Model weights published in safetensors format
-- [ ] **REL-04**: MIT license applied consistently to datasets, model weights, scripts, and eval code
+- [x] **REL-03
+**: Model weights published in safetensors format
+- [x] **REL-04
+**: MIT license applied consistently to datasets, model weights, scripts, and eval code
 - [ ] **REL-05**: GGUF quantized variants (Q4_K_M, Q8_0) published for LM Studio / llama.cpp
 - [ ] **REL-06**: Interactive Gradio demo Space on HuggingFace showcasing all three capability areas
 - [ ] **REL-07**: Versioned dataset releases with documented changes and metrics per version

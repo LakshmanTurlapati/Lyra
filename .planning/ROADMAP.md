@@ -139,16 +139,22 @@ Plans:
 - [x] 08-02-PLAN.md -- Integration smoke test on tiny subset and human verification of readiness
 
 ### Phase 9: Benchmarking and Core Release
-**Goal**: Users can see how Lyra compares to base SmolLM2-1.7B on standard benchmarks and download the model/dataset from HuggingFace under MIT license
+**Goal**: Users can see how Lyra compares to base SmolLM2-1.7B on standard benchmarks and download the model/dataset from GitHub under MIT license
 **Depends on**: Phase 8
 **Requirements**: EVAL-01, EVAL-02, REL-01, REL-02, REL-03, REL-04
 **Success Criteria** (what must be TRUE):
-  1. Model is evaluated on standard benchmarks (MMLU, MBPP/HumanEval, BFCL) with pass@1 scores published
-  2. A comparison report exists showing base SmolLM2-1.7B vs Lyra fine-tuned model across all metrics
-  3. Dataset card on HuggingFace includes description, creation methodology, statistics, and limitations
-  4. Model card on HuggingFace includes metadata YAML, usage examples, training parameters, and benchmark results
-  5. Model weights are published in safetensors format and MIT license is applied to datasets, model weights, scripts, and eval code
-**Plans**: TBD
+  1. Model is evaluated on standard benchmarks (MMLU, ARC-Challenge, HellaSwag) and custom inference eval (tool-call-format, code-syntax) with pass@1 scores published
+  2. A comparison report (BENCHMARK.md) exists showing base SmolLM2-1.7B vs Lyra fine-tuned model across all metrics with Mermaid charts
+  3. Dataset card (datasets/README.md) includes description, creation methodology, statistics, and limitations
+  4. Model card (README.md) includes metadata YAML, usage examples, training parameters, and benchmark results
+  5. Model weights tracked in Git LFS (safetensors format) and MIT license applied to datasets, model weights, scripts, and eval code
+**Plans**: 5 plans
+Plans:
+- [ ] 09-01-PLAN.md -- Setup: Git LFS + LICENSE + lm-eval install + Wave 0 test scaffolding
+- [ ] 09-02-PLAN.md -- eval_inference.py (custom tool-calling/code eval) + eval_merge.py (result combiner)
+- [ ] 09-03-PLAN.md -- eval_compare.py --markdown extension with Mermaid bar chart output
+- [ ] 09-04-PLAN.md -- Run all evaluations (base + Lyra, knowledge + custom) and merge result JSONs
+- [ ] 09-05-PLAN.md -- Generate BENCHMARK.md, write model card, write dataset card, add SPDX headers
 
 ### Phase 10: Community Release Enhancements
 **Goal**: Users can run Lyra locally via GGUF quantization, try it in a browser demo, and track dataset evolution across versions
@@ -178,5 +184,5 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 6. General Knowledge Dataset | 0/3 | Planning complete | - |
 | 7. Dataset Assembly | 0/2 | Planning complete | - |
 | 8. Fine-Tuning | 0/2 | Planning complete | - |
-| 9. Benchmarking and Core Release | 0/TBD | Not started | - |
+| 9. Benchmarking and Core Release | 0/5 | Planning complete | - |
 | 10. Community Release Enhancements | 0/TBD | Not started | - |

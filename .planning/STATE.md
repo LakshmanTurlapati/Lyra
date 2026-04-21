@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 9 context gathered
-last_updated: "2026-04-21T16:20:55.317Z"
-last_activity: 2026-04-21
+status: executing
+stopped_at: Completed 09-01-PLAN.md
+last_updated: "2026-04-21T18:07:13.300Z"
+last_activity: 2026-04-21 -- Phase --phase execution started
 progress:
   total_phases: 10
   completed_phases: 8
   total_plans: 26
-  completed_plans: 21
-  percent: 81
+  completed_plans: 22
+  percent: 85
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-20)
 
 **Core value:** Curate Opus-quality training data that makes a 1.7B parameter model practically useful for day-to-day development tasks -- tool calls, quick code, and general reasoning.
-**Current focus:** Phase 08 — Fine-Tuning
+**Current focus:** Phase --phase — 09
 
 ## Current Position
 
-Phase: 9
-Plan: Not started
-Status: Phase complete — ready for verification
-Last activity: 2026-04-21
+Phase: --phase (09) — EXECUTING
+Plan: 1 of --name
+Status: Executing Phase --phase
+Last activity: 2026-04-21 -- Phase --phase execution started
 
-Progress: [..........] 0%
+Progress: [█████████░] 85%
 
 ## Performance Metrics
 
@@ -80,6 +80,7 @@ Progress: [..........] 0%
 | Phase 07 P02 | 2min | 1 tasks | 1 files |
 | Phase 08 P01 | 6min | 2 tasks | 3 files |
 | Phase 08 P02 | 2min | 2 tasks | 2 files |
+| Phase 09-benchmarking-and-core-release P01 | 4min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -132,6 +133,9 @@ Recent decisions affecting current work:
 - [Phase 08]: Move argparse before heavy imports in main() so --help works without torch/peft/trl installed
 - [Phase 08]: Disable epoch-based save/eval strategies when max_steps is active to avoid trainer errors on early exit
 - [Phase 08]: Subprocess-based integration test runs train.py as subprocess to validate actual CLI entry point end-to-end
+- git-lfs installed via brew (system tool) not pip -- .gitattributes committed before any model files staged per T-09-01 threat mitigation
+- Wave 0 test scaffolding written in RED state intentionally -- Plans 02, 03, 05 will turn them GREEN
+- lm-eval pinned at 0.4.11 with [hf] extra for HuggingFace model backend support in knowledge benchmarks
 
 ### Pending Todos
 
@@ -144,8 +148,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: --stopped-at
-Stopped at: Phase 9 context gathered
-Resume file: --resume-file
+Last session: 2026-04-21T18:07:13.296Z
+Stopped at: Completed 09-01-PLAN.md
+Resume file: None
 
 **Planned Phase:** 9 (Benchmarking and Core Release) — 5 plans — 2026-04-21T16:20:55.312Z
