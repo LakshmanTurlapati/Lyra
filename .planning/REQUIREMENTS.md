@@ -47,7 +47,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **EVAL-01
 **: Model evaluated on standard benchmarks (MMLU, MBPP/HumanEval, BFCL) with pass@1 scores
-- [ ] **EVAL-02**: Published comparison report of base SmolLM2-1.7B vs Lyra fine-tuned model
+- [x] **EVAL-02
+**: Published comparison report of base SmolLM2-1.7B vs Lyra fine-tuned model
 - [x] **EVAL-03**: Custom eval benchmarks measuring tool-call format compliance, argument extraction accuracy, and code correctness
 - [x] **EVAL-04**: Per-category quality metrics reported separately for tool calls, code, and general knowledge
 
