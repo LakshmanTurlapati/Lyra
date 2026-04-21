@@ -1,0 +1,29 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-21T00:47:12.855Z",
+  "phase": "9",
+  "phase_name": "Benchmarking and Core Release",
+  "phase_dir": null,
+  "plan": 0,
+  "task": 0,
+  "total_tasks": 0,
+  "status": "paused",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [
+    {"description": "Phase 9 requires trained model weights which need actual training run (30-90 min on MPS)", "type": "human_action", "workaround": "Run: pip install -r requirements.txt && python3 -m scripts.train --data-dir datasets/assembled"}
+  ],
+  "human_actions_pending": [
+    {"action": "Install ML dependencies and run training", "context": "scripts/train.py is ready but actual fine-tuning needs torch/peft/trl installed and ~30-90 min on Apple Silicon", "blocking": true}
+  ],
+  "decisions": [
+    {"decision": "Use all 3,630 samples with natural imbalance (68/16.5/15.4)", "rationale": "More data preferred over strict 33/33/33 balance", "phase": "7"},
+    {"decision": "MPS primary training target with 16-bit LoRA (no QLoRA on MPS)", "rationale": "bitsandbytes doesn't support MPS; Unsloth requires CUDA", "phase": "8"},
+    {"decision": "LoRA r=16, alpha=32, lr=2e-4, 3 epochs", "rationale": "SmolLM2 community defaults", "phase": "8"}
+  ],
+  "uncommitted_files": [
+    ".planning/phases/04-tool-calling-dataset/04-RESEARCH.md"
+  ],
+  "next_action": "Run /gsd-discuss-phase 9 --chain after training completes and model weights exist at models/lyra-merged/",
+  "context_notes": "Phases 1-8 complete. The project has all data pipeline, datasets, assembly, and training scripts ready. The actual training run is a manual step the user needs to execute before Phase 9 (benchmarking) can proceed. Phase 9 evaluates the trained model against benchmarks and publishes to HuggingFace."
+}
