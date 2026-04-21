@@ -585,21 +585,18 @@ result_json = result.model_dump_json(indent=2)
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should datasets/assembled/ Arrow files be tracked with LFS or excluded?**
-   - What we know: `datasets/assembled/` is currently in `.gitignore`. Arrow files are 17MB. Raw JSONL is gitignored too (`datasets/**/*.jsonl`).
-   - What's unclear: D-09 says "ship assembled dataset files" but .gitignore blocks both Arrow and JSONL currently.
-   - Recommendation: Include the Arrow files via `git add -f datasets/assembled/` with LFS tracking for the data files, OR create a `datasets/assembled-export/` copy outside gitignore. Planner should choose.
+   - **RESOLVED:** Use `git add -f datasets/assembled/` with LFS tracking for the Arrow files (per D-09 and D-10). The .gitignore exception is handled by `git add -f` (force-add). Add `datasets/assembled/**` to LFS tracking in .gitattributes via `git lfs track "datasets/assembled/**"`. This is implemented in Plan 05, Task 3.
+   - What we know: `datasets/assembled/` is currently in `.gitignore`. Arrow files are ~17MB each.
+   - Rationale: D-09 explicitly requires shipping assembled dataset files. `git add -f` overrides .gitignore for this specific directory. LFS (D-10) ensures the Arrow files don't bloat regular git history.
 
 2. **What count of knowledge samples from our test set (28 samples) is used in EVAL-01?**
-   - What we know: lm-eval runs MMLU/ARC/HellaSwag on the full benchmark datasets (thousands of questions), not our 28-sample test set.
-   - What's unclear: Whether EVAL-01 report should mention the test split knowledge samples at all.
-   - Recommendation: EVAL-01 report uses lm-eval benchmark scores (MMLU/ARC/HellaSwag). The 28 knowledge test samples are best omitted from EVAL-01 since they don't produce comparable metrics with standard benchmarks.
+   - **RESOLVED:** EVAL-01 report uses lm-eval benchmark scores (MMLU/ARC/HellaSwag only) on the full benchmark datasets. The 28 knowledge test split samples are not used in EVAL-01 — they exist only for reference. lm-eval runs on standard benchmark tasks (thousands of questions), not our curated test set. The custom eval covers tool-calling (123 samples) and code (30 samples) from the test split only.
 
 3. **Author name for LICENSE file**
-   - What we know: LICENSE file needs a copyright holder name. CLAUDE.md/README.md don't specify.
-   - Recommendation: Planner should leave `[Author]` as a placeholder or prompt user before writing LICENSE.
+   - **RESOLVED:** Copyright holder is "Lakshman Turlapati" (confirmed by revision_context user decision). LICENSE file already written in Plan 01, Task 1 with this name.
 
 ---
 
