@@ -119,6 +119,102 @@ def format_compare_table(results: list[CompareResult]) -> str:
     return "\n".join(lines)
 
 
+def format_mermaid_bar_chart(results: list[CompareResult], base_name: str, candidate_name: str) -> str:
+    """Emit Mermaid xychart-beta bar chart comparing base vs Lyra per benchmark.
+
+    Two bar series: first is baseline, second is candidate.
+    Benchmark labels are quoted strings on the x-axis.
+
+    Args:
+        results: Ordered list of CompareResult objects.
+        base_name: Display name for baseline model.
+        candidate_name: Display name for candidate (fine-tuned) model.
+
+    Returns:
+        Fenced Mermaid code block string.
+    """
+    if not results:
+        return ""
+
+    labels = [f'"{r.benchmark}"' for r in results]
+    base_vals = [f"{r.baseline_score:.4f}" for r in results]
+    cand_vals = [f"{r.candidate_score:.4f}" for r in results]
+
+    x_labels = "[" + ", ".join(labels) + "]"
+    base_series = "[" + ", ".join(base_vals) + "]"
+    cand_series = "[" + ", ".join(cand_vals) + "]"
+
+    return (
+        "```mermaid\n"
+        "xychart-beta\n"
+        f'    title "Base {base_name} vs {candidate_name}"\n'
+        f"    x-axis {x_labels}\n"
+        '    y-axis "Score" 0 --> 1\n'
+        f"    bar {base_series}\n"
+        f"    bar {cand_series}\n"
+        "```"
+    )
+
+
+def write_benchmark_md(
+    results: list[CompareResult],
+    output_path: Path,
+    base_name: str,
+    candidate_name: str,
+) -> None:
+    """Write BENCHMARK.md with summary table and Mermaid bar chart.
+
+    Report structure:
+      - Title with model names
+      - Summary table: Benchmark | Base | Lyra | Delta
+      - Mermaid xychart-beta bar chart
+
+    Uses plain f-string formatting (project convention -- no external deps).
+
+    Args:
+        results: List of CompareResult objects.
+        output_path: Destination path for BENCHMARK.md.
+        base_name: Display name for the baseline model.
+        candidate_name: Display name for the fine-tuned model.
+    """
+    lines: list[str] = [
+        "# Benchmark Results",
+        "",
+        f"Base model: `{base_name}` | Fine-tuned: `{candidate_name}`",
+        "",
+        "## Summary",
+        "",
+        "| Benchmark | Category | Metric | Base | Lyra | Delta |",
+        "|-----------|----------|--------|------|------|-------|",
+    ]
+
+    for r in results:
+        if r.delta > 0:
+            delta_str = f"+{r.delta:.4f}"
+        elif r.delta < 0:
+            delta_str = f"{r.delta:.4f}"
+        else:
+            delta_str = f" {r.delta:.4f}"
+
+        lines.append(
+            f"| {r.benchmark} | {r.category} | {r.metric} "
+            f"| {r.baseline_score:.4f} | {r.candidate_score:.4f} | {delta_str} |"
+        )
+
+    # Mermaid bar chart
+    chart = format_mermaid_bar_chart(results, base_name, candidate_name)
+    if chart:
+        lines += [
+            "",
+            "## Score Comparison",
+            "",
+            chart,
+        ]
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text("\n".join(lines) + "\n")
+
+
 def main() -> int:
     """CLI entry point for eval comparison.
 
@@ -145,6 +241,12 @@ def main() -> int:
         type=Path,
         default=None,
         help="Optional path to write CompareResult list as JSON.",
+    )
+    parser.add_argument(
+        "--markdown",
+        type=Path,
+        default=None,
+        help="If set, write BENCHMARK.md to this path (tables + Mermaid chart).",
     )
     args = parser.parse_args()
 
@@ -184,6 +286,16 @@ def main() -> int:
         output_data = [r.model_dump() for r in deltas]
         args.output.write_text(json.dumps(output_data, indent=2))
         print(f"\nComparison written to {args.output}")
+
+    # Generate Markdown + Mermaid report if requested (D-04, D-05, D-06)
+    if args.markdown is not None:
+        write_benchmark_md(
+            deltas,
+            args.markdown,
+            baseline.model_name,
+            candidate.model_name,
+        )
+        print(f"\nBenchmark report written to {args.markdown}")
 
     return 0
 
