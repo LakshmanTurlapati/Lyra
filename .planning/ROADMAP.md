@@ -136,7 +136,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 08-01-PLAN.md -- Training script with hardware auto-detection, LoRA config, SFTTrainer, and unit tests
-- [ ] 08-02-PLAN.md -- Integration smoke test on tiny subset and human verification of readiness
+- [x] 08-02-PLAN.md -- Integration smoke test on tiny subset and human verification of readiness
 
 ### Phase 9: Benchmarking and Core Release
 **Goal**: Users can see how Lyra compares to base SmolLM2-1.7B on standard benchmarks and download the model/dataset from HuggingFace under MIT license
