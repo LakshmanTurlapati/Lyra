@@ -155,6 +155,12 @@ def build_parser():
         default=False,
         help="Skip merging adapter into base model after training",
     )
+    parser.add_argument(
+        "--max-steps",
+        type=int,
+        default=-1,
+        help="Max training steps (-1 = use epochs). For smoke tests: --max-steps 1",
+    )
 
     return parser
 
@@ -212,17 +218,29 @@ def get_training_args(args, device):
     """
     from trl import SFTConfig
 
+    # When max_steps is set (> 0), override epochs so max_steps takes precedence.
+    # This enables quick smoke tests (--max-steps 1) without running full epochs.
+    use_max_steps = getattr(args, "max_steps", -1) > 0
+    epochs = 100 if use_max_steps else args.epochs
+    max_steps = args.max_steps if use_max_steps else -1
+
+    # When using max_steps, disable epoch-based save/eval to avoid errors
+    # (trainer would try to evaluate after each epoch, but we exit after N steps)
+    save_strategy = "no" if use_max_steps else "epoch"
+    eval_strategy = "no" if use_max_steps else "epoch"
+
     return SFTConfig(
         output_dir=args.output_dir,
-        num_train_epochs=args.epochs,
+        num_train_epochs=epochs,
+        max_steps=max_steps,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum,
         learning_rate=args.lr,
         max_length=args.max_length,
         assistant_only_loss=True,
-        save_strategy="epoch",
-        eval_strategy="epoch",
-        load_best_model_at_end=True,
+        save_strategy=save_strategy,
+        eval_strategy=eval_strategy,
+        load_best_model_at_end=False if use_max_steps else True,
         metric_for_best_model="eval_loss",
         greater_is_better=False,
         gradient_checkpointing=True,
@@ -251,14 +269,15 @@ def main():
     9. Save LoRA adapter
     10. Optionally merge adapter into base model and save
     """
+    parser = build_parser()
+    args = parser.parse_args()
+
+    # Heavy imports after argparse so --help works without ML libraries installed
     import torch
     from datasets import DatasetDict
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from trl import SFTTrainer
-
-    parser = build_parser()
-    args = parser.parse_args()
 
     # Validate paths (T-08-02: use Path objects for safety)
     output_dir = Path(args.output_dir)

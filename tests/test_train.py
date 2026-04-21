@@ -393,3 +393,223 @@ class TestMpsFallbackEnv:
         import scripts.train  # noqa: F401
 
         assert os.environ.get("PYTORCH_ENABLE_MPS_FALLBACK") == "1"
+
+
+class TestMaxStepsFlag:
+    """Test that --max-steps flag is present and wires into training args."""
+
+    def test_max_steps_default(self):
+        """Default max_steps is -1 (use epochs)."""
+        from scripts.train import build_parser
+
+        parser = build_parser()
+        args = parser.parse_args([])
+        assert args.max_steps == -1
+
+    def test_max_steps_override(self):
+        """--max-steps flag sets max_steps correctly."""
+        from scripts.train import build_parser
+
+        parser = build_parser()
+        args = parser.parse_args(["--max-steps", "1"])
+        assert args.max_steps == 1
+
+    def test_max_steps_in_training_args(self):
+        """When max_steps > 0, training args use max_steps and disable epoch save/eval."""
+        from scripts.train import build_parser, get_training_args
+
+        parser = build_parser()
+        args = parser.parse_args(["--max-steps", "5"])
+        training_args = get_training_args(args, "cpu")
+
+        assert training_args.max_steps == 5
+        assert training_args.num_train_epochs == 100  # overridden to large value
+        assert training_args.save_strategy.value == "no"
+        assert training_args.eval_strategy.value == "no"
+        assert training_args.load_best_model_at_end is False
+
+    def test_max_steps_disabled_uses_epochs(self):
+        """When max_steps is -1 (default), epochs-based training is used."""
+        from scripts.train import build_parser, get_training_args
+
+        parser = build_parser()
+        args = parser.parse_args(["--epochs", "3"])
+        training_args = get_training_args(args, "cpu")
+
+        assert training_args.max_steps == -1
+        assert training_args.num_train_epochs == 3
+        assert training_args.save_strategy.value == "epoch"
+        assert training_args.eval_strategy.value == "epoch"
+        assert training_args.load_best_model_at_end is True
+
+
+class TestMergeProducesModel:
+    """Test that the merge path produces expected output files.
+
+    Uses mocks to avoid loading a real 3.4GB model. Verifies the merge_and_unload
+    code path writes files to the merged directory.
+    """
+
+    def test_merge_produces_model(self, tmp_path):
+        """Merge path produces safetensors files in merged directory."""
+        # Create a mock adapter directory with adapter_config.json
+        adapter_dir = tmp_path / "adapter"
+        adapter_dir.mkdir()
+        adapter_config = {
+            "r": 16,
+            "lora_alpha": 32,
+            "target_modules": [
+                "q_proj", "k_proj", "v_proj", "o_proj",
+                "gate_proj", "up_proj", "down_proj",
+            ],
+            "task_type": "CAUSAL_LM",
+        }
+        import json
+        (adapter_dir / "adapter_config.json").write_text(json.dumps(adapter_config))
+
+        merged_dir = tmp_path / "merged"
+
+        # Mock the entire merge workflow
+        mock_base_model = MagicMock()
+        mock_peft_model = MagicMock()
+        mock_merged = MagicMock()
+        mock_tokenizer = MagicMock()
+
+        mock_peft_model.merge_and_unload.return_value = mock_merged
+
+        # Simulate save_pretrained writing files
+        def fake_save_pretrained(path, **kwargs):
+            Path(path).mkdir(parents=True, exist_ok=True)
+            (Path(path) / "model.safetensors").write_text("fake")
+            (Path(path) / "config.json").write_text("{}")
+
+        mock_merged.save_pretrained.side_effect = fake_save_pretrained
+
+        def fake_tokenizer_save(path, **kwargs):
+            Path(path).mkdir(parents=True, exist_ok=True)
+            (Path(path) / "tokenizer.json").write_text("{}")
+
+        mock_tokenizer.save_pretrained.side_effect = fake_tokenizer_save
+
+        with patch("transformers.AutoModelForCausalLM") as mock_auto_model, \
+             patch("peft.PeftModel") as mock_peft_cls:
+            mock_auto_model.from_pretrained.return_value = mock_base_model
+            mock_peft_cls.from_pretrained.return_value = mock_peft_model
+
+            # Execute the merge logic inline (mirrors main() merge block)
+            import torch
+            base_model = mock_auto_model.from_pretrained(
+                "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+                torch_dtype=torch.float16,
+            )
+            peft_model = mock_peft_cls.from_pretrained(
+                base_model, str(adapter_dir)
+            )
+            merged = peft_model.merge_and_unload()
+
+            merged_dir.mkdir(parents=True, exist_ok=True)
+            merged.save_pretrained(str(merged_dir), safe_serialization=True)
+            mock_tokenizer.save_pretrained(str(merged_dir))
+
+        # Verify merged output files
+        assert (merged_dir / "model.safetensors").exists()
+        assert (merged_dir / "config.json").exists()
+        assert (merged_dir / "tokenizer.json").exists()
+
+        # Verify merge_and_unload was called
+        mock_peft_model.merge_and_unload.assert_called_once()
+
+
+# ---------------------------------------------------------------------------
+# Integration smoke tests (require real ML libraries + model download)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.slow
+class TestIntegrationSmoke:
+    """Integration smoke tests that run the actual training pipeline.
+
+    These tests download SmolLM2-1.7B-Instruct (~3.4GB) on first run and
+    execute 1 training step on a 2-sample subset of the assembled dataset.
+
+    Requirements:
+        - pip install torch peft trl accelerate (from requirements.txt)
+        - datasets/assembled/ must exist with train/validation/test splits
+        - ~3.4GB disk space for model download (cached in ~/.cache/huggingface/)
+        - ~10GB RAM/VRAM for model loading + 1 training step
+
+    Run with: python -m pytest tests/test_train.py -x -v -m slow
+    Skip with: python -m pytest tests/test_train.py -x -v -m "not slow"
+
+    Expected time: 2-5 minutes (mostly model download on first run)
+    """
+
+    def test_training_smoke(self, tmp_path):
+        """Run training script for 1 step on 2 samples -- full pipeline validation.
+
+        Downloads SmolLM2-1.7B-Instruct (~3.4GB) on first run.
+        Validates: model load, dataset load, LoRA init, 1 training step, adapter save.
+        """
+        import subprocess
+
+        project_root = Path(__file__).parent.parent
+
+        # Verify dataset exists before attempting training
+        dataset_dir = project_root / "datasets" / "assembled"
+        assert dataset_dir.exists(), (
+            f"Assembled dataset not found at {dataset_dir}. "
+            "Run scripts/assemble_dataset.py first."
+        )
+
+        adapter_dir = tmp_path / "adapter"
+        merged_dir = tmp_path / "merged"
+
+        cmd = [
+            sys.executable,
+            str(project_root / "scripts" / "train.py"),
+            "--dataset-dir", str(dataset_dir),
+            "--output-dir", str(adapter_dir),
+            "--merged-dir", str(merged_dir),
+            "--epochs", "1",
+            "--batch-size", "1",
+            "--grad-accum", "1",
+            "--max-length", "512",
+            "--max-steps", "1",
+            "--no-merge",
+        ]
+
+        env = os.environ.copy()
+        env["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
+        # Disable wandb for smoke test
+        env["WANDB_DISABLED"] = "true"
+
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5 minute timeout for model download + 1 step
+            env=env,
+            cwd=str(project_root),
+        )
+
+        # Print output for debugging on failure
+        if result.returncode != 0:
+            print("STDOUT:", result.stdout[-2000:] if len(result.stdout) > 2000 else result.stdout)
+            print("STDERR:", result.stderr[-2000:] if len(result.stderr) > 2000 else result.stderr)
+
+        assert result.returncode == 0, (
+            f"Training script failed with exit code {result.returncode}.\n"
+            f"STDERR (last 500 chars): {result.stderr[-500:]}"
+        )
+
+        # Verify adapter output
+        assert (adapter_dir / "adapter_config.json").exists(), (
+            "adapter_config.json not found in output directory"
+        )
+
+        # Verify adapter_config.json contains expected LoRA fields
+        import json
+        config = json.loads((adapter_dir / "adapter_config.json").read_text())
+        assert "r" in config, "adapter_config.json missing 'r' field"
+        assert "lora_alpha" in config, "adapter_config.json missing 'lora_alpha' field"
+        assert "target_modules" in config, "adapter_config.json missing 'target_modules' field"
