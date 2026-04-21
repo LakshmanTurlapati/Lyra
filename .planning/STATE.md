@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 09-01-PLAN.md
-last_updated: "2026-04-21T18:07:13.300Z"
+stopped_at: Completed 09-02-PLAN.md
+last_updated: "2026-04-21T18:12:31.819Z"
 last_activity: 2026-04-21 -- Phase --phase execution started
 progress:
   total_phases: 10
   completed_phases: 8
   total_plans: 26
-  completed_plans: 22
-  percent: 85
+  completed_plans: 23
+  percent: 88
 ---
 
 # Project State
@@ -30,7 +30,7 @@ Plan: 1 of --name
 Status: Executing Phase --phase
 Last activity: 2026-04-21 -- Phase --phase execution started
 
-Progress: [█████████░] 85%
+Progress: [█████████░] 88%
 
 ## Performance Metrics
 
@@ -81,6 +81,7 @@ Progress: [█████████░] 85%
 | Phase 08 P01 | 6min | 2 tasks | 3 files |
 | Phase 08 P02 | 2min | 2 tasks | 2 files |
 | Phase 09-benchmarking-and-core-release P01 | 4min | 2 tasks | 5 files |
+| Phase 09-benchmarking-and-core-release P02 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -136,6 +137,8 @@ Recent decisions affecting current work:
 - git-lfs installed via brew (system tool) not pip -- .gitattributes committed before any model files staged per T-09-01 threat mitigation
 - Wave 0 test scaffolding written in RED state intentionally -- Plans 02, 03, 05 will turn them GREEN
 - lm-eval pinned at 0.4.11 with [hf] extra for HuggingFace model backend support in knowledge benchmarks
+- Module-level None references for load_from_disk/run_inference_on_sample/_load_model_and_tokenizer assigned lazily in run_custom_eval() body enable pytest monkeypatching without import-time side effects
+- eval_merge.py uses model metadata from first file and appends second file categories -- asymmetric merge is intentional per Pattern 3 in RESEARCH.md
 
 ### Pending Todos
 
@@ -148,8 +151,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-21T18:07:13.296Z
-Stopped at: Completed 09-01-PLAN.md
+Last session: 2026-04-21T18:12:31.814Z
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None
 
 **Planned Phase:** 9 (Benchmarking and Core Release) — 5 plans — 2026-04-21T16:20:55.312Z
