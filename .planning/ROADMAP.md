@@ -135,7 +135,7 @@ Plans:
   3. Fine-tuned SmolLM2-1.7B model weights are produced via QLoRA and saved in a format ready for evaluation and release
 **Plans**: 2 plans
 Plans:
-- [ ] 08-01-PLAN.md -- Training script with hardware auto-detection, LoRA config, SFTTrainer, and unit tests
+- [x] 08-01-PLAN.md -- Training script with hardware auto-detection, LoRA config, SFTTrainer, and unit tests
 - [ ] 08-02-PLAN.md -- Integration smoke test on tiny subset and human verification of readiness
 
 ### Phase 9: Benchmarking and Core Release

@@ -39,9 +39,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Training
 
-- [ ] **TRNG-01**: User can run end-to-end fine-tuning using TRL SFTTrainer + LoRA/PEFT with documented scripts
-- [ ] **TRNG-02**: Training targets consumer GPU (8GB+ VRAM) with documented hyperparameters and expected training time
-- [ ] **TRNG-03**: Fine-tuned SmolLM2-1.7B model weights produced via QLoRA
+- [x] **TRNG-01**: User can run end-to-end fine-tuning using TRL SFTTrainer + LoRA/PEFT with documented scripts
+- [x] **TRNG-02**: Training targets consumer GPU (8GB+ VRAM) with documented hyperparameters and expected training time
+- [x] **TRNG-03**: Fine-tuned SmolLM2-1.7B model weights produced via QLoRA
 
 ### Evaluation
 
@@ -113,9 +113,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | KNOW-01 | Phase 6 | Complete |
 | KNOW-02 | Phase 6 | Complete |
 | KNOW-03 | Phase 6 | Complete |
-| TRNG-01 | Phase 8 | Pending |
-| TRNG-02 | Phase 8 | Pending |
-| TRNG-03 | Phase 8 | Pending |
+| TRNG-01 | Phase 8 | Complete |
+| TRNG-02 | Phase 8 | Complete |
+| TRNG-03 | Phase 8 | Complete |
 | EVAL-01 | Phase 9 | Pending |
 | EVAL-02 | Phase 9 | Pending |
 | EVAL-03 | Phase 3 | Complete |
