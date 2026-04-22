@@ -164,8 +164,8 @@ Plans:
 **Plans:** 6 plans
 
 Plans:
-- [ ] 09.1-01-PLAN.md -- Code fixes: eval template loading (D-03) + train.py template persistence (D-04)
-- [ ] 09.1-02-PLAN.md -- Generate ~21K additional samples across all 3 domains (D-05, D-06, D-07)
+- [x] 09.1-01-PLAN.md -- Code fixes: eval template loading (D-03) + train.py template persistence (D-04)
+- [x] 09.1-02-PLAN.md -- Generate ~21K additional samples across all 3 domains (D-05, D-06, D-07)
 - [ ] 09.1-03-PLAN.md -- Diagnostic eval re-run on existing Lyra model (Stage 1 validation)
 - [ ] 09.1-04-PLAN.md -- Curate all domains + reassemble dataset at 25K scale (D-08)
 - [ ] 09.1-05-PLAN.md -- Retrain on 25K dataset with adjusted hyperparameters (lr=1e-4, epochs=2)
@@ -200,5 +200,5 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 7. Dataset Assembly | 0/2 | Planning complete | - |
 | 8. Fine-Tuning | 0/2 | Planning complete | - |
 | 9. Benchmarking and Core Release | 0/5 | Planning complete | - |
-| 09.1. Tool-Call Format Regression Fix | 0/6 | Planning complete | - |
+| 09.1. Tool-Call Format Regression Fix | 2/6 | Executing | - |
 | 10. Community Release Enhancements | 0/TBD | Not started | - |
