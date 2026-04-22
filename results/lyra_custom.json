@@ -1,0 +1,25 @@
+{
+  "model_path": "models/lyra-merged",
+  "model_name": "lyra-merged",
+  "timestamp": "2026-04-21T21:27:14.324528",
+  "device": "mps",
+  "categories": [
+    {
+      "category": "custom",
+      "benchmarks": [
+        {
+          "benchmark": "tool-call-format",
+          "metric": "pass@1",
+          "score": 0.18699186991869918,
+          "num_fewshot": null
+        },
+        {
+          "benchmark": "code-syntax",
+          "metric": "pass@1",
+          "score": 0.2,
+          "num_fewshot": null
+        }
+      ]
+    }
+  ]
+}

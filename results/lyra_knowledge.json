@@ -1,0 +1,31 @@
+{
+  "model_path": "models/lyra-merged",
+  "model_name": "lyra-merged",
+  "timestamp": "2026-04-21T21:24:48.127449",
+  "device": "mps",
+  "categories": [
+    {
+      "category": "knowledge",
+      "benchmarks": [
+        {
+          "benchmark": "mmlu",
+          "metric": "acc",
+          "score": 0.46035087719298246,
+          "num_fewshot": 5
+        },
+        {
+          "benchmark": "arc_challenge",
+          "metric": "acc_norm",
+          "score": 0.5,
+          "num_fewshot": 25
+        },
+        {
+          "benchmark": "hellaswag",
+          "metric": "acc_norm",
+          "score": 0.65,
+          "num_fewshot": 10
+        }
+      ]
+    }
+  ]
+}
