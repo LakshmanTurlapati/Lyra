@@ -21,6 +21,9 @@ venv/
 # Model cache
 .cache/
 
+# Training checkpoints (large, reproducible intermediates)
+models/**/checkpoint-*/
+
 # Assembled dataset (binary Arrow files, reproducible from source JSONL + script)
 datasets/assembled/
 
