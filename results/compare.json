@@ -1,0 +1,42 @@
+[
+  {
+    "category": "knowledge",
+    "benchmark": "mmlu",
+    "metric": "acc",
+    "baseline_score": 0.5012280701754386,
+    "candidate_score": 0.46035087719298246,
+    "delta": -0.04087719298245612
+  },
+  {
+    "category": "knowledge",
+    "benchmark": "arc_challenge",
+    "metric": "acc_norm",
+    "baseline_score": 0.45,
+    "candidate_score": 0.5,
+    "delta": 0.04999999999999999
+  },
+  {
+    "category": "knowledge",
+    "benchmark": "hellaswag",
+    "metric": "acc_norm",
+    "baseline_score": 0.66,
+    "candidate_score": 0.65,
+    "delta": -0.010000000000000009
+  },
+  {
+    "category": "custom",
+    "benchmark": "tool-call-format",
+    "metric": "pass@1",
+    "baseline_score": 0.4065040650406504,
+    "candidate_score": 0.18699186991869918,
+    "delta": -0.21951219512195122
+  },
+  {
+    "category": "custom",
+    "benchmark": "code-syntax",
+    "metric": "pass@1",
+    "baseline_score": 0.2,
+    "candidate_score": 0.2,
+    "delta": 0.0
+  }
+]
