@@ -54,8 +54,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Release
 
-- [ ] **REL-01**: Dataset card on HuggingFace with description, creation methodology, statistics, limitations
-- [ ] **REL-02**: Model card on HuggingFace with metadata YAML, usage examples, training params, benchmark results
+- [x] **REL-01**: Dataset card on HuggingFace with description, creation methodology, statistics, limitations
+- [x] **REL-02**: Model card on HuggingFace with metadata YAML, usage examples, training params, benchmark results
 - [x] **REL-03
 **: Model weights published in safetensors format
 - [x] **REL-04
@@ -120,14 +120,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRNG-01 | Phase 8 | Complete |
 | TRNG-02 | Phase 8 | Complete |
 | TRNG-03 | Phase 8 | Complete |
-| EVAL-01 | Phase 9 | Pending |
-| EVAL-02 | Phase 9 | Pending |
+| EVAL-01 | Phase 9 | Complete |
+| EVAL-02 | Phase 9 | Complete |
 | EVAL-03 | Phase 3 | Complete |
 | EVAL-04 | Phase 3 | Complete |
-| REL-01 | Phase 9 | Pending |
-| REL-02 | Phase 9 | Pending |
-| REL-03 | Phase 9 | Pending |
-| REL-04 | Phase 9 | Pending |
+| REL-01 | Phase 9 | Complete |
+| REL-02 | Phase 9 | Complete |
+| REL-03 | Phase 9 | Complete |
+| REL-04 | Phase 9 | Complete |
 | REL-05 | Phase 10 | Pending |
 | REL-06 | Phase 10 | Pending |
 | REL-07 | Phase 10 | Pending |

@@ -150,11 +150,11 @@ Plans:
   5. Model weights tracked in Git LFS (safetensors format) and MIT license applied to datasets, model weights, scripts, and eval code
 **Plans**: 5 plans
 Plans:
-- [ ] 09-01-PLAN.md -- Setup: Git LFS + LICENSE + lm-eval install + Wave 0 test scaffolding
-- [ ] 09-02-PLAN.md -- eval_inference.py (custom tool-calling/code eval) + eval_merge.py (result combiner)
-- [ ] 09-03-PLAN.md -- eval_compare.py --markdown extension with Mermaid bar chart output
-- [ ] 09-04-PLAN.md -- Run all evaluations (base + Lyra, knowledge + custom) and merge result JSONs
-- [ ] 09-05-PLAN.md -- Generate BENCHMARK.md, write model card, write dataset card, add SPDX headers
+- [x] 09-01-PLAN.md -- Setup: Git LFS + LICENSE + lm-eval install + Wave 0 test scaffolding
+- [x] 09-02-PLAN.md -- eval_inference.py (custom tool-calling/code eval) + eval_merge.py (result combiner)
+- [x] 09-03-PLAN.md -- eval_compare.py --markdown extension with Mermaid bar chart output
+- [x] 09-04-PLAN.md -- Run all evaluations (base + Lyra, knowledge + custom) and merge result JSONs
+- [x] 09-05-PLAN.md -- Generate BENCHMARK.md, write model card, write dataset card, add SPDX headers
 
 ### Phase 09.1: Tool-Call Format Regression Fix (INSERTED)
 
@@ -199,6 +199,6 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 6. General Knowledge Dataset | 0/3 | Planning complete | - |
 | 7. Dataset Assembly | 0/2 | Planning complete | - |
 | 8. Fine-Tuning | 0/2 | Planning complete | - |
-| 9. Benchmarking and Core Release | 0/5 | Planning complete | - |
+| 9. Benchmarking and Core Release | 5/5 | Complete | 2026-04-22 |
 | 09.1. Tool-Call Format Regression Fix | 4/6 | Executing | - |
 | 10. Community Release Enhancements | 0/TBD | Not started | - |
