@@ -14,5 +14,6 @@
   "pad_token": "<|im_end|>",
   "tokenizer_class": "GPT2Tokenizer",
   "unk_token": "<|endoftext|>",
-  "vocab_size": 49152
+  "vocab_size": 49152,
+  "chat_template": "{% for message in messages %}{% if loop.first and messages[0]['role'] != 'system' %}{{ '<|im_start|>system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face<|im_end|>\n' }}{% endif %}{% set msg_content = message['content'] if message.get('content') else '' %}{% if message.get('tool_calls') %}{% set msg_content = '<tool_call>' + message['tool_calls']|tojson + '</tool_call>' %}{% endif %}{% if message['role'] == 'assistant' %}{{ '<|im_start|>' + message['role'] + '\n' + msg_content + '<|im_end|>\n' }}{% else %}{{ '<|im_start|>' + message['role'] + '\n' + msg_content + '<|im_end|>\n' }}{% endif %}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}"
 }
