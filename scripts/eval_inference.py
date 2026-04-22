@@ -129,6 +129,18 @@ def _do_load_model_and_tokenizer(model_path: str, device: str):
         model_path, torch_dtype=torch.float32
     ).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+    # Explicit template verification (D-03: guard against template-less models)
+    if tokenizer.chat_template is None:
+        jinja_path = Path(model_path) / "chat_template.jinja"
+        if jinja_path.exists():
+            tokenizer.chat_template = jinja_path.read_text()
+            logger.warning("Loaded chat_template from %s (not in tokenizer config)", jinja_path)
+        else:
+            logger.warning("No chat_template found for %s -- using model default", model_path)
+    else:
+        logger.info("Chat template loaded successfully for %s", model_path)
+
     return model, tokenizer
 
 

@@ -66,6 +66,112 @@ def test_check_code_syntax_py_alias():
     assert check_code_syntax(output) is True
 
 
+def test_template_fallback_loads_jinja_file(tmp_path, monkeypatch):
+    """_do_load_model_and_tokenizer loads chat_template from .jinja file when tokenizer lacks one."""
+    import types
+    import sys
+
+    # Build a fake model directory with a chat_template.jinja file
+    model_dir = tmp_path / "fake-model"
+    model_dir.mkdir()
+    test_template = "{% for m in messages %}{{ m.content }}{% endfor %}"
+    (model_dir / "chat_template.jinja").write_text(test_template)
+
+    # Create mock torch and transformers for the lazy imports inside the function
+    fake_model = types.SimpleNamespace()
+    fake_model.to = lambda device: fake_model
+
+    fake_tokenizer = types.SimpleNamespace()
+    fake_tokenizer.chat_template = None  # Simulate missing template
+
+    mock_torch = types.ModuleType("torch")
+    mock_torch.float32 = "torch.float32"
+    monkeypatch.setitem(sys.modules, "torch", mock_torch)
+
+    mock_transformers = types.ModuleType("transformers")
+    mock_transformers.AutoModelForCausalLM = types.SimpleNamespace(
+        from_pretrained=lambda path, torch_dtype=None: fake_model,
+    )
+    mock_transformers.AutoTokenizer = types.SimpleNamespace(
+        from_pretrained=lambda path: fake_tokenizer,
+    )
+    monkeypatch.setitem(sys.modules, "transformers", mock_transformers)
+
+    from scripts.eval_inference import _do_load_model_and_tokenizer
+
+    _, tokenizer = _do_load_model_and_tokenizer(str(model_dir), "cpu")
+    assert tokenizer.chat_template == test_template
+
+
+def test_template_fallback_no_jinja_file(tmp_path, monkeypatch):
+    """_do_load_model_and_tokenizer leaves chat_template as None when no .jinja file exists."""
+    import types
+    import sys
+
+    model_dir = tmp_path / "fake-model-no-jinja"
+    model_dir.mkdir()
+
+    fake_model = types.SimpleNamespace()
+    fake_model.to = lambda device: fake_model
+
+    fake_tokenizer = types.SimpleNamespace()
+    fake_tokenizer.chat_template = None
+
+    mock_torch = types.ModuleType("torch")
+    mock_torch.float32 = "torch.float32"
+    monkeypatch.setitem(sys.modules, "torch", mock_torch)
+
+    mock_transformers = types.ModuleType("transformers")
+    mock_transformers.AutoModelForCausalLM = types.SimpleNamespace(
+        from_pretrained=lambda path, torch_dtype=None: fake_model,
+    )
+    mock_transformers.AutoTokenizer = types.SimpleNamespace(
+        from_pretrained=lambda path: fake_tokenizer,
+    )
+    monkeypatch.setitem(sys.modules, "transformers", mock_transformers)
+
+    from scripts.eval_inference import _do_load_model_and_tokenizer
+
+    _, tokenizer = _do_load_model_and_tokenizer(str(model_dir), "cpu")
+    assert tokenizer.chat_template is None
+
+
+def test_template_already_present_not_overwritten(tmp_path, monkeypatch):
+    """_do_load_model_and_tokenizer keeps existing chat_template when present."""
+    import types
+    import sys
+
+    model_dir = tmp_path / "fake-model-has-template"
+    model_dir.mkdir()
+    # Even if jinja file exists, it should not overwrite an existing template
+    (model_dir / "chat_template.jinja").write_text("jinja fallback template")
+
+    existing_template = "existing template from tokenizer_config"
+    fake_model = types.SimpleNamespace()
+    fake_model.to = lambda device: fake_model
+
+    fake_tokenizer = types.SimpleNamespace()
+    fake_tokenizer.chat_template = existing_template
+
+    mock_torch = types.ModuleType("torch")
+    mock_torch.float32 = "torch.float32"
+    monkeypatch.setitem(sys.modules, "torch", mock_torch)
+
+    mock_transformers = types.ModuleType("transformers")
+    mock_transformers.AutoModelForCausalLM = types.SimpleNamespace(
+        from_pretrained=lambda path, torch_dtype=None: fake_model,
+    )
+    mock_transformers.AutoTokenizer = types.SimpleNamespace(
+        from_pretrained=lambda path: fake_tokenizer,
+    )
+    monkeypatch.setitem(sys.modules, "transformers", mock_transformers)
+
+    from scripts.eval_inference import _do_load_model_and_tokenizer
+
+    _, tokenizer = _do_load_model_and_tokenizer(str(model_dir), "cpu")
+    assert tokenizer.chat_template == existing_template
+
+
 def test_run_custom_eval_returns_category_result(tmp_path, monkeypatch):
     """run_custom_eval returns a CategoryResult with tool-call-format and code-syntax benchmarks."""
     import json, sys
