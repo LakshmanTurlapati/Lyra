@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 09-03-PLAN.md
-last_updated: "2026-04-21T18:15:48.749Z"
-last_activity: 2026-04-21 -- Phase --phase execution started
+stopped_at: Completed 09.1-01-PLAN.md
+last_updated: "2026-04-22T05:14:52.065Z"
+last_activity: 2026-04-22 -- Phase --phase execution started
 progress:
-  total_phases: 10
+  total_phases: 11
   completed_phases: 8
-  total_plans: 26
-  completed_plans: 24
-  percent: 92
+  total_plans: 32
+  completed_plans: 26
+  percent: 81
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-20)
 
 **Core value:** Curate Opus-quality training data that makes a 1.7B parameter model practically useful for day-to-day development tasks -- tool calls, quick code, and general reasoning.
-**Current focus:** Phase --phase — 09
+**Current focus:** Phase --phase — 09.1
 
 ## Current Position
 
-Phase: --phase (09) — EXECUTING
-Plan: 1 of --name
-Status: Executing Phase --phase
-Last activity: 2026-04-21 -- Phase --phase execution started
+Phase: --phase (09.1) — EXECUTING
+Plan: 2 of 6
+Status: Executing Phase 09.1
+Last activity: 2026-04-22 -- Phase --phase execution started
 
-Progress: [█████████░] 92%
+Progress: [████████░░] 81%
 
 ## Performance Metrics
 
@@ -83,6 +83,7 @@ Progress: [█████████░] 92%
 | Phase 09-benchmarking-and-core-release P01 | 4min | 2 tasks | 5 files |
 | Phase 09-benchmarking-and-core-release P02 | 3min | 2 tasks | 2 files |
 | Phase 09-benchmarking-and-core-release P03 | 2min | 1 tasks | 1 files |
+| Phase 09.1 P01 | 3min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -142,20 +143,27 @@ Recent decisions affecting current work:
 - eval_merge.py uses model metadata from first file and appends second file categories -- asymmetric merge is intentional per Pattern 3 in RESEARCH.md
 - write_benchmark_md uses plain f-string table formatting consistent with format_compare_table (no external deps, project convention)
 - format_mermaid_bar_chart emits two bar series (baseline first, candidate second) per xychart-beta specification
+- Jinja fallback reads chat_template.jinja when tokenizer.chat_template is None (D-03 fix for eval regression)
+- Template persistence writes inline to tokenizer_config.json after merge with generation markers stripped (D-04)
 
 ### Pending Todos
 
 None yet.
 
+### Roadmap Evolution
+
+- Phase 09.1 inserted after Phase 9: Tool-Call Format Regression Fix (URGENT) — tool-call-format score regressed from 0.41 to 0.19 after fine-tuning, requires root cause analysis, potential data scaling to 25K samples, retrain, and re-evaluation
+
 ### Blockers/Concerns
 
 - SmolLM2 chat template specifics for tool calls need hands-on verification in Phase 1
 - Optimal LoRA hyperparameters for 3-way multi-task at 1.7B need empirical sweep in Phase 8
+- **CRITICAL:** Lyra tool-call-format score regressed -0.22 vs base model — Phase 09.1 inserted to investigate and fix before release
 
 ## Session Continuity
 
-Last session: 2026-04-21T18:15:48.744Z
-Stopped at: Completed 09-03-PLAN.md
+Last session: 2026-04-22T05:14:52.060Z
+Stopped at: Completed 09.1-01-PLAN.md
 Resume file: None
 
-**Planned Phase:** 9 (Benchmarking and Core Release) — 5 plans — 2026-04-21T16:20:55.312Z
+**Planned Phase:** 09.1 (tool-call-format-regression-fix) — 6 plans — 2026-04-22T05:04:14.737Z
