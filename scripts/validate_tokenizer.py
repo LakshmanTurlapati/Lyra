@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """validate_tokenizer.py -- Validate conversations against SmolLM2-1.7B-Instruct tokenizer.
 
 Catches the most dangerous failure mode in fine-tuning: data that looks structurally

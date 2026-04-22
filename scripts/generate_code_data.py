@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """generate_code_data.py -- Generate code generation training data batches.
 
 Produces JSONL batches of code generation conversations across 3 categories:

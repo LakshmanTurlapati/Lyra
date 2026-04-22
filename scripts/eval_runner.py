@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """eval_runner.py -- Unified evaluation runner invoking standard benchmark suites (D-01).
 
 Thin orchestration layer that invokes three standard benchmark suites and

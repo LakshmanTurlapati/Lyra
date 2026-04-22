@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """assemble_dataset.py -- Merge curated domain JSONL into a HuggingFace DatasetDict.
 
 Loads tool-calling, code, and knowledge curated JSONL files, strips internal

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """curate_pipeline.py -- Pipeline orchestrator for Lyra dataset curation.
 
 Reads pipeline.yaml configuration, runs 4 sequential stages, and writes

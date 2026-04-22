@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """generate_sample.py -- Generate sample conversations for testing the validation pipeline.
 
 Produces 10 hardcoded sample conversations across three domains (tool-calling, code,

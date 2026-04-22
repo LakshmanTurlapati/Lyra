@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """style_validator.py -- Adaptive output style validation per domain.
 
 Implements per-domain style checks per D-09 and D-10:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """dedup.py -- N-gram Jaccard similarity deduplication.
 
 Implements near-duplicate detection per D-04 and D-05:

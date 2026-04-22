@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """pipeline_config.py -- Pydantic models and loader for pipeline.yaml.
 
 Provides typed configuration for the curation pipeline with per-domain

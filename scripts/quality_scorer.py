@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """quality_scorer.py -- Tier 1 automated heuristic quality scoring.
 
 Implements 4 independent quality signals per D-01 and D-03:

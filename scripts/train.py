@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """train.py -- Fine-tune SmolLM2-1.7B on the Lyra dataset with LoRA.
 
 Supports MPS (Apple Silicon), CUDA, and CPU backends with auto-detection.

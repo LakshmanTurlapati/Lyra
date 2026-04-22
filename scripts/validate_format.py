@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """validate_format.py -- Validate Lyra ShareGPT JSONL against the format specification.
 
 Pydantic-based validation for TRL-native conversational format with tool calling support.

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """eval_compare.py -- Compare two eval result JSON files and print delta table (D-10).
 
 Reads a baseline and candidate EvalResult JSON file, matches benchmarks by

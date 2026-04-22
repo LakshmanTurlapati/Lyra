@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """eval_config.py -- Pydantic schemas and config loader for the evaluation framework.
 
 Defines typed data models for benchmark results, per-category aggregation,

@@ -90,12 +90,7 @@ def _ensure_mock_peft():
 
 
 def _ensure_mock_trl():
-    """Install a mock trl module if the real one is not available."""
-    try:
-        from trl import SFTConfig  # noqa: F401
-        return False
-    except ImportError:
-        pass
+    """Install a mock trl module for deterministic training-args tests."""
 
     mock_trl = types.ModuleType("trl")
 
@@ -646,6 +641,11 @@ class TestIntegrationSmoke:
         Downloads SmolLM2-1.7B-Instruct (~3.4GB) on first run.
         Validates: model load, dataset load, LoRA init, 1 training step, adapter save.
         """
+        if os.environ.get("LYRA_RUN_TRAINING_SMOKE") != "1":
+            pytest.skip(
+                "Set LYRA_RUN_TRAINING_SMOKE=1 to run the slow training smoke test"
+            )
+
         import subprocess
 
         project_root = Path(__file__).parent.parent

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """generate_tool_data.py -- Generate tool-calling training data batches.
 
 Produces JSONL batches of tool-calling conversations across 5 categories:

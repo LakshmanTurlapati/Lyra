@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
 """generate_knowledge_data.py -- Generate general knowledge training data batches.
 
 Produces JSONL batches of knowledge conversations across 3 categories:

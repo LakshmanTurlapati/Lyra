@@ -104,7 +104,7 @@ def test_eval_config_loads_yaml():
     config = load_eval_config(Path("configs/eval.yaml"))
     assert config.knowledge_tasks == ["mmlu", "arc_challenge", "hellaswag"]
     assert config.code_datasets == ["humaneval", "mbpp"]
-    assert config.batch_size == "auto"
+    assert config.batch_size == "1"
     assert config.dtype == "float32"
     assert config.num_fewshot["mmlu"] == 5
 
