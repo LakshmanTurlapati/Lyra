@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 09.1-02-PLAN.md
-last_updated: "2026-04-22T05:19:32Z"
-last_activity: 2026-04-22 -- Phase 09.1 Plan 02 completed
+stopped_at: Completed 09.1-04-PLAN.md
+last_updated: "2026-04-22T06:04:00Z"
+last_activity: 2026-04-22 -- Phase 09.1 Plan 04 completed
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 32
-  completed_plans: 27
-  percent: 84
+  completed_plans: 29
+  percent: 91
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-04-20)
 ## Current Position
 
 Phase: --phase (09.1) — EXECUTING
-Plan: 3 of 6
+Plan: 5 of 6
 Status: Executing Phase 09.1
-Last activity: 2026-04-22 -- Phase 09.1 Plan 02 completed
+Last activity: 2026-04-22 -- Phase 09.1 Plan 04 completed
 
-Progress: [████████░░] 84%
+Progress: [█████████░] 91%
 
 ## Performance Metrics
 
@@ -85,6 +85,8 @@ Progress: [████████░░] 84%
 | Phase 09-benchmarking-and-core-release P03 | 2min | 1 tasks | 1 files |
 | Phase 09.1 P01 | 3min | 2 tasks | 4 files |
 | Phase 09.1 P02 | 3min | 2 tasks | 446 files |
+| Phase 09.1 P03 | 3min | 2 tasks | 4 files |
+| Phase 09.1 P04 | 33min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -142,6 +144,8 @@ Recent decisions affecting current work:
 - lm-eval pinned at 0.4.11 with [hf] extra for HuggingFace model backend support in knowledge benchmarks
 - Module-level None references for load_from_disk/run_inference_on_sample/_load_model_and_tokenizer assigned lazily in run_custom_eval() body enable pytest monkeypatching without import-time side effects
 - eval_merge.py uses model metadata from first file and appends second file categories -- asymmetric merge is intentional per Pattern 3 in RESEARCH.md
+- [Phase 09.1]: Full re-curation on 32K raw samples yields 13,292 curated (41% retention); code/knowledge limited to ~650 each due to template-pool exhaustion at scale
+- [Phase 09.1]: O(n^2) n-gram Jaccard dedup on 23K tool-calling samples takes ~28 min -- consider MinHash LSH for future scaling beyond 25K
 - write_benchmark_md uses plain f-string table formatting consistent with format_compare_table (no external deps, project convention)
 - format_mermaid_bar_chart emits two bar series (baseline first, candidate second) per xychart-beta specification
 - Jinja fallback reads chat_template.jinja when tokenizer.chat_template is None (D-03 fix for eval regression)
@@ -163,8 +167,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-22T05:19:32Z
-Stopped at: Completed 09.1-02-PLAN.md
+Last session: 2026-04-22T06:04:00Z
+Stopped at: Completed 09.1-04-PLAN.md
 Resume file: None
 
 **Planned Phase:** 09.1 (tool-call-format-regression-fix) — 6 plans — 2026-04-22T05:04:14.737Z
