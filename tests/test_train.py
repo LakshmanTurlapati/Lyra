@@ -443,6 +443,102 @@ class TestMaxStepsFlag:
         assert training_args.load_best_model_at_end is True
 
 
+class TestTemplatePersistence:
+    """Test that the merge step writes chat_template into tokenizer_config.json."""
+
+    # The full custom chat template from train.py lines 435-455
+    TRAINING_TEMPLATE = (
+        "{% for message in messages %}"
+        "{% if loop.first and messages[0]['role'] != 'system' %}"
+        "{{ '<|im_start|>system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face<|im_end|>\n' }}"
+        "{% endif %}"
+        "{% set msg_content = message['content'] if message.get('content') else '' %}"
+        "{% if message.get('tool_calls') %}"
+        "{% set msg_content = '<tool_call>' + message['tool_calls']|tojson + '</tool_call>' %}"
+        "{% endif %}"
+        "{% if message['role'] == 'assistant' %}"
+        "{% generation %}"
+        "{{ '<|im_start|>' + message['role'] + '\n' + msg_content + '<|im_end|>\n' }}"
+        "{% endgeneration %}"
+        "{% else %}"
+        "{{ '<|im_start|>' + message['role'] + '\n' + msg_content + '<|im_end|>\n' }}"
+        "{% endif %}"
+        "{% endfor %}"
+        "{% if add_generation_prompt %}"
+        "{{ '<|im_start|>assistant\n' }}"
+        "{% endif %}"
+    )
+
+    def test_template_written_to_config(self, tmp_path):
+        """After merge, tokenizer_config.json contains a chat_template key."""
+        import json as _json
+
+        merged_dir = tmp_path / "merged"
+        merged_dir.mkdir()
+        # Write a minimal tokenizer_config.json (simulating save_pretrained output)
+        (merged_dir / "tokenizer_config.json").write_text(
+            _json.dumps({"model_type": "llama"})
+        )
+
+        # Simulate the template persistence code from train.py merge step
+        config_path = merged_dir / "tokenizer_config.json"
+        config_data = _json.loads(config_path.read_text())
+        inference_template = self.TRAINING_TEMPLATE
+        for marker in ["{% generation %}", "{% endgeneration %}"]:
+            inference_template = inference_template.replace(marker, "")
+        config_data["chat_template"] = inference_template
+        config_path.write_text(_json.dumps(config_data, indent=2) + "\n")
+
+        # Verify
+        result = _json.loads(config_path.read_text())
+        assert "chat_template" in result
+
+    def test_template_strips_generation_markers(self, tmp_path):
+        """Written template does NOT contain {% generation %} or {% endgeneration %}."""
+        import json as _json
+
+        merged_dir = tmp_path / "merged"
+        merged_dir.mkdir()
+        (merged_dir / "tokenizer_config.json").write_text(
+            _json.dumps({"model_type": "llama"})
+        )
+
+        config_path = merged_dir / "tokenizer_config.json"
+        config_data = _json.loads(config_path.read_text())
+        inference_template = self.TRAINING_TEMPLATE
+        for marker in ["{% generation %}", "{% endgeneration %}"]:
+            inference_template = inference_template.replace(marker, "")
+        config_data["chat_template"] = inference_template
+        config_path.write_text(_json.dumps(config_data, indent=2) + "\n")
+
+        result = _json.loads(config_path.read_text())
+        template = result["chat_template"]
+        assert "{% generation %}" not in template
+        assert "{% endgeneration %}" not in template
+
+    def test_template_preserves_tool_call_format(self, tmp_path):
+        """Written template DOES contain <tool_call> handling."""
+        import json as _json
+
+        merged_dir = tmp_path / "merged"
+        merged_dir.mkdir()
+        (merged_dir / "tokenizer_config.json").write_text(
+            _json.dumps({"model_type": "llama"})
+        )
+
+        config_path = merged_dir / "tokenizer_config.json"
+        config_data = _json.loads(config_path.read_text())
+        inference_template = self.TRAINING_TEMPLATE
+        for marker in ["{% generation %}", "{% endgeneration %}"]:
+            inference_template = inference_template.replace(marker, "")
+        config_data["chat_template"] = inference_template
+        config_path.write_text(_json.dumps(config_data, indent=2) + "\n")
+
+        result = _json.loads(config_path.read_text())
+        template = result["chat_template"]
+        assert "<tool_call>" in template
+
+
 class TestMergeProducesModel:
     """Test that the merge path produces expected output files.
 

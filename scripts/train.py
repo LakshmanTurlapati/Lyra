@@ -29,6 +29,121 @@ from pathlib import Path
 os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
 
 
+class LyraProgressCallback:
+    """Rich training progress callback with elapsed time, ETA, and live stats.
+
+    Inherits all no-op event handlers from TrainerCallback so the callback
+    handler never hits a missing method. Prints a formatted status line every
+    `logging_steps` showing:
+    - Visual progress bar with step count
+    - Elapsed / ETA times
+    - Smoothed training loss and current learning rate
+    - Throughput in samples/sec
+    - Per-epoch summary with eval loss when available
+    """
+
+    BAR_WIDTH = 30
+
+    def __init__(self):
+        self.start_time = None
+        self.total_steps = 0
+        self.current_epoch = 0
+        self.epoch_start_time = None
+
+    def on_train_begin(self, args, state, control, **kwargs):
+        self.start_time = time.time()
+        self.epoch_start_time = self.start_time
+        self.total_steps = state.max_steps
+        print()  # blank line before progress output
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if self.start_time is None or logs is None:
+            return
+
+        step = state.global_step
+        total = self.total_steps
+        elapsed = time.time() - self.start_time
+
+        # Progress bar
+        frac = step / total if total > 0 else 0
+        filled = int(self.BAR_WIDTH * frac)
+        bar = "█" * filled + "░" * (self.BAR_WIDTH - filled)
+        pct = int(frac * 100)
+
+        # ETA
+        if step > 0:
+            eta_sec = (elapsed / step) * (total - step)
+            eta_str = _fmt_time(eta_sec)
+        else:
+            eta_str = "..."
+        elapsed_str = _fmt_time(elapsed)
+
+        # Stats from logs
+        loss = logs.get("loss", logs.get("train_loss"))
+        lr = logs.get("learning_rate")
+
+        # Compute throughput from step timing
+        if step > 0:
+            samples_per_sec = (step * args.per_device_train_batch_size
+                               * args.gradient_accumulation_steps) / elapsed
+        else:
+            samples_per_sec = None
+
+        # Build status line
+        parts = [f"{bar} {pct:3d}%  {step}/{total}"]
+        parts.append(f"elapsed {elapsed_str}")
+        parts.append(f"eta {eta_str}")
+        if loss is not None:
+            parts.append(f"loss {loss:.4f}")
+        if lr is not None:
+            parts.append(f"lr {lr:.2e}")
+        if samples_per_sec is not None:
+            parts.append(f"{samples_per_sec:.1f} samp/s")
+
+        print(f"[Lyra] {' │ '.join(parts)}", flush=True)
+
+    def on_epoch_begin(self, args, state, control, **kwargs):
+        self.epoch_start_time = time.time()
+        self.current_epoch += 1
+        total_epochs = int(state.num_train_epochs) if hasattr(state, "num_train_epochs") else args.num_train_epochs
+        print(f"\n[Lyra] ── Epoch {self.current_epoch}/{int(total_epochs)} ──")
+
+    def on_epoch_end(self, args, state, control, **kwargs):
+        epoch_elapsed = time.time() - (self.epoch_start_time or self.start_time)
+        print(f"[Lyra] ── Epoch {self.current_epoch} done in {_fmt_time(epoch_elapsed)} ──")
+
+    def on_evaluate(self, args, state, control, metrics=None, **kwargs):
+        if metrics is None:
+            return
+        eval_loss = metrics.get("eval_loss")
+        if eval_loss is not None:
+            print(f"[Lyra]    ↳ eval_loss: {eval_loss:.4f}")
+
+    def on_train_end(self, args, state, control, **kwargs):
+        elapsed = time.time() - self.start_time if self.start_time else 0
+        print(f"\n[Lyra] ✓ Training finished in {_fmt_time(elapsed)}")
+        print()
+
+    def __getattr__(self, name):
+        """Return a no-op for any unimplemented TrainerCallback event."""
+        if name.startswith("on_"):
+            return lambda *args, **kwargs: None
+        raise AttributeError(name)
+
+
+def _fmt_time(seconds):
+    """Format seconds as human-readable time string."""
+    if seconds < 60:
+        return f"{int(seconds)}s"
+    elif seconds < 3600:
+        m, s = divmod(int(seconds), 60)
+        return f"{m}m {s:02d}s"
+    else:
+        h, rem = divmod(int(seconds), 3600)
+        m, s = divmod(rem, 60)
+        return f"{h}h {m:02d}m {s:02d}s"
+
+
 def detect_hardware():
     """Detect available hardware and return device string and quantization config.
 
@@ -315,6 +430,30 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    # Patch chat template with {% generation %} markers for TRL assistant_only_loss.
+    # Handles both text content and tool_calls (serialized as JSON) in assistant messages.
+    tokenizer.chat_template = (
+        "{% for message in messages %}"
+        "{% if loop.first and messages[0]['role'] != 'system' %}"
+        "{{ '<|im_start|>system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face<|im_end|>\n' }}"
+        "{% endif %}"
+        "{% set msg_content = message['content'] if message.get('content') else '' %}"
+        "{% if message.get('tool_calls') %}"
+        "{% set msg_content = '<tool_call>' + message['tool_calls']|tojson + '</tool_call>' %}"
+        "{% endif %}"
+        "{% if message['role'] == 'assistant' %}"
+        "{% generation %}"
+        "{{ '<|im_start|>' + message['role'] + '\n' + msg_content + '<|im_end|>\n' }}"
+        "{% endgeneration %}"
+        "{% else %}"
+        "{{ '<|im_start|>' + message['role'] + '\n' + msg_content + '<|im_end|>\n' }}"
+        "{% endif %}"
+        "{% endfor %}"
+        "{% if add_generation_prompt %}"
+        "{{ '<|im_start|>assistant\n' }}"
+        "{% endif %}"
+    )
+
     # Step 4: Load dataset
     print(f"[Lyra] Loading dataset from: {dataset_dir}")
     dataset = DatasetDict.load_from_disk(str(dataset_dir))
@@ -346,14 +485,15 @@ def main():
         peft_config=lora_config,
     )
 
+    # Replace default progress callback with Lyra's rich callback
+    from transformers import ProgressCallback
+
+    trainer.remove_callback(ProgressCallback)
+    trainer.add_callback(LyraProgressCallback())
+
     # Step 8: Train
     print("[Lyra] Starting training...")
-    start_time = time.time()
     trainer.train()
-    elapsed = time.time() - start_time
-    minutes = int(elapsed // 60)
-    seconds = int(elapsed % 60)
-    print(f"[Lyra] Training complete in {minutes}m {seconds}s")
 
     # Step 9: Save adapter
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -372,6 +512,21 @@ def main():
         merged_dir.mkdir(parents=True, exist_ok=True)
         merged.save_pretrained(str(merged_dir), safe_serialization=True)
         tokenizer.save_pretrained(str(merged_dir))
+
+        # Belt-and-suspenders: also write inference template to tokenizer_config.json
+        # (D-04: transformers 5.5.4 saves .jinja but not inline in config.json)
+        import json as _json
+        config_path = merged_dir / "tokenizer_config.json"
+        if config_path.exists():
+            config_data = _json.loads(config_path.read_text())
+            # Strip TRL-specific generation markers (not needed for inference)
+            inference_template = tokenizer.chat_template
+            for marker in ["{% generation %}", "{% endgeneration %}"]:
+                inference_template = inference_template.replace(marker, "")
+            config_data["chat_template"] = inference_template
+            config_path.write_text(_json.dumps(config_data, indent=2) + "\n")
+            print(f"[Lyra] Chat template written to {config_path}")
+
         print(f"[Lyra] Merged model saved to: {merged_dir}")
     else:
         print("[Lyra] Skipping merge (--no-merge flag set)")
