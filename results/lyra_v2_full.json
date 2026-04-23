@@ -1,0 +1,48 @@
+{
+  "model_path": "models/lyra-merged",
+  "model_name": "lyra-merged",
+  "timestamp": "2026-04-22T19:23:12.885456",
+  "device": "mps",
+  "categories": [
+    {
+      "category": "knowledge",
+      "benchmarks": [
+        {
+          "benchmark": "mmlu",
+          "metric": "acc",
+          "score": 0.46350877192982454,
+          "num_fewshot": 5
+        },
+        {
+          "benchmark": "arc_challenge",
+          "metric": "acc_norm",
+          "score": 0.46,
+          "num_fewshot": 25
+        },
+        {
+          "benchmark": "hellaswag",
+          "metric": "acc_norm",
+          "score": 0.66,
+          "num_fewshot": 10
+        }
+      ]
+    },
+    {
+      "category": "custom",
+      "benchmarks": [
+        {
+          "benchmark": "tool-call-format",
+          "metric": "pass@1",
+          "score": 0.06343906510851419,
+          "num_fewshot": null
+        },
+        {
+          "benchmark": "code-syntax",
+          "metric": "pass@1",
+          "score": 0.1875,
+          "num_fewshot": null
+        }
+      ]
+    }
+  ]
+}
