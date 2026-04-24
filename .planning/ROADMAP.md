@@ -156,6 +156,16 @@ Plans:
 - [x] 09-04-PLAN.md -- Run all evaluations (base + Lyra, knowledge + custom) and merge result JSONs
 - [x] 09-05-PLAN.md -- Generate BENCHMARK.md, write model card, write dataset card, add SPDX headers
 
+### Phase 09.2: Tool-Call Regression Diagnosis (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 9
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 09.2 to break down)
+
 ### Phase 09.1: Tool-Call Format Regression Fix (INSERTED)
 
 **Goal:** Investigate why Lyra's tool-call-format score regressed from 0.41 to 0.19 after fine-tuning, diagnose root cause (training data format mismatch, catastrophic forgetting, or data imbalance), fix the issue (potentially scaling to 25,000 samples), retrain, and re-evaluate to confirm improvement
