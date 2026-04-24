@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 09.2 context gathered
-last_updated: "2026-04-24T02:41:12.051Z"
-last_activity: 2026-04-22 -- Phase 09 completed
+last_updated: "2026-04-24T02:56:03.163Z"
+last_activity: 2026-04-24 -- Phase 09.2 execution started
 progress:
   total_phases: 12
   completed_phases: 10
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-20)
 
 **Core value:** Curate Opus-quality training data that makes a 1.7B parameter model practically useful for day-to-day development tasks -- tool calls, quick code, and general reasoning.
-**Current focus:** Phase 09.1 — tool-call-format-regression-fix
+**Current focus:** Phase 09.2 — tool-call-regression-diagnosis
 
 ## Current Position
 
-Phase: 09.1 (tool-call-format-regression-fix) — EXECUTING
-Plan: 5 of 6
-Status: Ready to execute Phase 09.1 Plan 05
-Last activity: 2026-04-22 -- Phase 09 completed
+Phase: 09.2 (tool-call-regression-diagnosis) — EXECUTING
+Plan: 1 of 6
+Status: Executing Phase 09.2
+Last activity: 2026-04-24 -- Phase 09.2 execution started
 
 Progress: [█████████░] 94%
 
