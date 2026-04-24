@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 09-05-PLAN.md
-last_updated: "2026-04-22T19:52:34.408Z"
+stopped_at: Phase 09.2 context gathered
+last_updated: "2026-04-24T01:26:58.765Z"
 last_activity: 2026-04-22 -- Phase 09 completed
 progress:
-  total_phases: 11
-  completed_phases: 9
+  total_phases: 12
+  completed_phases: 10
   total_plans: 32
-  completed_plans: 30
-  percent: 94
+  completed_plans: 32
+  percent: 100
 ---
 
 # Project State
@@ -160,6 +160,7 @@ None yet.
 ### Roadmap Evolution
 
 - Phase 09.1 inserted after Phase 9: Tool-Call Format Regression Fix (URGENT) — tool-call-format score regressed from 0.41 to 0.19 after fine-tuning, requires root cause analysis, potential data scaling to 25K samples, retrain, and re-evaluation
+- Phase 09.2 inserted after Phase 9: Tool-Call Regression Diagnosis (URGENT) — Phase 09.1's retrain regressed further (tool-call-format 0.41 → 0.06, MMLU -7.5% vs base); diagnose eval-template handling, domain-skew, and overfitting before another retrain
 
 ### Blockers/Concerns
 
@@ -169,8 +170,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-22T19:50:49.132Z
-Stopped at: Completed 09-05-PLAN.md
-Resume file: None
+Last session: --stopped-at
+Stopped at: Phase 09.2 context gathered
+Resume file: --resume-file
 
 **Planned Phase:** 09.1 (tool-call-format-regression-fix) — 6 plans — 2026-04-22T05:04:14.737Z
