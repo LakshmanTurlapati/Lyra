@@ -506,7 +506,6 @@ class TestCli:
 class TestStatsJsonOutput:
     """Phase 10 REL-07: stats subcommand emits machine-readable JSON validated via DatasetStats."""
 
-    @pytest.mark.xfail(reason="Wave 0 RED stub -- GREEN in Plan 01 Task 3 (DatasetStats + --json flag)")
     def test_compute_stats_wraps_in_dataset_stats_model(self, domain_fixture_dir):
         from scripts.assemble_dataset import assemble, compute_stats, DatasetStats
         dd = assemble(
@@ -524,7 +523,6 @@ class TestStatsJsonOutput:
         model = DatasetStats.model_validate(full)
         assert model.splits["train"].total > 0
 
-    @pytest.mark.xfail(reason="Wave 0 RED stub -- GREEN in Plan 01 Task 3 (--output flag write)")
     def test_stats_json_output_writes_file(self, tmp_path, domain_fixture_dir):
         import subprocess
         import json
