@@ -161,7 +161,7 @@ Plans:
 **Goal:** Diagnose why Lyra v2 scored 0.0634 on tool-call-format (below base 0.4065, far below >0.41 target), then execute the corrective action (retrain, targeted patch, or revert to base SmolLM2-1.7B-Instruct) and confirm either (a) the fine-tuned model beats the base on tool-call-format with MMLU/ARC/HellaSwag within 5%, or (b) a documented revert-to-base release is in place.
 **Requirements**: TOOL-01, EVAL-01
 **Depends on:** Phase 9
-**Plans:** 7/7 plans complete
+**Plans:** 6/7 plans complete (09.2-06 halted at pre-flight, re-dispatch pending)
 
 Plans:
 - [x] 09.2-01-PLAN.md — D-07 eval re-baseline + Wave 0 test scaffolding (pytest + RED stubs)
@@ -170,7 +170,7 @@ Plans:
 - [x] 09.2-04-PLAN.md — D-06 training-run audit (loss + distribution thresholds locked)
 - [x] 09.2-05-PLAN.md — Evidence synthesis into DIAGNOSIS.md + user sign-off on corrective action
 - [x] 09.2-07-PLAN.md — Data rework via parallel Claude subagents (INSERTED — prerequisite for 06A)
-- [x] 09.2-06-PLAN.md — Execute chosen branch (06A retrain / 06B patch / 06C revert to base)
+- [ ] 09.2-06-PLAN.md — Execute chosen branch (06A retrain / 06B patch / 06C revert to base) — HALTED 0/4 at pre-flight 2026-04-23; plumbing fixed 2026-04-24, awaiting re-dispatch on main
 
 ### Phase 09.1: Tool-Call Format Regression Fix (INSERTED)
 
