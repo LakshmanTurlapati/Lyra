@@ -92,6 +92,37 @@ python -m scripts.generate_sample
 pytest
 ```
 
+## GGUF Variants
+
+Quantized GGUF variants for local inference via LM Studio / llama.cpp. Attached to each model GitHub Release (see [Releases](https://github.com/LakshmanTurlapati/Lyra/releases)).
+
+| Variant | Size | Bits/weight | SHA256 | Use case |
+|---------|------|-------------|--------|----------|
+| Q4_K_M  | TBD | ~4.9 | TBD | Balanced quality/size -- recommended for consumer hardware |
+| Q8_0    | TBD | ~8.5 | TBD | Near-original quality |
+
+*Sizes and SHA256 checksums are filled at release-cut time by Plan 04. See CHANGELOG.md for the current release's values.*
+
+### Conversion (reproducing from source)
+
+Requires `llama.cpp` CLI tools on `$PATH`:
+
+```bash
+brew install llama.cpp           # or: git clone https://github.com/ggml-org/llama.cpp
+pip install gguf==0.18.0
+scripts/convert_gguf.sh models/lyra-merged lyra-v1.0
+```
+
+### Verifying the chat template
+
+Every shipped GGUF embeds the SmolLM2 chat template at convert time (Phase 09.1 D-07):
+
+```bash
+python3 -m scripts.verify_gguf build/gguf/lyra-v1.0-q4_k_m.gguf
+# Or the llama.cpp CLI equivalent:
+gguf-dump build/gguf/lyra-v1.0-q4_k_m.gguf --no-tensors | grep -i chat_template
+```
+
 ## Project Structure
 
 ```

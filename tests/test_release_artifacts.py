@@ -44,3 +44,29 @@ def test_dataset_card():
     assert "## Statistics" in text or "## Dataset Statistics" in text, \
         "datasets/README.md missing statistics section"
     assert "## Limitations" in text, "datasets/README.md missing limitations section"
+    assert "## Dataset Versions" in text or "### Dataset Versions" in text, \
+        "datasets/README.md missing Dataset Versions section (REL-07)"
+
+
+def test_gitattributes_gguf_lfs():
+    """gitattributes tracks *.gguf under git-lfs (REL-05 / Phase 10 D-05)."""
+    text = (REPO_ROOT / ".gitattributes").read_text()
+    assert "*.gguf" in text, ".gitattributes does not track *.gguf"
+    gguf_lines = [l for l in text.splitlines() if "*.gguf" in l]
+    assert any("filter=lfs" in l for l in gguf_lines), "*.gguf line does not set filter=lfs"
+
+
+def test_gitattributes_arrow_lfs():
+    """gitattributes tracks *.arrow under git-lfs (REL-07 / Phase 10 D-10)."""
+    text = (REPO_ROOT / ".gitattributes").read_text()
+    assert "*.arrow" in text, ".gitattributes does not track *.arrow"
+
+
+def test_changelog_exists_at_root():
+    """CHANGELOG.md exists at repo root with Keep-a-Changelog header (REL-07 / D-10)."""
+    path = REPO_ROOT / "CHANGELOG.md"
+    assert path.exists(), "CHANGELOG.md not found"
+    text = path.read_text()
+    assert "Keep a Changelog" in text
+    assert "Semantic Versioning" in text
+    assert "## [Unreleased]" in text
