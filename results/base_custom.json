@@ -1,7 +1,7 @@
 {
   "model_path": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
   "model_name": "SmolLM2-1.7B-Instruct",
-  "timestamp": "2026-04-21T18:52:49.875324",
+  "timestamp": "2026-04-23T22:23:07.220028",
   "device": "mps",
   "categories": [
     {
@@ -10,13 +10,13 @@
         {
           "benchmark": "tool-call-format",
           "metric": "pass@1",
-          "score": 0.4065040650406504,
+          "score": 0.34223706176961605,
           "num_fewshot": null
         },
         {
           "benchmark": "code-syntax",
           "metric": "pass@1",
-          "score": 0.2,
+          "score": 0.1875,
           "num_fewshot": null
         }
       ]
