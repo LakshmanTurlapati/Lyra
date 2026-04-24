@@ -113,7 +113,11 @@ class Conversation(BaseModel):
                         f"Tool message at index {i} missing 'name' field"
                     )
 
-        # Rule 5: Validate tool_calls count matches subsequent tool messages
+        # Rule 5: Validate tool_calls count matches subsequent tool messages.
+        # Exception: an assistant with tool_calls that is the FINAL message is
+        # allowed to have zero tool-results — this represents the single-turn
+        # "emit tool_call and stop" pattern required as a training signal to
+        # prevent the pct_end_in_tool_call=0 pathology (Phase 09.2 D-06).
         i = 0
         while i < len(msgs):
             msg = msgs[i]
@@ -124,7 +128,8 @@ class Conversation(BaseModel):
                 while j < len(msgs) and msgs[j].role == "tool":
                     actual += 1
                     j += 1
-                if actual != expected:
+                is_final = i == len(msgs) - 1
+                if actual != expected and not (is_final and actual == 0):
                     raise ValueError(
                         f"Expected {expected} tool messages after assistant "
                         f"at index {i}, got {actual}"

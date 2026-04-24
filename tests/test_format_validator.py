@@ -99,6 +99,59 @@ def test_rejects_tool_without_name():
         Conversation.model_validate(data)
 
 
+def test_final_assistant_tool_call_without_result_passes():
+    """Assistant with tool_calls as final message is allowed with zero tool-results.
+
+    Phase 09.2 Plan 07: trains pct_end_in_tool_call signal. Plan 06A fails if
+    training data has 0% of tool-calling samples ending in a tool_call.
+    """
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are helpful."},
+            {"role": "user", "content": "Weather in Paris?"},
+            {"role": "assistant", "content": "", "tool_calls": [
+                {"type": "function", "function": {"name": "get_weather",
+                                                  "arguments": {"city": "Paris"}}}
+            ]},
+        ],
+        "tools": [
+            {"type": "function", "function": {
+                "name": "get_weather",
+                "description": "Get weather",
+                "parameters": {}
+            }}
+        ],
+        "domain": "tool-calling"
+    }
+    result = Conversation.model_validate(data)
+    assert len(result.messages) == 3
+    assert result.messages[2].tool_calls is not None
+
+
+def test_mid_conversation_tool_call_still_needs_result():
+    """Assistant with tool_calls in middle of conversation still requires tool-result."""
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are helpful."},
+            {"role": "user", "content": "Weather?"},
+            {"role": "assistant", "content": "", "tool_calls": [
+                {"type": "function", "function": {"name": "get_weather",
+                                                  "arguments": {}}}
+            ]},
+            {"role": "assistant", "content": "Done."},
+        ],
+        "tools": [
+            {"type": "function", "function": {
+                "name": "get_weather",
+                "description": "Get weather",
+                "parameters": {}
+            }}
+        ]
+    }
+    with pytest.raises(ValueError, match="Expected 1 tool messages"):
+        Conversation.model_validate(data)
+
+
 def test_validate_file_valid(valid_conversation, tmp_path):
     """validate_file on valid JSONL returns all valid, no errors."""
     jsonl_path = tmp_path / "test.jsonl"
