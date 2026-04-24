@@ -24,6 +24,13 @@ venv/
 # Training checkpoints (large, reproducible intermediates)
 models/**/checkpoint-*/
 
+# Model weights and tokenizers (too large for GitHub LFS; publish to HF Hub instead)
+models/**/*.safetensors
+models/**/*.bin
+models/**/*.pt
+models/**/*.pth
+models/**/tokenizer.json
+
 # Assembled dataset (binary Arrow files, reproducible from source JSONL + script)
 datasets/assembled/
 
