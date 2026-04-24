@@ -622,7 +622,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | A6 | llama.cpp b8913 (latest at 2026-04-24) correctly handles SmolLM2 architecture | Standard Stack | Low — SmolLM2 uses `LlamaForCausalLM` architecture [VERIFIED: models/lyra-merged/config.json line 3]; this has been supported in llama.cpp since ~2023. Standard conversion path. |
 | A7 | The dataset JSONL files produced for the bundle are TRL-native format (messages/role/content), matching what Phase 7 assembled | Pattern 3 | Low — `assemble_dataset.py` produces exactly this format [VERIFIED: source inspection]. The bundle is just `save_to_disk` output, so the format is whatever the Arrow files contain. |
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> All five open questions below have been answered via the "Recommendation:" paragraphs that follow each. The 4 PLAN.md files implement the recommended choices: (Q1) brew-default with `LLAMA_CPP_DIR` fallback, (Q2) `release/dataset-v1.0.0/BENCHMARK-v1.0.0.md` as the pinned snapshot path, (Q3) a single combined `CHANGELOG.md` with versioned sections, (Q4) extended `stats` subcommand with `--json --output` flags on existing `scripts/assemble_dataset.py`, (Q5) the 4-plan split (1 non-gated prep + 2 wave-2 releases + 1 wave-3 docs/UAT).
 
 1. **Is `llama.cpp` brew formula sufficient, or should the project vendor a pinned source checkout?**
    - What we know: brew ships stable 8890; source-build gives commit-SHA reproducibility.
