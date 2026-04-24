@@ -1,3 +1,8 @@
-# Model weights, tokenizers, and assembled dataset binaries are NOT tracked in git.
-# They exceed GitHub's 2GB-per-file LFS limit. Publish to HuggingFace Hub instead.
-# See .gitignore for the ignored patterns.
+# Git LFS tracking for large binaries (Phase 9 D-10 + Phase 10 D-05/D-10).
+# Rules MUST exist before the first matching file is committed; LFS does not apply retroactively.
+*.safetensors filter=lfs diff=lfs merge=lfs -text
+*.gguf filter=lfs diff=lfs merge=lfs -text
+*.arrow filter=lfs diff=lfs merge=lfs -text
+
+# Dataset JSONL bundle under LFS for assembled splits
+datasets/assembled/**/*.jsonl filter=lfs diff=lfs merge=lfs -text

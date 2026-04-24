@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 7: Dataset Assembly** - Merge domains into final dataset with stratified train/validation/test splits and natural domain balance
 - [ ] **Phase 8: Fine-Tuning** - QLoRA training on SmolLM2-1.7B with documented scripts, hyperparameters, and consumer GPU targeting
 - [ ] **Phase 9: Benchmarking and Core Release** - Run evaluations, produce comparison report, publish model/dataset cards and weights on HuggingFace under MIT
-- [ ] **Phase 10: Community Release Enhancements** - GGUF quantized variants, interactive Gradio demo Space, and versioned dataset releases
+- [ ] **Phase 10: Community Release Enhancements** - GGUF quantized variants and versioned dataset releases
 
 ## Phase Details
 
@@ -188,15 +188,20 @@ Plans:
 - [ ] 09.1-06-PLAN.md -- Re-evaluate retrained model + compare results + success criteria check (D-09, D-10)
 
 ### Phase 10: Community Release Enhancements
-**Goal**: Users can run Lyra locally via GGUF quantization, try it in a browser demo, and track dataset evolution across versions
-**Depends on**: Phase 9
-**Requirements**: REL-05, REL-06, REL-07
+**Goal**: Users can run Lyra locally via GGUF quantization and track dataset evolution across versions
+**Depends on**: Phase 9 (gated on Phase 09.1/09.2 tool-call-format success criterion per D-06)
+**Requirements**: REL-05, REL-07
 **Success Criteria** (what must be TRUE):
   1. GGUF quantized variants (Q4_K_M, Q8_0) are published and loadable in LM Studio and llama.cpp
-  2. An interactive Gradio demo Space on HuggingFace showcases all three capability areas (tool calling, code, knowledge)
-  3. Dataset releases are versioned with documented changes and metrics per version
-**Plans**: TBD
-**UI hint**: yes
+  2. Dataset releases are versioned with documented changes and metrics per version
+**Plans**: 4 plans
+**UI hint**: no
+
+Plans:
+- [ ] 10-01-PLAN.md -- Non-gated prep (LFS, scripts skeleton, CHANGELOG, docs scaffold, REL-06 removal)
+- [ ] 10-02-PLAN.md -- GGUF conversion execution (gated on 09.1/09.2 D-06)
+- [ ] 10-03-PLAN.md -- Dataset v1.0.0 release bundle + tag + gh release
+- [ ] 10-04-PLAN.md -- Docs finalization + UAT (manual LM Studio / llama-cli smoke)
 
 ## Progress
 

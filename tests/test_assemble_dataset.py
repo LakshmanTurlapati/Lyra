@@ -501,3 +501,49 @@ class TestCli:
         assert result.returncode == 0, f"CLI stats failed: {result.stderr}"
         # Should print something to stdout
         assert "train" in result.stdout.lower() or "domain" in result.stdout.lower()
+
+
+class TestStatsJsonOutput:
+    """Phase 10 REL-07: stats subcommand emits machine-readable JSON validated via DatasetStats."""
+
+    def test_compute_stats_wraps_in_dataset_stats_model(self, domain_fixture_dir):
+        from scripts.assemble_dataset import assemble, compute_stats, DatasetStats
+        dd = assemble(
+            output_dir=str(domain_fixture_dir / "out"),
+            seed=42,
+            base_dir=str(domain_fixture_dir),
+        )
+        stats_dict = compute_stats(dd)
+        full = {
+            "schema_version": "1.0.0",
+            "dataset_version": "1.0.0",
+            "generated_at": "2026-04-24T00:00:00+00:00",
+            "splits": stats_dict,
+        }
+        model = DatasetStats.model_validate(full)
+        assert model.splits["train"].total > 0
+
+    def test_stats_json_output_writes_file(self, tmp_path, domain_fixture_dir):
+        import subprocess
+        import json
+        # First assemble a dataset for the stats command to consume
+        out_ds = domain_fixture_dir / "stats_json_out"
+        subprocess.run(
+            [sys.executable, "-m", "scripts.assemble_dataset", "assemble",
+             "--output-dir", str(out_ds),
+             "--seed", "42",
+             "--base-dir", str(domain_fixture_dir)],
+            capture_output=True, text=True,
+            cwd=str(Path(__file__).parent.parent),
+        )
+        out = tmp_path / "stats.json"
+        result = subprocess.run(
+            [sys.executable, "-m", "scripts.assemble_dataset", "stats",
+             "--dataset-dir", str(out_ds), "--json", "--output", str(out)],
+            capture_output=True, text=True,
+            cwd=str(Path(__file__).parent.parent),
+        )
+        assert result.returncode == 0, result.stderr
+        parsed = json.loads(out.read_text())
+        assert parsed["schema_version"] == "1.0.0"
+        assert "splits" in parsed

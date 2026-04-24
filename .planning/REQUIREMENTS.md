@@ -61,7 +61,6 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **REL-04
 **: MIT license applied consistently to datasets, model weights, scripts, and eval code
 - [ ] **REL-05**: GGUF quantized variants (Q4_K_M, Q8_0) published for LM Studio / llama.cpp
-- [ ] **REL-06**: Interactive Gradio demo Space on HuggingFace showcasing all three capability areas
 - [ ] **REL-07**: Versioned dataset releases with documented changes and metrics per version
 
 ## v2 Requirements
@@ -92,6 +91,7 @@ Explicitly excluded. Documented to prevent scope creep.
 | Web UI for dataset curation | CLI-first pipeline; users who need UI can use Argilla or HuggingFace data viewer |
 | Hosted API/serving infrastructure | Release weights; users deploy on their own infrastructure (Ollama, LM Studio, vLLM) |
 | Automated continuous training pipeline | Over-engineering for iterative research project; manual training runs with documented configs |
+| Interactive Gradio demo Space on HuggingFace | Community release is GitHub-native; interactive demo not pursued in v1 |
 
 ## Traceability
 
@@ -129,12 +129,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | REL-03 | Phase 9 | Complete |
 | REL-04 | Phase 9 | Complete |
 | REL-05 | Phase 10 | Pending |
-| REL-06 | Phase 10 | Pending |
+| REL-06 | Out of Scope | Deferred |
 | REL-07 | Phase 10 | Pending |
 
 **Coverage:**
-- v1 requirements: 32 total
-- Mapped to phases: 32
+- v1 requirements: 31 total
+- Mapped to phases: 31
 - Unmapped: 0
 
 ---

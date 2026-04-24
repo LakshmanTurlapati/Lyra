@@ -180,6 +180,49 @@ def compute_stats(dataset_dict: DatasetDict) -> dict:
     return stats
 
 
+# --- Phase 10 REL-07: Machine-readable DatasetStats envelope ---
+
+from datetime import datetime, timezone
+
+from pydantic import BaseModel
+
+
+class DatasetSplitStats(BaseModel):
+    total: int
+    domains: dict[str, dict[str, float]]
+
+
+class DatasetStats(BaseModel):
+    schema_version: str  # e.g. "1.0.0" -- bumps when JSON shape changes
+    dataset_version: str  # e.g. "1.0.0" -- matches dataset-vX.Y.Z git tag
+    generated_at: str  # ISO-8601 UTC timestamp
+    splits: dict[str, DatasetSplitStats]
+
+
+def build_dataset_stats_payload(dataset_dict, dataset_version: str = "1.0.0") -> dict:
+    """Wrap compute_stats() output in the full DatasetStats envelope.
+
+    Args:
+        dataset_dict: The assembled DatasetDict.
+        dataset_version: Version string embedded in the envelope (default: "1.0.0").
+
+    Returns:
+        Dict containing schema_version, dataset_version, generated_at ISO-8601
+        timestamp, and per-split stats. Validated via DatasetStats.model_validate
+        before return, so compute_stats shape drift fails loud here.
+    """
+    raw = compute_stats(dataset_dict)
+    envelope = {
+        "schema_version": "1.0.0",
+        "dataset_version": dataset_version,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "splits": raw,
+    }
+    # Validate before returning -- fails loud if compute_stats shape drifts.
+    DatasetStats.model_validate(envelope)
+    return envelope
+
+
 def print_stats(dataset_dict: DatasetDict) -> None:
     """Print formatted domain distribution table to stdout.
 
@@ -304,6 +347,23 @@ def main():
         default=DEFAULT_OUTPUT_DIR,
         help=f"Path to saved DatasetDict (default: {DEFAULT_OUTPUT_DIR})",
     )
+    stats_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON instead of the human-readable table.",
+    )
+    stats_parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="If set, write JSON to this file (only valid with --json).",
+    )
+    stats_parser.add_argument(
+        "--dataset-version",
+        type=str,
+        default="1.0.0",
+        help="Dataset version string embedded in the JSON envelope (default: 1.0.0).",
+    )
 
     args = parser.parse_args()
 
@@ -345,7 +405,22 @@ def main():
             logger.error("Dataset directory not found: %s", dataset_dir)
             sys.exit(1)
         dd = DatasetDict.load_from_disk(str(dataset_dir))
-        print_stats(dd)
+        if args.json:
+            import json as _json
+            payload = build_dataset_stats_payload(dd, dataset_version=args.dataset_version)
+            if args.output is not None:
+                # T-10-04: refuse path traversal
+                if ".." in args.output.parts:
+                    logger.error("Output path may not contain '..': %s", args.output)
+                    sys.exit(1)
+                resolved = args.output.resolve()
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(_json.dumps(payload, indent=2))
+                logger.info("Wrote stats JSON to %s", resolved)
+            else:
+                print(_json.dumps(payload, indent=2))
+        else:
+            print_stats(dd)
 
 
 if __name__ == "__main__":

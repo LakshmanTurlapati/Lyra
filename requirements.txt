@@ -12,3 +12,6 @@ accelerate>=1.13.0
 
 # Evaluation (Phase 9)
 lm-eval[hf]==0.4.11
+
+# GGUF metadata inspection (Phase 10 REL-05)
+gguf==0.18.0
