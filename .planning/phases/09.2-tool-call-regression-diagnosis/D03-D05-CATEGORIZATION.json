@@ -1,0 +1,64 @@
+{
+  "probe_date": "2026-04-24",
+  "model": "models/lyra-merged",
+  "dataset_mode": {
+    "n": 20,
+    "histogram": {
+      "valid_tool_call": 0,
+      "malformed_tool_call_json": 0,
+      "empty": 0,
+      "echo_tool_result_prefix": 8,
+      "echoed_expected_text": 2,
+      "incomplete_tool_call": 1,
+      "plain_text": 9
+    },
+    "percentages": {
+      "valid_tool_call": 0.0,
+      "malformed_tool_call_json": 0.0,
+      "empty": 0.0,
+      "echo_tool_result_prefix": 40.0,
+      "echoed_expected_text": 10.0,
+      "incomplete_tool_call": 5.0,
+      "plain_text": 45.0
+    },
+    "dominant_category": "plain_text",
+    "refined_buckets_note": "The 9 plain_text rows are all canned_summary_template instances matching the memorized schema 'I\\'ve completed the task. [CLAUSE] the operation was successful.'; see Markdown for behavioral sub-buckets."
+  },
+  "single_turn_mode": {
+    "n": 8,
+    "histogram": {
+      "valid_tool_call": 8,
+      "malformed_tool_call_json": 0,
+      "empty": 0,
+      "echo_tool_result_prefix": 0,
+      "echoed_expected_text": 0,
+      "incomplete_tool_call": 0,
+      "plain_text": 0
+    },
+    "percentages": {
+      "valid_tool_call": 100.0,
+      "malformed_tool_call_json": 0.0,
+      "empty": 0.0,
+      "echo_tool_result_prefix": 0.0,
+      "echoed_expected_text": 0.0,
+      "incomplete_tool_call": 0.0,
+      "plain_text": 0.0
+    },
+    "dominant_category": "valid_tool_call",
+    "mode_collapsed": true,
+    "semantic_breakdown": {
+      "valid_and_semantically_correct": 1,
+      "mode_collapsed_get_weather_tokyo": 6,
+      "mode_collapsed_git_commit_canned": 2
+    },
+    "semantic_correctness_percent": 12.5,
+    "semantic_correctness_note": "8/8 syntactically valid <tool_call> XML; 7/8 collapse onto two memorized outputs (get_weather(city=Tokyo) 6x, git_commit(message=Fix typo in docs) 2x) regardless of prompt intent. Only 1/8 is semantically appropriate, and even that uses 'location' kwarg instead of schema-defined 'city'."
+  },
+  "human_confirmed": true,
+  "feeds_plan_05": [
+    "v2 is severely mode-collapsed on single-turn: 7/8 prompts produce canned get_weather(Tokyo) (6x) or git_commit(\"Fix typo in docs\") (2x) regardless of actual intent.",
+    "Dataset-mode is dominated by two memorized response-shells totaling 85%: canned_summary_template (45%) and echo_tool_result_prefix (40%). These are not in test expectations -- they are learned template reflexes.",
+    "XML format machinery is intact (8/8 valid syntax on single-turn). The regression is in trigger-and-semantic-selection, NOT in format emission. Fix must target training-data distribution or SFT reward signal.",
+    "H1 (training-distribution mode collapse) strongly supported; H5 (template persistence) already eliminated by Plan 02. DIAGNOSIS.md should rank H1/H2/H3 and park H4/H5 as eliminated."
+  ]
+}
