@@ -169,6 +169,7 @@ Plans:
 - [ ] 09.2-03-PLAN.md — D-03 + D-05 generation probe script + human categorization
 - [ ] 09.2-04-PLAN.md — D-06 training-run audit (loss + distribution thresholds locked)
 - [ ] 09.2-05-PLAN.md — Evidence synthesis into DIAGNOSIS.md + user sign-off on corrective action
+- [ ] 09.2-07-PLAN.md — Data rework via parallel Claude subagents (INSERTED — prerequisite for 06A)
 - [ ] 09.2-06-PLAN.md — Execute chosen branch (06A retrain / 06B patch / 06C revert to base)
 
 ### Phase 09.1: Tool-Call Format Regression Fix (INSERTED)
