@@ -158,13 +158,18 @@ Plans:
 
 ### Phase 09.2: Tool-Call Regression Diagnosis (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
+**Goal:** Diagnose why Lyra v2 scored 0.0634 on tool-call-format (below base 0.4065, far below >0.41 target), then execute the corrective action (retrain, targeted patch, or revert to base SmolLM2-1.7B-Instruct) and confirm either (a) the fine-tuned model beats the base on tool-call-format with MMLU/ARC/HellaSwag within 5%, or (b) a documented revert-to-base release is in place.
+**Requirements**: TOOL-01, EVAL-01
 **Depends on:** Phase 9
-**Plans:** 0 plans
+**Plans:** 6 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 09.2 to break down)
+- [ ] 09.2-01-PLAN.md — D-07 eval re-baseline + Wave 0 test scaffolding (pytest + RED stubs)
+- [ ] 09.2-02-PLAN.md — D-04 template parity pytest (H5 ruled out, locked in CI)
+- [ ] 09.2-03-PLAN.md — D-03 + D-05 generation probe script + human categorization
+- [ ] 09.2-04-PLAN.md — D-06 training-run audit (loss + distribution thresholds locked)
+- [ ] 09.2-05-PLAN.md — Evidence synthesis into DIAGNOSIS.md + user sign-off on corrective action
+- [ ] 09.2-06-PLAN.md — Execute chosen branch (06A retrain / 06B patch / 06C revert to base)
 
 ### Phase 09.1: Tool-Call Format Regression Fix (INSERTED)
 
