@@ -23,7 +23,6 @@ def _mock_gguf_module(chat_template: str, include_keys=("tokenizer.chat_template
     return mock_gguf
 
 
-@pytest.mark.xfail(reason="Wave 0 RED stub -- GREEN in Plan 01 Task 2 (scripts/verify_gguf.py creation)")
 def test_verify_gguf_accepts_good_metadata(tmp_path):
     """verify_gguf.py exits 0 when all required keys present + SmolLM2 marker found."""
     gguf_path = tmp_path / "fake.gguf"
@@ -34,7 +33,6 @@ def test_verify_gguf_accepts_good_metadata(tmp_path):
         assert verify(gguf_path) == 0
 
 
-@pytest.mark.xfail(reason="Wave 0 RED stub -- GREEN in Plan 01 Task 2")
 def test_verify_gguf_rejects_missing_template(tmp_path):
     """verify_gguf.py exits 1 when tokenizer.chat_template key is absent."""
     gguf_path = tmp_path / "fake.gguf"
@@ -45,7 +43,6 @@ def test_verify_gguf_rejects_missing_template(tmp_path):
         assert verify(gguf_path) == 1
 
 
-@pytest.mark.xfail(reason="Wave 0 RED stub -- GREEN in Plan 01 Task 2")
 def test_verify_gguf_rejects_wrong_marker(tmp_path):
     """verify_gguf.py exits 1 when chat_template present but missing <|im_start|> marker."""
     gguf_path = tmp_path / "fake.gguf"
@@ -56,7 +53,6 @@ def test_verify_gguf_rejects_wrong_marker(tmp_path):
         assert verify(gguf_path) == 1
 
 
-@pytest.mark.xfail(reason="Wave 0 RED stub -- GREEN in Plan 01 Task 2 (scripts/convert_gguf.sh creation)")
 def test_convert_gguf_rejects_bad_path():
     """convert_gguf.sh exits non-zero on invalid model dir arg (T-10-01 mitigation)."""
     script = REPO_ROOT / "scripts" / "convert_gguf.sh"
