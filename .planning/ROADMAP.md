@@ -198,7 +198,7 @@ Plans:
 **UI hint**: no
 
 Plans:
-- [ ] 10-01-PLAN.md -- Non-gated prep (LFS, scripts skeleton, CHANGELOG, docs scaffold, REL-06 removal)
+- [x] 10-01-PLAN.md -- Non-gated prep (LFS, scripts skeleton, CHANGELOG, docs scaffold, REL-06 removal)
 - [ ] 10-02-PLAN.md -- GGUF conversion execution (gated on 09.1/09.2 D-06)
 - [ ] 10-03-PLAN.md -- Dataset v1.0.0 release bundle + tag + gh release
 - [ ] 10-04-PLAN.md -- Docs finalization + UAT (manual LM Studio / llama-cli smoke)
@@ -222,4 +222,4 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 8. Fine-Tuning | 0/2 | Planning complete | - |
 | 9. Benchmarking and Core Release | 5/5 | Complete | 2026-04-22 |
 | 09.1. Tool-Call Format Regression Fix | 4/6 | Executing | - |
-| 10. Community Release Enhancements | 0/TBD | Not started | - |
+| 10. Community Release Enhancements | 1/4 | Executing (Wave 1 done; Waves 2/3 gated on 09.1/09.2 D-06) | - |
