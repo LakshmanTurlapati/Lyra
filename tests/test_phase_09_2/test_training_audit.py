@@ -29,47 +29,41 @@ def _pct_end_in_tool_call(tool_calling_train):
 
 
 @pytest.mark.slow
-@pytest.mark.xfail(
-    strict=False,
-    reason=(
-        "Archival: documents the 09.1 dataset pathology where "
-        "pct_end_in_tool_call == 0.0. Plan 06A retrain deliberately "
-        "rebalances this; once that lands the xfail will XPASS->FAIL "
-        "silently (strict=False) and the forward-looking ceiling test "
-        "(below) is the active gate."
-    ),
-)
-def test_tool_calling_assistant_ending_type_distribution_archival(tool_calling_train):
-    """Per RESEARCH.md H1: on the 09.1 dataset, 100% of train tool-calling
-    samples end in text, never in a tool_call. This xfail captures that
-    state-of-the-world as an archival finding for Plan 05 to cite.
+def test_tool_calling_assistant_ending_floor(tool_calling_train):
+    """Plan 07 rebalance target: pct_end_in_tool_call >= 0.05.
+
+    Trains the model that a tool_call on its own can be a complete response
+    (prevents the mode collapse documented in D-06 where the 09.1 training
+    set had 0.00% of tool-calling samples ending in a tool_call).
     """
     pct = _pct_end_in_tool_call(tool_calling_train)
-    assert pct == 0.0, (
-        f"Archival test: expected exactly 0.0 tool-call-ending fraction "
-        f"(the 09.1 pathology), got {pct:.4f}."
+    assert pct >= 0.05, (
+        f"pct_end_in_tool_call = {pct:.4f} below 5% floor. "
+        f"Plan 07 Wave B produces 500 single-turn tool-call-ending samples; "
+        f"if this fails, the rebalance was undone. See D-06 + 09.2-07-SUMMARY."
     )
 
 
 @pytest.mark.slow
-def test_tool_calling_assistant_ending_type_ceiling_is_bounded(tool_calling_train):
-    """Forward-looking ceiling. Passes BEFORE and AFTER Plan 06A's retrain.
-    The intended remediation (adding a small fraction of tool-call-ending
-    samples, target ~4%) must still satisfy pct_end_in_tool_call < 0.10.
-    Only a pathological over-correction (>=10% tool-call-ending) fails.
+def test_tool_calling_assistant_ending_ceiling(tool_calling_train):
+    """Guardrail against over-correction: pct_end_in_tool_call stays
+    below 0.30 so text-ending summaries remain the majority pattern.
     """
     pct = _pct_end_in_tool_call(tool_calling_train)
-    assert pct < 0.10, (
-        f"pct_end_in_tool_call = {pct:.1%} exceeds 10% forward-looking ceiling. "
-        f"A retrain has over-corrected toward tool-call-ending samples. "
-        f"Rebalance back toward text-ending majority; see RESEARCH.md H1 remediation."
+    assert pct < 0.30, (
+        f"pct_end_in_tool_call = {pct:.4f} exceeds 30% ceiling — retrain has "
+        f"over-corrected toward tool-call-ending samples."
     )
 
 
 @pytest.mark.slow
 def test_top5_canned_suffix_coverage_is_bounded(tool_calling_train):
-    """Per RESEARCH.md H1: ~46% of training tool-calling samples share one
-    of 5 ending prefixes (60-char). Retrains MUST keep this <= 50%.
+    """Plan 07 rebalance target: top-5 60-char ending prefix coverage <= 20%.
+
+    Before Plan 07: 46% of tool-calling samples shared one of 5 canned
+    summary templates. Plan 07 Wave C + downsample of canned-ending legacy
+    samples drops this to ~17%. A regression past 20% means the canned
+    suffix cluster is returning.
     """
     prefixes = Counter()
     for s in tool_calling_train:
@@ -79,24 +73,25 @@ def test_top5_canned_suffix_coverage_is_bounded(tool_calling_train):
     n = len(tool_calling_train)
     top5_total = sum(c for _, c in prefixes.most_common(5))
     coverage = top5_total / n if n else 0.0
-    assert coverage <= 0.50, (
-        f"Top-5 canned-suffix coverage = {coverage:.1%} of {n} tool-calling train "
-        f"samples exceeds 50% threshold. Retrain must diversify endings "
-        f"(see RESEARCH.md Pitfall 3 remediation). Top 5 prefixes: "
-        f"{prefixes.most_common(5)}"
+    assert coverage <= 0.20, (
+        f"Top-5 canned-suffix coverage = {coverage:.4f} of {n} tool-calling "
+        f"train samples exceeds 20% threshold. See D-06 + 07-SUFFIX-POOL.md. "
+        f"Top 5 prefixes: {prefixes.most_common(5)}"
     )
 
 
 @pytest.mark.slow
 def test_domain_skew_bounds(assembled_train):
-    """Per 09.1-04: tool-calling domain is 90.2% of train. Retrains MUST
-    keep it <= 92% to avoid further skew (ideally rebalance DOWN per
-    RESEARCH.md H1 remediation).
+    """Plan 07 rebalance target: tool-calling domain ratio <= 80% of train.
+
+    Before Plan 07: tool-calling was 90.22% of train (4.9% knowledge,
+    4.9% code) — documented as the MMLU -7.5% catastrophic-forgetting
+    driver. Plan 07 Wave D + downsample brings tool-calling to ~65%.
     """
     domains = Counter(s.get("domain", "unknown") for s in assembled_train)
     n = sum(domains.values())
     tc_fraction = domains.get("tool-calling", 0) / n if n else 0.0
-    assert tc_fraction <= 0.92, (
-        f"tool-calling domain = {tc_fraction:.1%} of {n} train samples, "
-        f"exceeds 92% ceiling. Rebalancing required."
+    assert tc_fraction <= 0.80, (
+        f"tool-calling domain = {tc_fraction:.4f} of {n} train samples, "
+        f"exceeds 80% target. Rebalance code/knowledge supplementary data."
     )

@@ -1,0 +1,40 @@
+{
+  "citation": "",
+  "description": "",
+  "features": {
+    "messages": {
+      "feature": {
+        "_type": "Json"
+      },
+      "_type": "List"
+    },
+    "domain": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "tools": {
+      "feature": {
+        "type": {
+          "dtype": "string",
+          "_type": "Value"
+        },
+        "function": {
+          "name": {
+            "dtype": "string",
+            "_type": "Value"
+          },
+          "description": {
+            "dtype": "string",
+            "_type": "Value"
+          },
+          "parameters": {
+            "_type": "Json"
+          }
+        }
+      },
+      "_type": "List"
+    }
+  },
+  "homepage": "",
+  "license": ""
+}
