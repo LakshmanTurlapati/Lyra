@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Phase 10 context re-reviewed (no changes)
-last_updated: "2026-04-24T17:13:44.780Z"
+last_updated: "2026-04-24T18:14:33.821Z"
 last_activity: 2026-04-24
 progress:
   total_phases: 12
   completed_phases: 11
-  total_plans: 39
+  total_plans: 43
   completed_plans: 39
-  percent: 100
+  percent: 91
 ---
 
 # Project State
@@ -175,4 +175,4 @@ Last session: --stopped-at
 Stopped at: Phase 10 context re-reviewed (no changes)
 Resume file: --resume-file
 
-**Planned Phase:** 09.2 (tool-call-regression-diagnosis) — 6 plans — 2026-04-24T02:41:12.045Z
+**Planned Phase:** 10 (community-release-enhancements) — 4 plans — 2026-04-24T18:14:33.814Z
