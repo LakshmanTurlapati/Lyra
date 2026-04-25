@@ -194,7 +194,7 @@ Plans:
 **Requirements:** EVAL-01, TOOL-01
 **Depends on:** Phase 09.2 plan 06 (v4 weights landed, committed `0de4f53`)
 **Budget:** ~$1,100 Anthropic Batch API (Opus pricing, 50% batch discount, prompt caching) + ~2 days wall-clock (24h batch + ~6h continue-train + ~45m eval + curation)
-**Plans:** 3 plans (TBD)
+**Plans:** 3 plans
 
 Plans:
 - [ ] 09.3-01-PLAN.md -- Data generation: 42K rebalanced samples via Anthropic Batch API (80% tool-call with diverse suffixes + ≥15% single-turn tool-call-ending / 10% code / 10% knowledge with topic-pool expansion)
@@ -237,5 +237,5 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 9. Benchmarking and Core Release | 5/5 | Complete | 2026-04-22 |
 | 09.1. Tool-Call Format Regression Fix | 4/6 | Executing | - |
 | 09.2. Tool-Call Regression Diagnosis | 6/7 | Plan 06 executed (v4: tool-call-format 0.4044 vs base 0.4065, parity within noise) | - |
-| 09.3. Dataset Scale + Continue-Train v5 | 0/3 | Planning — awaiting Phase 09.3 plan drafting | - |
+| 09.3. Dataset Scale + Continue-Train v5 | 0/3 | Planning complete | - |
 | 10. Community Release Enhancements | 1/4 | Executing (Wave 1 done; Waves 2/3 gated on D-09 strict pass from 09.3 OR accept-partial) | - |
