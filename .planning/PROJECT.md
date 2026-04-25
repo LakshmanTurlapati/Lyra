@@ -74,7 +74,7 @@ Three focus areas, evenly weighted:
 | MIT license | Maximum adoption, no commercial restrictions | -- Pending |
 | Strict D-09: fine-tuned model must BEAT base on tool-call-format | User rejected parity-with-base as the release bar (Phase 09.2-06 v4 at 0.4044 vs base 0.4065). "We have to fix the Lyra model... make sure it's better than base... until then we are not done." | Phase 09.3 is the v5 attempt. If v5 also fails strict D-09, escalate with three options: one more hypothesis / accept-partial with disclosure / pivot to 06C revert-to-base. |
 | v5 via continue-training from v4 adapter | v4 at parity within noise (−0.5% tool-call-format). v4's code-syntax +143% and ARC +4.4% are assets worth preserving. Continue-training adds new training signal without restarting from base. | Phase 09.3 execution. Novel step: requires `scripts/train.py --resume-from-adapter` support. |
-| Phase 09.3 API budget cap $1,500 | Anthropic Batch API at Opus pricing with 50% batch discount + prompt caching forecasts ~$1,100 for 42K new samples. $1,500 is the hard cap before user re-approval. | Phase 09.3 Plan 01 pre-submission forecast gate. |
+| Phase 09.3 generation via Claude Code subagent batches (no paid API) | User rejected the $1,100 Anthropic Batch API path 2026-04-25. Free, slower (3-5h orchestrated), same Opus quality, no idempotency or cost-overrun risk. Pattern from Plan 09.2-07 scaled up via more sequential batches. | Phase 09.3 Plan 01 — orchestrator runs ~5-10 parallel subagents per batch, sequential batches. Memory: `feedback_no_paid_api_for_data_gen.md`. |
 
 ## Evolution
 
