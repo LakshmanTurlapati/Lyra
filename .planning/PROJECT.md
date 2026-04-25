@@ -67,11 +67,14 @@ Three focus areas, evenly weighted:
 |----------|-----------|---------|
 | SmolLM2-1.7B as base model | Largest SmolLM -- best balance of capability and local deployability | -- Pending |
 | ShareGPT format | Widely supported, native HuggingFace integration, multi-turn capable | -- Pending |
-| Even 33/33/33 split across focus areas | Balanced general-purpose model rather than specialist | -- Pending |
+| Even 33/33/33 split across focus areas | Balanced general-purpose model rather than specialist | Revised 2026-04-24 — Phase 09.2-07 rebalanced to 80/10/10 (tool-call/code/knowledge) to prevent tool-call distribution skew. Phase 09.3 inherits this ratio. |
 | Opus generates all data | Highest quality source, consistent output, no annotation costs | -- Pending |
-| Start with ~5K samples | Validate approach before investing in scale | -- Pending |
+| Start with ~5K samples | Validate approach before investing in scale | Revised — scaled to 25K in Phase 09.1, rebalanced down to 7.5K in 09.2-07 for quality, now scaling back to ~50K in Phase 09.3 with 09.2-07 rules enforced at scale. |
 | Name: Lyra | Greek constellation, musical lineage (Haiku/Sonnet/Opus), "small but clear" | -- Pending |
 | MIT license | Maximum adoption, no commercial restrictions | -- Pending |
+| Strict D-09: fine-tuned model must BEAT base on tool-call-format | User rejected parity-with-base as the release bar (Phase 09.2-06 v4 at 0.4044 vs base 0.4065). "We have to fix the Lyra model... make sure it's better than base... until then we are not done." | Phase 09.3 is the v5 attempt. If v5 also fails strict D-09, escalate with three options: one more hypothesis / accept-partial with disclosure / pivot to 06C revert-to-base. |
+| v5 via continue-training from v4 adapter | v4 at parity within noise (−0.5% tool-call-format). v4's code-syntax +143% and ARC +4.4% are assets worth preserving. Continue-training adds new training signal without restarting from base. | Phase 09.3 execution. Novel step: requires `scripts/train.py --resume-from-adapter` support. |
+| Phase 09.3 API budget cap $1,500 | Anthropic Batch API at Opus pricing with 50% batch discount + prompt caching forecasts ~$1,100 for 42K new samples. $1,500 is the hard cap before user re-approval. | Phase 09.3 Plan 01 pre-submission forecast gate. |
 
 ## Evolution
 

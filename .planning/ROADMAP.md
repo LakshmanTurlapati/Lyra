@@ -21,6 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 7: Dataset Assembly** - Merge domains into final dataset with stratified train/validation/test splits and natural domain balance
 - [ ] **Phase 8: Fine-Tuning** - QLoRA training on SmolLM2-1.7B with documented scripts, hyperparameters, and consumer GPU targeting
 - [ ] **Phase 9: Benchmarking and Core Release** - Run evaluations, produce comparison report, publish model/dataset cards and weights on HuggingFace under MIT
+- [ ] **Phase 09.3: Dataset Scale + Continue-Train v5** (INSERTED) - Scale rebalanced dataset to ~50K via Anthropic Batch API, continue-train v5 from v4 adapter, eval for strict D-09 pass
 - [ ] **Phase 10: Community Release Enhancements** - GGUF quantized variants and versioned dataset releases
 
 ## Phase Details
@@ -187,6 +188,19 @@ Plans:
 - [ ] 09.1-05-PLAN.md -- Retrain on 25K dataset with adjusted hyperparameters (lr=1e-4, epochs=2)
 - [ ] 09.1-06-PLAN.md -- Re-evaluate retrained model + compare results + success criteria check (D-09, D-10)
 
+### Phase 09.3: Dataset Scale + Continue-Train v5 (INSERTED)
+
+**Goal:** Generate ~42K fresh rebalanced training samples (applying 09.2-07's mode-collapse-avoiding rules at scale), reassemble with existing 7,519-sample rebalanced set into a ~50K DatasetDict, continue-train v5 from v4's LoRA adapter (not from base), and eval to confirm strict D-09 pass (tool-call-format > base 0.4065) or escalate to accept-partial.
+**Requirements:** EVAL-01, TOOL-01
+**Depends on:** Phase 09.2 plan 06 (v4 weights landed, committed `0de4f53`)
+**Budget:** ~$1,100 Anthropic Batch API (Opus pricing, 50% batch discount, prompt caching) + ~2 days wall-clock (24h batch + ~6h continue-train + ~45m eval + curation)
+**Plans:** 3 plans (TBD)
+
+Plans:
+- [ ] 09.3-01-PLAN.md -- Data generation: 42K rebalanced samples via Anthropic Batch API (80% tool-call with diverse suffixes + ≥15% single-turn tool-call-ending / 10% code / 10% knowledge with topic-pool expansion)
+- [ ] 09.3-02-PLAN.md -- Curate + reassemble to 50K (merge with v4 rebalanced set, enforce 09.2-07 audit thresholds as gates)
+- [ ] 09.3-03-PLAN.md -- Continue-train v5 from v4 adapter (lr=1e-5, 1 epoch, ~6h) + eval + D-09 gate + SUMMARY
+
 ### Phase 10: Community Release Enhancements
 **Goal**: Users can run Lyra locally via GGUF quantization and track dataset evolution across versions
 **Depends on**: Phase 9 (gated on Phase 09.1/09.2 tool-call-format success criterion per D-06)
@@ -222,4 +236,6 @@ Phase 3 depends on Phase 1 (not Phase 2) and can execute in parallel with Phase 
 | 8. Fine-Tuning | 0/2 | Planning complete | - |
 | 9. Benchmarking and Core Release | 5/5 | Complete | 2026-04-22 |
 | 09.1. Tool-Call Format Regression Fix | 4/6 | Executing | - |
-| 10. Community Release Enhancements | 1/4 | Executing (Wave 1 done; Waves 2/3 gated on 09.1/09.2 D-06) | - |
+| 09.2. Tool-Call Regression Diagnosis | 6/7 | Plan 06 executed (v4: tool-call-format 0.4044 vs base 0.4065, parity within noise) | - |
+| 09.3. Dataset Scale + Continue-Train v5 | 0/3 | Planning — awaiting Phase 09.3 plan drafting | - |
+| 10. Community Release Enhancements | 1/4 | Executing (Wave 1 done; Waves 2/3 gated on D-09 strict pass from 09.3 OR accept-partial) | - |
