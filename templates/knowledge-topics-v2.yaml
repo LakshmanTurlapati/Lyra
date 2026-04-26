@@ -1,0 +1,700 @@
+version: 2
+description: |
+  Knowledge topic pool for Phase 09.3 knowledge-sample generation (D-07).
+  Replaces the 192-topic hardcoded pool in scripts/generate_knowledge_data.py
+  that hit exhaustion at ~650 samples in Phase 09.1-04.
+
+  Subagents pick a (topic, sub_angle) pair, then write a fresh user question +
+  Sonnet-quality assistant answer in ShareGPT format. Sub-angles encourage
+  variety so the same topic produces multiple distinct samples.
+
+  Total: 7 categories x ~90 topics each = 630 topics. Each topic combined with
+  6 sub-angles gives 3,780 unique (topic, angle) seeds — ample headroom for
+  1,500–4,200 sample generation without prompt collisions.
+
+sub_angles:
+  - definition          # "What is X?" — core concept and scope
+  - mechanism           # "How does X work?" — underlying process
+  - significance        # "Why does X matter?" — real-world impact
+  - comparison          # "How does X differ from Y?" — contrast with related concept
+  - example             # "Give a concrete example of X" — illustrative case
+  - misconception       # "What's a common misunderstanding about X?" — corrective angle
+
+categories:
+
+  science:
+    # physics
+    - Newton's laws of motion
+    - thermodynamics and entropy
+    - quantum superposition
+    - special relativity
+    - general relativity
+    - electromagnetic induction
+    - wave-particle duality
+    - the Higgs mechanism
+    - dark matter
+    - dark energy
+    - cosmic microwave background
+    - black hole event horizons
+    - gravitational waves
+    - the photoelectric effect
+    - nuclear fission vs fusion
+    - the standard model of particle physics
+    - conservation of energy
+    - angular momentum
+    - the Coriolis effect
+    - quantum tunneling
+    - Bose-Einstein condensates
+    - the uncertainty principle
+    # chemistry
+    - the periodic table organization
+    - covalent vs ionic bonding
+    - acid-base chemistry
+    - oxidation-reduction reactions
+    - catalysts and enzyme kinetics
+    - chirality in molecules
+    - polymer chemistry
+    - gas laws (Boyle, Charles, ideal)
+    - phase transitions of matter
+    - electrochemistry and batteries
+    - organic functional groups
+    - Le Chatelier's principle
+    - molecular orbital theory
+    - hydrogen bonding
+    - solubility and saturation
+    # biology
+    - DNA replication
+    - protein folding
+    - the citric acid cycle
+    - photosynthesis
+    - mitosis vs meiosis
+    - natural selection
+    - genetic mutation types
+    - CRISPR gene editing
+    - the immune response
+    - neurotransmitters and synapses
+    - the human microbiome
+    - mitochondrial DNA
+    - epigenetics
+    - the central dogma of molecular biology
+    - cellular respiration
+    - homeostasis
+    - the cardiovascular system
+    - the endocrine system
+    - viral replication
+    - antibiotic resistance
+    - stem cells
+    # earth science / astronomy
+    - plate tectonics
+    - the carbon cycle
+    - the water cycle
+    - El Nino and La Nina
+    - the greenhouse effect
+    - ocean currents and thermohaline circulation
+    - the Milankovitch cycles
+    - star formation and stellar nucleosynthesis
+    - the life cycle of stars
+    - planetary atmospheres
+    - exoplanet detection methods
+    - the Kuiper belt vs Oort cloud
+    - tides and lunar gravity
+    - earthquake mechanics
+    - volcanic eruption types
+    - mineral formation
+    - the ozone layer
+    - geomagnetic reversals
+    # environment
+    - climate feedback loops
+    - biodiversity hotspots
+    - eutrophication
+    - ocean acidification
+    - microplastics in ecosystems
+    - rewilding
+    - carbon sequestration
+    - the nitrogen cycle
+    - urban heat islands
+    - the Amazon rainforest's role in climate
+    - keystone species
+    - coral reef bleaching
+    - desertification
+    - soil degradation
+    - invasive species
+    - the phosphorus cycle
+    - mass extinction events
+    - the deep ocean ecosystem
+    - permafrost thaw
+
+  history:
+    # ancient
+    - the rise of Mesopotamian city-states
+    - ancient Egyptian dynastic structure
+    - the Indus Valley civilization
+    - classical Greek democracy
+    - the Roman Republic vs Empire transition
+    - the Han dynasty
+    - the Maya civilization
+    - the Aztec empire
+    - the Inca road system
+    - Phoenician trade networks
+    - the Persian Achaemenid empire
+    - the conquests of Alexander the Great
+    - the spread of Buddhism along the Silk Road
+    - the fall of the Western Roman Empire
+    # medieval
+    - the Byzantine Empire
+    - the Islamic Golden Age
+    - feudalism in medieval Europe
+    - the Mongol Empire's expansion
+    - the Crusades
+    - the Black Death's social impact
+    - the Hanseatic League
+    - the Renaissance origins
+    - the Hundred Years' War
+    - the Reconquista
+    - medieval guild systems
+    - the Holy Roman Empire structure
+    - the spread of Islam in West Africa
+    - the Khmer Empire
+    - the rise of the Ottoman Empire
+    # modern
+    - the Age of Exploration
+    - the Columbian Exchange
+    - the Atlantic slave trade
+    - the Reformation
+    - the Scientific Revolution
+    - the Enlightenment
+    - the American Revolution
+    - the French Revolution
+    - the Industrial Revolution
+    - the Napoleonic Wars
+    - the abolition of slavery
+    - the Meiji Restoration
+    - the unification of Germany
+    - the unification of Italy
+    - World War I origins
+    - the Russian Revolution
+    - the Treaty of Versailles
+    - the Great Depression
+    - the rise of fascism in Europe
+    - World War II turning points
+    - the Holocaust
+    - the partition of India
+    - the Chinese Communist Revolution
+    - the Cold War
+    - the Cuban Missile Crisis
+    - decolonization in Africa
+    - the civil rights movement
+    - the Vietnam War
+    - the fall of the Berlin Wall
+    - the dissolution of the Soviet Union
+    - apartheid and its end in South Africa
+    - the European Union's formation
+    # biographies / movements
+    - Mahatma Gandhi's nonviolent resistance
+    - Nelson Mandela's leadership
+    - Marie Curie's scientific contributions
+    - Albert Einstein's impact on physics
+    - Leonardo da Vinci's polymathy
+    - Confucius and Confucian philosophy
+    - Genghis Khan's conquests
+    - the women's suffrage movement
+    - the labor movement of the 19th century
+    - the abolitionist movement
+    - Winston Churchill's wartime leadership
+    - Franklin D. Roosevelt's New Deal
+    - Martin Luther King Jr.'s civil rights leadership
+    - Rosa Parks and the Montgomery bus boycott
+    - Susan B. Anthony's suffrage activism
+    - Frederick Douglass's abolitionism
+    - Harriet Tubman and the Underground Railroad
+    - the rise of OPEC
+    - the Marshall Plan
+    - the founding of the United Nations
+    - the Suez Crisis
+    - the Iranian Revolution
+    - the Korean War
+    - the Spanish Civil War
+    - the Boxer Rebellion
+    - the Opium Wars
+    - the Mexican Revolution
+    - the Haitian Revolution
+    - the Glorious Revolution
+    - the Spanish Inquisition
+    - the Council of Trent
+    - the Magna Carta
+    - the Code of Hammurabi
+    - the Library of Alexandria
+    - the Great Wall of China
+    - the building of the pyramids
+    - the Vikings and Norse exploration
+    - the Ming dynasty's maritime expeditions
+
+  math:
+    # algebra
+    - linear equations
+    - quadratic equations
+    - polynomial factoring
+    - systems of equations
+    - matrices and determinants
+    - vector spaces
+    - eigenvalues and eigenvectors
+    - group theory basics
+    - ring theory
+    - field theory
+    - abstract algebra applications
+    # geometry
+    - Euclidean geometry axioms
+    - the Pythagorean theorem
+    - circle properties
+    - triangle congruence and similarity
+    - coordinate geometry
+    - non-Euclidean geometry
+    - hyperbolic geometry
+    - topology basics
+    - knot theory
+    - fractal geometry
+    - the four-color theorem
+    # calculus
+    - limits and continuity
+    - derivatives as rates of change
+    - the fundamental theorem of calculus
+    - integration techniques
+    - multivariable calculus
+    - partial derivatives
+    - vector calculus
+    - differential equations
+    - Taylor series
+    - Fourier series
+    - the Laplace transform
+    # statistics / probability
+    - the law of large numbers
+    - the central limit theorem
+    - Bayes' theorem
+    - hypothesis testing
+    - confidence intervals
+    - p-values and their misinterpretation
+    - regression analysis
+    - probability distributions (normal, Poisson, binomial)
+    - Markov chains
+    - the Monty Hall problem
+    - Simpson's paradox
+    - sampling bias
+    # number theory / discrete
+    - prime number distribution
+    - the Riemann hypothesis
+    - modular arithmetic
+    - Fermat's last theorem
+    - Goldbach's conjecture
+    - graph theory basics
+    - Eulerian and Hamiltonian paths
+    - the traveling salesman problem
+    - combinatorics basics
+    - the pigeonhole principle
+    - the prisoner's dilemma
+    - game theory and Nash equilibrium
+    - logarithms
+    - exponential growth and decay
+    - trigonometric identities
+    - the unit circle
+    - radians vs degrees
+    - complex numbers
+    - quaternions
+    - the binomial theorem
+    - mathematical induction
+    - proof by contradiction
+    - set theory basics
+    - Cantor's diagonal argument
+    - Godel's incompleteness theorems
+    - the axiom of choice
+    - convex optimization
+    - linear programming
+    - Monte Carlo methods
+    - numerical stability
+    - floating-point representation
+    - the FFT (fast Fourier transform)
+    - Big-O notation
+    - NP-completeness
+
+  tech:
+    # programming
+    - object-oriented programming
+    - functional programming
+    - recursion vs iteration
+    - dynamic programming
+    - greedy algorithms
+    - sorting algorithm tradeoffs
+    - hash tables and collisions
+    - tree data structures (BST, AVL, B-tree)
+    - heaps and priority queues
+    - graph traversal (BFS, DFS)
+    - garbage collection
+    - memory leaks
+    - concurrency vs parallelism
+    - mutexes and semaphores
+    - lock-free data structures
+    - the actor model
+    - design patterns (singleton, observer, factory)
+    - SOLID principles
+    - dependency injection
+    - test-driven development
+    # systems
+    - operating system kernels
+    - virtual memory
+    - process scheduling
+    - file systems (ext4, NTFS, APFS, ZFS)
+    - containers vs virtual machines
+    - microservices architecture
+    - monolithic architecture tradeoffs
+    - event-driven architecture
+    - message queues (Kafka, RabbitMQ)
+    - distributed consensus (Raft, Paxos)
+    - the CAP theorem
+    - sharding databases
+    - caching strategies
+    - load balancing algorithms
+    # networks
+    - the OSI model
+    - TCP vs UDP
+    - HTTP/1.1 vs HTTP/2 vs HTTP/3
+    - DNS resolution
+    - BGP and internet routing
+    - NAT and IPv4 exhaustion
+    - IPv6 adoption
+    - TLS handshake
+    - certificate authorities
+    - WebSockets vs Server-Sent Events
+    - WebRTC
+    - VPN protocols (IPsec, WireGuard)
+    # AI/ML
+    - supervised vs unsupervised learning
+    - neural network backpropagation
+    - convolutional neural networks
+    - recurrent neural networks
+    - transformer architecture
+    - attention mechanisms
+    - transfer learning
+    - reinforcement learning
+    - gradient descent variants
+    - overfitting and regularization
+    - LoRA fine-tuning
+    - quantization for inference
+    - retrieval-augmented generation
+    - tokenization in language models
+    - embeddings and vector search
+    # security
+    - public-key cryptography
+    - symmetric vs asymmetric encryption
+    - hashing vs encryption
+    - SQL injection
+    - cross-site scripting (XSS)
+    - cross-site request forgery (CSRF)
+    - OAuth 2.0 flows
+    - JWT tokens and their pitfalls
+    - zero-trust architecture
+    - defense in depth
+    - the principle of least privilege
+    - rate limiting and DDoS mitigation
+    - WebAssembly
+    - GraphQL vs REST
+    - server-sent events
+    - service workers
+    - browser rendering pipeline
+    - JIT compilation
+    - ahead-of-time compilation
+    - just-in-time vs ahead-of-time tradeoffs
+    - garbage collector tuning
+    - reactive programming
+    - functional reactive programming
+    - immutable data structures
+    - persistent data structures
+    - copy-on-write
+    - SIMD vectorization
+    - cache hierarchies (L1, L2, L3)
+    - branch prediction
+    - speculative execution
+    - row-store vs column-store databases
+    - vector databases
+    - time-series databases
+    - eventual consistency
+
+  everyday_life:
+    # cooking / food
+    - the Maillard reaction
+    - emulsification
+    - fermentation in food
+    - gluten development in dough
+    - the science of caramelization
+    - knife sharpening
+    - sous vide cooking
+    - food preservation methods
+    - umami taste
+    - the role of fat in flavor
+    - tempering chocolate
+    - rising agents (yeast, baking soda, baking powder)
+    # personal finance
+    - compound interest
+    - the time value of money
+    - index funds vs active management
+    - dollar-cost averaging
+    - the difference between stocks and bonds
+    - 401(k) vs Roth IRA
+    - emergency funds
+    - mortgage amortization
+    - credit scores
+    - inflation's impact on savings
+    - tax brackets and marginal rates
+    - estate planning basics
+    # health
+    - sleep cycles and REM
+    - the role of fiber in digestion
+    - hydration and electrolytes
+    - aerobic vs anaerobic exercise
+    - vaccine mechanisms
+    - the placebo effect
+    - blood pressure regulation
+    - cholesterol (HDL vs LDL)
+    - insulin and blood sugar
+    - the gut-brain axis
+    - mindfulness meditation
+    - the role of vitamin D
+    # home / practical
+    - how a refrigerator works
+    - how an electric motor works
+    - how a microwave heats food
+    - how a thermostat regulates temperature
+    - how solar panels generate electricity
+    - how a heat pump works
+    - water heater types
+    - septic vs sewer systems
+    - circuit breakers vs fuses
+    - smoke alarm types
+    - composting basics
+    - LED vs incandescent vs fluorescent lighting
+    # communication
+    - active listening
+    - nonverbal communication
+    - the difference between assertive and aggressive communication
+    - giving constructive feedback
+    - public speaking fundamentals
+    - persuasion techniques
+    - conflict resolution
+    - cross-cultural communication
+    # travel / geography
+    - time zones and the international date line
+    - jet lag
+    - passport vs visa requirements
+    - currency exchange and forex spreads
+    - the Schengen area
+    - travel insurance
+    - altitude sickness
+    - reading a topographic map
+    - reading nutrition labels
+    - basic first aid (CPR, choking, bleeding)
+    - reading a thermostat schedule
+    - calculating tip and tax mentally
+    - reading a credit card statement
+    - HSAs vs FSAs
+    - life insurance types (term vs whole)
+    - rent vs buy decisions
+    - negotiating salary
+    - building a resume
+    - networking effectively
+    - intermittent fasting
+    - the keto diet
+    - macronutrients and micronutrients
+    - reading a weather radar map
+    - storm safety
+    - earthquake preparedness
+    - basic car maintenance (oil, tires, brakes)
+    - reading a tire sidewall
+    - gardening basics (sunlight, watering, soil)
+    - container gardening
+    - houseplant care
+
+  arts_and_humanities:
+    # literature
+    - the hero's journey
+    - unreliable narrators
+    - stream of consciousness
+    - magical realism
+    - the difference between novel and novella
+    - Shakespeare's sonnets
+    - the epic tradition (Homer, Virgil, Dante)
+    - the rise of the novel in the 18th century
+    - Russian literature of the 19th century
+    - postmodernism in fiction
+    - the Beat Generation
+    - science fiction subgenres
+    # philosophy
+    - Plato's theory of forms
+    - Aristotelian logic
+    - Cartesian dualism
+    - empiricism vs rationalism
+    - Kant's categorical imperative
+    - utilitarianism
+    - existentialism
+    - phenomenology
+    - the trolley problem
+    - free will vs determinism
+    - the philosophy of mind
+    - virtue ethics
+    - social contract theory
+    - the problem of induction
+    - the Ship of Theseus
+    # music
+    - the circle of fifths
+    - musical modes (Dorian, Phrygian, etc.)
+    - sonata form
+    - the development of jazz
+    - the history of the blues
+    - hip-hop's emergence
+    - the structure of a symphony
+    - equal temperament tuning
+    - acoustic vs electric guitar tone
+    - synthesizer waveforms
+    - the role of the conductor
+    # visual arts
+    - the Renaissance use of perspective
+    - chiaroscuro
+    - Impressionism
+    - Cubism
+    - Surrealism
+    - Abstract Expressionism
+    - the Bauhaus movement
+    - Japanese woodblock printing (ukiyo-e)
+    - color theory basics
+    - the rule of thirds
+    - art conservation techniques
+    # languages
+    - the Indo-European language family
+    - phonemes vs graphemes
+    - tonal vs non-tonal languages
+    - grammatical case systems
+    - language acquisition in children
+    - pidgins and creoles
+    - the Sapir-Whorf hypothesis
+    - sign language linguistics
+    - translation vs interpretation
+    - dead languages and revival efforts
+    # culture / religion
+    - the major branches of Christianity
+    - the five pillars of Islam
+    - Buddhist meditation traditions
+    - Hindu cosmology
+    - Jewish festivals and their meanings
+    - Confucianism vs Taoism
+    - indigenous spiritual traditions
+    - secular humanism
+    - the development of writing systems
+    - the role of myth in culture
+    - oral storytelling traditions
+    - the development of theater (Greek to modern)
+    - opera as an art form
+    - ballet history
+    - the Harlem Renaissance
+    - Latin American magical realism
+    - West African griot traditions
+    - calligraphy traditions (Chinese, Arabic, Western)
+    - graphic design fundamentals
+    - typography basics
+    - photography composition
+    - documentary vs fiction film
+    - the auteur theory in film
+    - Stoicism in modern life
+    - Eastern vs Western philosophy
+    - the philosophy of language
+    - aesthetics
+    - the meaning of consciousness
+    - epistemology basics
+    - logic puzzles and paradoxes (Liar, Russell)
+    - rhetoric and the art of persuasion
+
+  current_events:
+    # sustainability
+    - electric vehicle adoption
+    - lithium-ion battery supply chains
+    - solid-state batteries
+    - hydrogen as an energy carrier
+    - offshore wind energy
+    - solar farm efficiency
+    - small modular reactors
+    - geothermal energy
+    - carbon capture and storage
+    - direct air capture
+    - regenerative agriculture
+    - vertical farming
+    - lab-grown meat
+    # geopolitics
+    - the BRICS expansion
+    - NATO's evolving role
+    - Taiwan strait tensions
+    - the Russia-Ukraine conflict
+    - Middle East energy politics
+    - the African Continental Free Trade Area
+    - Arctic sovereignty disputes
+    - the South China Sea
+    - sanctions as a foreign policy tool
+    - global migration patterns
+    # economy
+    - inflation drivers in the 2020s
+    - central bank interest rate policy
+    - quantitative easing and tightening
+    - cryptocurrency regulation
+    - stablecoin mechanics
+    - CBDCs (central bank digital currencies)
+    - the rise of remote work
+    - the gig economy
+    - supply chain reshoring
+    - the semiconductor industry
+    - rare earth element supply
+    - the housing affordability crisis
+    # society
+    - social media's impact on mental health
+    - the loneliness epidemic
+    - declining birth rates in developed nations
+    - aging population challenges
+    - universal basic income proposals
+    - the four-day workweek
+    - student debt
+    - healthcare access disparities
+    - the future of higher education
+    # science / tech news
+    - large language models and their limits
+    - AI alignment research
+    - AI in drug discovery
+    - quantum computing progress
+    - James Webb Space Telescope discoveries
+    - SpaceX and reusable rockets
+    - the Artemis lunar program
+    - mRNA vaccine platforms
+    - Alzheimer's drug development
+    - personalized medicine and genomics
+    - brain-computer interfaces
+    - the search for extraterrestrial life
+    - asteroid deflection planetary defense
+    - solar geoengineering
+    - the Voyager probes
+    - global pandemic preparedness
+    - antibiotic resistance crisis
+    - food security in a warming world
+    - water scarcity hotspots
+    - the Belt and Road Initiative
+    - the digital euro and CBDCs
+    - generative AI in creative industries
+    - AI-assisted scientific discovery
+    - autonomous vehicles
+    - delivery drones
+    - the metaverse
+    - decentralized social media
+    - end-to-end encryption regulation
+    - online age verification debates
+    - misinformation and platform moderation
+    - the future of content moderation
+    - degrowth economics
+    - modern monetary theory
+    - shareholder vs stakeholder capitalism
+    - ESG investing critique
+
+# Validation: subagents should treat each (category, topic, sub_angle) tuple
+# as a distinct seed. Two samples must not share the same (topic, sub_angle)
+# tuple within a single batch.
