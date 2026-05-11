@@ -6,3 +6,6 @@
 
 # Dataset JSONL bundle under LFS for assembled splits
 datasets/assembled/**/*.jsonl filter=lfs diff=lfs merge=lfs -text
+
+# Per-domain raw JSONL produced by phase data-generation plans (e.g. raw-09.3/)
+datasets/*/raw-*/**/*.jsonl filter=lfs diff=lfs merge=lfs -text

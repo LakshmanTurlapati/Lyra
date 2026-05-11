@@ -13,6 +13,8 @@ build/
 datasets/**/*.jsonl
 datasets/**/*.json
 !datasets/**/.gitkeep
+# Raw per-phase JSONL is tracked via LFS (see .gitattributes)
+!datasets/*/raw-*/**/*.jsonl
 
 # Virtual environments
 venv/
