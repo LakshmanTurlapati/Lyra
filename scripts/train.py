@@ -277,6 +277,14 @@ def build_parser():
         default=-1,
         help="Max training steps (-1 = use epochs). For smoke tests: --max-steps 1",
     )
+    parser.add_argument(
+        "--resume-from-adapter",
+        type=str,
+        default=None,
+        help="Path to existing LoRA adapter to continue-train from (e.g. models/lyra-adapter). "
+             "When set, the existing adapter is loaded with is_trainable=True and SFTTrainer is "
+             "given the wrapped PeftModel directly (no fresh LoraConfig).",
+    )
 
     return parser
 
@@ -426,6 +434,19 @@ def main():
         args.model_name, **model_kwargs
     )
 
+    # Step 2.5: Optionally resume from existing LoRA adapter (continue-training)
+    if args.resume_from_adapter:
+        adapter_path = Path(args.resume_from_adapter)
+        if not (adapter_path / "adapter_config.json").exists():
+            print(
+                f"Error: --resume-from-adapter path missing adapter_config.json: {adapter_path}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        print(f"[Lyra] Resuming from adapter: {adapter_path}")
+        model = PeftModel.from_pretrained(model, str(adapter_path), is_trainable=True)
+        print("[Lyra] Adapter loaded with is_trainable=True; SFTTrainer will skip fresh peft_config")
+
     # Step 3: Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
     if tokenizer.pad_token is None:
@@ -465,26 +486,32 @@ def main():
         f"test={len(dataset['test'])}"
     )
 
-    # Step 5: Configure LoRA
-    lora_config = get_lora_config(args)
-    print(
-        f"[Lyra] LoRA config: r={lora_config.r}, "
-        f"alpha={lora_config.lora_alpha}, "
-        f"modules={lora_config.target_modules}"
-    )
+    # Step 5: Configure LoRA (only for fresh training — resume path uses the loaded adapter)
+    if args.resume_from_adapter:
+        lora_config = None
+        print("[Lyra] Skipping LoraConfig — using adapter loaded in step 2.5")
+    else:
+        lora_config = get_lora_config(args)
+        print(
+            f"[Lyra] LoRA config: r={lora_config.r}, "
+            f"alpha={lora_config.lora_alpha}, "
+            f"modules={lora_config.target_modules}"
+        )
 
     # Step 6: Configure training
     training_args = get_training_args(args, device)
 
     # Step 7: Create trainer
-    trainer = SFTTrainer(
+    trainer_kwargs = dict(
         model=model,
         args=training_args,
         train_dataset=dataset["train"],
         eval_dataset=dataset["validation"],
         processing_class=tokenizer,
-        peft_config=lora_config,
     )
+    if lora_config is not None:
+        trainer_kwargs["peft_config"] = lora_config
+    trainer = SFTTrainer(**trainer_kwargs)
 
     # Replace default progress callback with Lyra's rich callback
     from transformers import ProgressCallback
