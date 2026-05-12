@@ -197,7 +197,7 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 09.3-01-PLAN.md -- Data generation: 42K rebalanced samples via Claude Code subagent batches (orchestrator runs ~5-10 parallel subagents per batch sequentially; 80% tool-call with diverse suffixes + ≥15% single-turn tool-call-ending / 10% code / 10% knowledge with topic-pool expansion)
+- [x] 09.3-01-PLAN.md -- Data generation: 42,251 raw samples landed (33,500 tool-call / 4,251 code / 4,500 knowledge) via 155 deterministic subagent generators; 14.85% single-turn-ending pre-merge (flagged for 09.3-02 audit); 623-topic v2 knowledge pool landed (D-07); raw JSONL tracked via LFS
 - [ ] 09.3-02-PLAN.md -- Curate + reassemble to 50K (merge with v4 rebalanced set, enforce 09.2-07 audit thresholds as gates)
 - [ ] 09.3-03-PLAN.md -- Continue-train v5 from v4 adapter (lr=1e-5, 1 epoch, ~6h) + eval + D-09 gate + SUMMARY
 

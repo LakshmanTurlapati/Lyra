@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 09.3 inserted — dataset scale + continue-train v5 approved (~$1,100 API + 2-3d wall-clock)
-last_updated: "2026-04-25T02:48:35.266Z"
-last_activity: 2026-04-24 -- Phase --phase execution started
+stopped_at: Phase 09.3 plan 01 closed out — 42,251 raw samples landed via subagent batches; 09.3-02 next (curate + assemble + D-06 hard gate)
+last_updated: "2026-05-11T23:59:00.000Z"
+last_activity: 2026-05-11 -- Phase 09.3 Plan 01 closed (subagent-batch dataset scale, LFS adoption, 14.85% single-turn flag)
 progress:
   total_phases: 13
   completed_phases: 11
   total_plans: 46
-  completed_plans: 40
-  percent: 87
+  completed_plans: 41
+  percent: 89
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-20)
 
 **Core value:** Curate Opus-quality training data that makes a 1.7B parameter model practically useful for day-to-day development tasks -- tool calls, quick code, and general reasoning.
-**Current focus:** Phase --phase — 10
+**Current focus:** Phase 09.3 — dataset-scale-and-retrain (Plan 02 next: curate + assemble)
 
 ## Current Position
 
-Phase: --phase (10) — EXECUTING
-Plan: 1 of --name
-Status: Executing Phase --phase
-Last activity: 2026-04-24 -- Phase --phase execution started
+Phase: 09.3 — EXECUTING (1 of 3 plans complete)
+Plan: 02 of 03 (curate + reassemble + D-06 hard gate)
+Status: Executing Phase 09.3
+Last activity: 2026-05-11 -- Phase 09.3 Plan 01 closed (subagent-batch dataset scale)
 
-Progress: [█████████░] 94%
+Progress: [██████████████████░░] 89% (41/46 plans)
 
 ## Performance Metrics
 
