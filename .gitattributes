@@ -9,3 +9,6 @@ datasets/assembled/**/*.jsonl filter=lfs diff=lfs merge=lfs -text
 
 # Per-domain raw JSONL produced by phase data-generation plans (e.g. raw-09.3/)
 datasets/*/raw-*/**/*.jsonl filter=lfs diff=lfs merge=lfs -text
+
+# Per-domain curated JSONL (the rolling training-input bundle; size grows as new raw phases land)
+datasets/*/curated/*.jsonl filter=lfs diff=lfs merge=lfs -text
