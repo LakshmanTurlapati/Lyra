@@ -1,29 +1,47 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-21T00:47:12.855Z",
-  "phase": "9",
-  "phase_name": "Benchmarking and Core Release",
-  "phase_dir": null,
-  "plan": 0,
-  "task": 0,
-  "total_tasks": 0,
+  "timestamp": "2026-05-13T05:22:24Z",
+  "phase": "09.3",
+  "phase_name": "dataset-scale-and-retrain",
+  "phase_dir": ".planning/phases/09.3-dataset-scale-and-retrain",
+  "plan": 3,
+  "task": 4,
+  "total_tasks": 5,
   "status": "paused",
-  "completed_tasks": [],
-  "remaining_tasks": [],
+  "completed_tasks": [
+    {"id": 1, "name": "Plan 01 — generate 42K raw samples via subagent batches", "status": "done", "commit": "7cd406e"},
+    {"id": 2, "name": "Plan 02 — curate + assemble v5 DatasetDict (50,502 samples)", "status": "done", "commit": "9eaa1bd"},
+    {"id": 3, "name": "Plan 03 Task 3 — continue-train v5 from v4 adapter on 42K new samples", "status": "done", "commit": "3b6b7bd"},
+    {"id": 4, "name": "Plan 03 Task 4 — eval suite (knowledge + custom + merge + compare) + write D09-GATE-V5.md", "status": "in_progress", "progress": "all 4 artifacts written (lyra_v5_knowledge.json, lyra_v5_custom.json, lyra_v5_full.json, D09-GATE-V5.md), NOT YET COMMITTED, verdict = FAIL-below-parity"}
+  ],
+  "remaining_tasks": [
+    {"id": 4, "name": "Plan 03 Task 4 — commit eval artifacts + verdict", "status": "ready_to_commit"},
+    {"id": 5, "name": "Plan 03 Task 5 — [CHECKPOINT 2] user ship-decision per D-14 (A/B/C)", "status": "blocked_on_user"}
+  ],
   "blockers": [
-    {"description": "Phase 9 requires trained model weights which need actual training run (30-90 min on MPS)", "type": "human_action", "workaround": "Run: pip install -r requirements.txt && python3 -m scripts.train --data-dir datasets/assembled"}
+    {"description": "v5 tool-call-format = 0.2353 — FAIL-below-parity vs base 0.4065 and v4 0.4044. Continue-train caused 17-point regression on the exact metric we set out to fix.", "type": "technical", "workaround": "Probe v5 outputs on failing tool-call samples before deciding ship-path; format mismatch may be cheaply fixable"},
+    {"description": "User must pick D-14 ship-decision (A=v6 retrain / B=accept-partial / C=06C revert-to-base) — per CONTEXT.md no auto-pivot allowed", "type": "human_action", "workaround": null}
   ],
   "human_actions_pending": [
-    {"action": "Install ML dependencies and run training", "context": "scripts/train.py is ready but actual fine-tuning needs torch/peft/trl installed and ~30-90 min on Apple Silicon", "blocking": true}
+    {"action": "Review D09-GATE-V5.md and pick ship-decision A/B/C", "context": "FAIL-below-parity verdict. Recommended first step: run a 10-sample probe of v5 outputs to determine if regression is a fixable format mismatch or a real catastrophic-forgetting failure.", "blocking": true},
+    {"action": "Decide whether to commit eval artifacts now or after probe", "context": "All 4 artifacts ready (results/lyra_v5_{knowledge,custom,full}.json + D09-GATE-V5.md). User asked to pause before commit step.", "blocking": false}
   ],
   "decisions": [
-    {"decision": "Use all 3,630 samples with natural imbalance (68/16.5/15.4)", "rationale": "More data preferred over strict 33/33/33 balance", "phase": "7"},
-    {"decision": "MPS primary training target with 16-bit LoRA (no QLoRA on MPS)", "rationale": "bitsandbytes doesn't support MPS; Unsloth requires CUDA", "phase": "8"},
-    {"decision": "LoRA r=16, alpha=32, lr=2e-4, 3 epochs", "rationale": "SmolLM2 community defaults", "phase": "8"}
+    {"decision": "Knowledge eval ran with --limit 100 per task", "rationale": "Plan specified this; v4 used same; ~30 min on MPS vs hours for full", "phase": "09.3"},
+    {"decision": "Custom eval ran against datasets/assembled (NOT assembled-v5)", "rationale": "Apples-to-apples comparison with v4 — same 416-sample test split (272 tool-calling + 72 code + 72 knowledge)", "phase": "09.3"},
+    {"decision": "Evaluated models/lyra-merged-v5 (NOT models/lyra-merged)", "rationale": "User kept v4 and v5 side-by-side (lyra-merged = v4, lyra-merged-v5 = v5) instead of plan's overwrite-with-tmp-snapshot approach. v4 is preserved without needing /tmp snapshot.", "phase": "09.3"}
   ],
   "uncommitted_files": [
-    ".planning/phases/04-tool-calling-dataset/04-RESEARCH.md"
+    ".planning/phases/09.3-dataset-scale-and-retrain/D09-GATE-V5.md",
+    "results/lyra_v5_knowledge.json",
+    "results/lyra_v5_custom.json",
+    "results/lyra_v5_full.json",
+    "datasets/assembled-v5/train/cache-87773928398ce60e.arrow",
+    "datasets/assembled-v5/validation/cache-07e4dd13dd453ba7.arrow",
+    "models/lyra-adapter-v5/",
+    "models/lyra-merged-v5/",
+    "README.md (modified)"
   ],
-  "next_action": "Run /gsd-discuss-phase 9 --chain after training completes and model weights exist at models/lyra-merged/",
-  "context_notes": "Phases 1-8 complete. The project has all data pipeline, datasets, assembly, and training scripts ready. The actual training run is a manual step the user needs to execute before Phase 9 (benchmarking) can proceed. Phase 9 evaluates the trained model against benchmarks and publishes to HuggingFace."
+  "next_action": "Read D09-GATE-V5.md and decide: probe failures first (recommended) OR commit + pick A/B/C ship-decision",
+  "context_notes": "Plan 03 Task 4 (eval suite) is complete-but-not-committed. v5 evals show: MMLU 0.4882 (-1.3% vs base), ARC 0.46 (+1%), HellaSwag 0.65 (-1%) — D-10 held. tool-call-format 0.2353 (-17pt vs base, -17pt vs v4) — D-09 FAIL-below-parity. code-syntax 0.5694 (+37pt vs base, +8pt vs v4) — D-13 met. The verdict is clear: continue-train improved code+held knowledge but catastrophically regressed tool-calls. Per D-14, user picks A/B/C. Strong recommendation before deciding: run a 10-sample probe to see WHAT v5 outputs on failing tool-call samples — if it's a format-near-miss (e.g. dropped <tool_call> wrapper) this might be a regex fix or quick fine-tune; if it's refusals or garbage, it's a deeper problem."
 }
