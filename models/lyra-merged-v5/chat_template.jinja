@@ -1,0 +1,8 @@
+{% for message in messages %}{% if loop.first and messages[0]['role'] != 'system' %}{{ '<|im_start|>system
+You are a helpful AI assistant named SmolLM, trained by Hugging Face<|im_end|>
+' }}{% endif %}{% set msg_content = message['content'] if message.get('content') else '' %}{% if message.get('tool_calls') %}{% set msg_content = '<tool_call>' + message['tool_calls']|tojson + '</tool_call>' %}{% endif %}{% if message['role'] == 'assistant' %}{% generation %}{{ '<|im_start|>' + message['role'] + '
+' + msg_content + '<|im_end|>
+' }}{% endgeneration %}{% else %}{{ '<|im_start|>' + message['role'] + '
+' + msg_content + '<|im_end|>
+' }}{% endif %}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant
+' }}{% endif %}
