@@ -36,5 +36,11 @@ models/**/tokenizer.json
 # Assembled dataset (binary Arrow files, reproducible from source JSONL + script)
 datasets/assembled/
 
+# HuggingFace datasets runtime caches (regenerated on load; not canonical data)
+datasets/**/cache-*.arrow
+
+# Claude Code local workspace (settings + agent worktrees; never tracked)
+.claude/
+
 # Environment
 .env
